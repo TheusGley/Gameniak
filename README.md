@@ -88,10 +88,3 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 ## 🚪 Aviso Final
 
-QUALQUER DÚVIDA ENTRAR EM CONTATO!
-
-- VITOR HUGO BRANDÃO SANTANA
-- RIO DE JANEIRO - RJ
-- PROGRAMADOR FULL STACK - PLENO
-- vto.hugo67@gmail.com
-
