@@ -1,0 +1,145 @@
+<!-- start: page -->
+  <div class="row">
+    <div class="col">
+      {if="$error"}
+      <div class="alert alert-danger  fade show" role="alert">
+       {$error}
+  
+      </div>
+      {/if}
+
+      {if="$sucess"}
+      <div class="alert alert-success  fade show" role="alert">
+       {$sucess}
+
+      </div>
+      {/if}
+      
+        
+
+
+            <div class="row">
+              <div class="col">
+                <section class="card card-modern">
+                  <header class="card-header">
+             
+            
+                    <h2 class="card-title">Tabela de Categorias</h2>
+                  </header>
+                  <div class="card-body">
+                    <table class="table table-bordered table-striped mb-0" id="datatable-default">
+                
+                
+                      <thead>
+                        <tr>
+                      
+                          <th width="5%">ID </th>             
+                          <th width="15%">Nome da categoria</th>
+                          <th width="25%">Descrição da categoria</th>                 
+                          <th width="8%">Data de criação</th>  
+                          <th width="5%">Deletar Categoria</th>               
+                        </tr>
+                      </thead>
+                 
+                 
+                      <tbody>
+           
+
+
+                        {loop="$results"}
+                  
+                        <tr>                 
+                          <td class="text-primary font-weight-semibold"> <strong>{$value.idcat}</strong></a></td>              
+                          <td class="text-primary font-weight-semibold">{$value.descat}</td>        
+                          <td class="text-primary font-weight-semibold">{$value.desresume}</td>
+                          <td class="text-primary font-weight-semibold">{function="FormatGeneralDate($value.dtregister)"}</td>
+                          <td>
+                            <a class="modal-with-zoom-anim ws-normal btn btn-danger w-100 font-weight-bold" href="#modal{$counter}">Deletar</a>          
+                          </td>
+                        </tr>               
+        
+                
+                        <div id="modal{$counter}" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+                          <section class="card">
+                            <header class="card-header">
+                        
+                            </header>
+                            <div class="card-body">
+                              <div class="modal-wrapper">
+                                
+                                <div class="text-center">
+                                  <p class="mb-2"><strong class="text-8 font-weight-bold text-decoration-none text-primary ">Tem certeza disso?</strong></p> 
+        
+                                    <P class="text-8 font-weight-bold text-decoration-none text-primary" >{$value.descat} -  <b class="text-success">[{$value.idcat}]</b>   </p>
+                                </div>
+                      
+                                <div class="text-center col-md-12" >
+                      
+                          
+                                            <hr>
+                                      
+                                            <h5 class="text-7 text-danger" style="line-height:25px"><strong>Essa ação irá DELETAR essa categoria permanentemente do sistema!</strong> </h5>   
+                                          <br>
+                                            <span class="lighter-1 text-5">Descrição da Categoria :</span>
+                                            <h5 class="text-5"><strong>{$value.desresume}</strong> </h5>   
+                                  
+        
+                                        
+                            
+                              </div>
+                            </div>
+                          </div>
+                          <footer class="card-footer">
+                            <div class="row">
+                              <div class="col-md-12 text-center">
+                              
+                                <a href='{function="getCategorieInfoAndReturnHashOnURL($value.idcat)"}'  class="btn btn-danger text-7 " style="text-decoration: none;" >
+                                Deletar </a>
+                                <button class="btn btn-info text-7 modal-dismiss">Fechar</button>
+                              </div>
+                            </div>
+                          </footer>
+                        </section>
+                      </div>
+                
+        
+                      {/loop}
+        
+                      </tbody>
+
+
+                    </table>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+
+            <hr class="solid mt-5 opacity-4">
+        
+        
+            <div class="datatable-footer">
+              <div class="row align-items-center justify-content-between mt-3">
+                        
+                      <div class="col-lg-auto text-center order-3 order-lg-2">
+                        <div class="results-info-wrapper"></div>
+                      </div>
+                        <div class="col-lg-auto order-2 order-lg-3 mb-3 mb-lg-0">
+                          <div class="pagination-wrapper"></div>
+                        </div>
+              </div>
+            </div>
+
+
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- end: page -->
+</section>
+
+
+
+

@@ -1,0 +1,89 @@
+
+<!-- Sidebar -->
+<aside id="sidebar-left" class="sidebar-left" style="width:30vh">
+    <div class="nano">
+        <div class="nano-content">
+            <nav id="menu" class="nav-main" role="navigation">
+                <ul class="nav nav-main">
+                    <li>
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i class="bx bxs-user-rectangle"></i>
+                            <span class="text-4">Painel Inicial</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Sidebar Sections -->
+            <div class="sidebar">
+                <!-- Seção 1: Conta e Perfil -->
+                <div class="widget-content">
+                    <ul class="nav nav-main">
+                        <li>
+                            <a class="nav-link" href="{% url 'minhaConta' %}">
+                                <i class="bx bxs-book-alt"></i>
+                                <span class="text-4" >Minha Conta</span>
+                            </a>
+                        </li>
+                        {% comment %} <li>
+                            <a class="nav-link" href="{% url 'meuPerfil' %}">
+                                <i class="bx bxs-user"></i>
+                                <span></span>
+                            </a>
+                        </li> {% endcomment %}
+                        <li>
+                            <a class="nav-link" href="{% url 'mensagens' %}">
+                                <i class="bx bxs-message-square-detail"></i>
+                                <span class="text-4">Mensagens</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Seção 2: Anúncios -->
+                <div class="widget-content">
+                    <ul class="nav nav-main">
+                        <li>
+                            <a class="nav-link" href="{% url 'pubAnuncio' %}">
+                                <i class="bx bxs-shopping-bags"></i>
+                                <span class="text-4">Publicar Anúncio</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{% url 'gerAnuncio' %}">
+                                <i class="bx bxs-shopping-bags"></i>
+                                <span class="text-4">Gerenciar Anúncios</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Divider -->
+                <hr class="separator" />
+
+                <!-- Seção 3: Logout e Navegação -->
+                <div class="widget-content">
+                    <ul class="nav nav-main">
+                        <li>
+                            <a class="nav-link" href="{% url "logout" %}">
+                                <i class="bx bxs-door-open"></i>
+                                <span>Desconectar-se</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{% url "home" %}">
+                                <i class="bx bxs-home"></i>
+                                <span>Voltar ao site</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
+</div>
+
+
+    {%block content%}
+    {%endblock%}

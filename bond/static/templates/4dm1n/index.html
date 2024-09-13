@@ -1,0 +1,302 @@
+<!-- start: page -->
+
+<div class="row "  >
+
+  {if="$error"}
+  <div class="alert alert-danger  fade show" role="alert">
+   {$error}
+
+  </div>
+  {/if}
+
+  {if="$sucess"}
+  <div class="alert alert-success  fade show" role="alert">
+   {$sucess}
+   {/if}
+  <div class="col-lg-12 col-xl-4">
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-modern">
+          <div class="card-body p-0">
+            <div class="widget-user-info">
+              <div class="widget-user-info-header bg-primary">
+                <h2 class="font-weight-bold text-color-dark text-5 text-white">Olá, {$user.desperson}</h2>
+                <p class="mb-0 text-white">Administrador</p>
+
+                <div class="widget-user-acrostic bg-primary">
+                  <span class="font-weight-bold">VH</span>
+                </div>
+              </div>
+              <div class="widget-user-info-body">
+                <div class="row">
+                  <div class="col-auto">
+                    <strong class="text-color-dark text-5">R$ TESTE</strong>
+                    <h3 class="text-4-1">Valor Total Recebido</h3>
+                  </div>
+                  <div class="col-auto">
+                    <strong class="text-color-dark text-5">TESTE</strong>
+                    <h3 class="text-4-1">Serviços Comercializados</h3>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <a href="/admin/configurar" class="btn btn-danger btn-xl border font-weight-semibold text-color-dark text-3 mt-4">Configurações</a>
+                   
+                  </div>
+                  <div class="col">
+                    <a href="/" class="btn btn-success btn-xl border font-weight-semibold text-color-dark text-3 mt-4">Voltar para o Site</a>
+                  </div>
+                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="row">
+      <div class="col-lg-6 col-xl-12 pb-2 pb-lg-0 mb-4 mb-lg-0">
+        <div class="card card-modern">
+          <div class="card-body py-4">
+            <div class="row align-items-center">
+              <div class="col-6 col-md-4">
+                <h3 class="text-4-1 my-0">Total de clientes</h3>
+                <strong class="text-6 text-color-dark">TESTE</strong>
+              </div>
+              <div class="col-6 col-md-4 border border-top-0 border-right-0 border-bottom-0 border-color-light-grey py-3">
+                <h3 class="text-4-1 text-color-success line-height-2 my-0">Clientes <strong>Registrados &uarr;</strong></h3>
+                <span>Todos os Dias</span>
+              </div>
+              <div class="col-md-4 text-left text-md-right pr-md-4 mt-4 mt-md-0 text-white">
+                <i class="bx bx-cart-alt icon icon-inline icon-xl bg-primary rounded-circle text-color-light"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-xl-12 pt-xl-2 mt-xl-4">
+        <div class="card card-modern">
+          <div class="card-body py-4">
+            <div class="row align-items-center">
+              <div class="col-6 col-md-4">
+                <h3 class="text-4-1 my-0">Vendas Totais</h3>
+                <strong class="text-6 text-color-dark">TESTE</strong>
+              </div>
+              <div class="col-6 col-md-4 border border-top-0 border-right-0 border-bottom-0 border-color-light-grey py-3">
+                <h3 class="text-4-1 text-color-success line-height-2 my-0">Vendas <strong>Concluídas &uarr;</strong></h3>
+                <span>Todos os Dias</span>
+              </div>
+              <div class="col-md-4 text-left text-md-right pr-md-4 mt-4 mt-md-0 text-white">
+                <i class="bx bx-purchase-tag-alt icon icon-inline icon-xl bg-primary rounded-circle text-color-light pr-0"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="col-lg-12 col-xl-8 pt-2 pt-xl-0 mt-4 mt-xl-0">
+    
+  
+	<!-- start: page -->
+  <div class="row">
+    <div class="col">
+   
+    
+        
+
+
+            <div class="row">
+              <div class="col">
+                <section class="card card-modern">
+                  <header class="card-header">
+             
+            
+                    <h2 class="card-title">Tabela dos Usuários</h2>
+                  </header>
+                  <div class="card-body">
+                    <table class="table table-bordered table-striped mb-0" id="datatable-default">
+                
+                
+                <thead>
+                  <tr>
+                    <th width="8%">ID</th>
+                    <th width="10%">Nome</th>
+                    <th width="15%">Status</th>
+                    <th width="10%">Valor</th>
+                    <th width="10%">Taxa</th>
+                    <th width="15%">Data</th>
+               
+                    <th width="5%">Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                
+                  {loop="$results"}
+                  <tr > 
+                 
+                    <td class="text-primary font-weight-semibold"> <strong>{$value.idcompra}</strong></a></td>
+                    <td ><strong><a class="text-primary font-weight-semibold" href='{function="getPurchaseInfoAndReturnProductHashOnURL($value.idproduto)"}'>{$value.desproduct}</a></strong></td>        
+                    <td class="text-primary font-weight-semibold">{$value.desstatus}</td>
+           
+                    <td class="text-success font-weight-semibold">R$ {function="ConvertVirgulaToPonto($value.vlprice)"}</td>
+                    <td class="text-danger font-weight-semibold">R$ {function="GetTaxa($value.vlprice)"}</td>
+                    <td class="text-primary font-weight-semibold">{function="FormatGeneralDate($value.dtbuy)"}</td>
+                   
+
+                    <td>
+                      <a class="modal-with-zoom-anim ws-normal btn btn-success w-100 font-weight-bold" href="#modal{$counter}">Visualizar</a>          
+                    </td>
+                  
+                   
+              
+                  </tr>               
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  
+  
+  
+  
+  
+  
+  
+                      <!-- Modal Animation -->
+    <div id="modal{$counter}" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+      <section class="card">
+        <header class="card-header">
+     
+        </header>
+        <div class="card-body">
+          <div class="modal-wrapper">
+            
+            <div class="text-center">
+               <p class="mb-2"><strong class="text-8 font-weight-bold text-decoration-none text-primary ">RECIBO DA COMPRA</strong></p> 
+
+                <P class="text-8 font-weight-bold text-decoration-none text-primary" >{$value.desproduct} -  <b class="text-success">[ R$ {function="ConvertVirgulaToPonto($value.vlprice)"} ]</b>   </p>
+            </div>
+  
+            <div class="text-center col-md-12" >
+  
+      
+                        <hr>
+                  
+                        <h5 class="text-5"><strong>Status da compra :</strong> <span class="lighter-1 ">{$value.desstatus}</span> </h5>   
+                        <h5 class="text-5"><strong>Método de pagamento :</strong> <span class="lighter-1">{$value.despayamentmethod}</span> </h5>                                                                                 
+                        <h5 class="text-5"><strong>Data da compra:</strong> <span class="lighter-1">{$value.dtbuy}</span> </h5>
+                        <h5 class="text-5"><strong>ID da compra :</strong> <span class="lighter-1">{$value.dessellername}</span> </h5>
+                        <h5 class="text-5"><strong>IP do comprador :</strong> <span class="lighter-1">{$value.desbuyerip}</span> </h5> 
+
+                        <hr>
+            
+                        <h5 class="text-5"><strong>Resumo do produto :</strong> <span class="lighter-1">{$value.desresume}</span> </h5>      
+                        <h5 class="text-5"><strong>Nome do produto :</strong> <span class="lighter-1">{$value.desproduct}</span> </h5>                                                                         
+                        <h5 class="text-5"><strong>Valor do produto :</strong> <span class="lighter-1">R${function="ConvertVirgulaToPonto($value.vlprice)"}</span> </h5>                              
+                      
+                      
+                    
+                        
+                       <hr>                   
+                        <h5 class="text-5"><strong>Nome do vendedor :</strong> <span class="lighter-1">{function="GetUserByID($value.idseller,'desperson')"}</span> </h5>
+                        <h5 class="text-5"><strong>E-mail do vendedor :</strong> <span class="lighter-1">{function="GetUserByID($value.idseller,'desemail')"}</span> </h5>          
+                        <h5 class="text-5"><strong>Apelido do vendedor :</strong> <span class="lighter-1">{function="GetUserByID($value.idseller,'desnick')"}</span> </h5>                                                         
+                        <h5 class="text-5"><strong>Data de registro:</strong> <span class="lighter-1">{function="FormatDate(GetUserByID($value.idseller,'dtregister'))"}</span> </h5>
+        
+
+                    
+  
+
+  
+         
+          </div>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <div class="row">
+          <div class="col-md-12 text-center">
+          
+            <a href='{function="getPurchaseInfoAndReturnHashOnURL($value.idcompra)"}'  class="btn btn-danger text-7 " style="text-decoration: none;" >
+             Deletar </a>
+            <button class="btn btn-danger text-7 modal-dismiss">Fechar</button>
+          </div>
+        </div>
+      </footer>
+    </section>
+  </div>
+  
+        
+          
+          
+        
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+                {/loop}
+  
+    
+    
+                </tbody>
+              </table>
+
+
+
+
+
+
+              <hr class="solid mt-5 opacity-4">
+              <div class="datatable-footer">
+                <div class="row align-items-center justify-content-between mt-3">
+                
+                  <div class="col-lg-auto text-center order-3 order-lg-2">
+                    <div class="results-info-wrapper"></div>
+                  </div>
+                  <div class="col-lg-auto order-2 order-lg-3 mb-3 mb-lg-0">
+                    <div class="pagination-wrapper"></div>
+                  </div>
+                </div>
+              </div>
+            </table>
+          </div>
+        </div>
+              
+                  </div>   
+                </div>   
+              </div>        
+            </div>
+          </div>
+
+
+  </div>
+</div>
+<!-- end: page -->
+</section>

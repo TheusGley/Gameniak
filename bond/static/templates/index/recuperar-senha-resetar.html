@@ -1,0 +1,65 @@
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">recuperar-senha</li>
+            </ol>
+
+
+        </div>
+    </nav>
+
+  
+
+    <div class="container pb-5">
+        <div class="heading mb-4">
+         
+            {if="$sucess"}
+
+            <div class="alert alert-success  mb-1 mt-1 text-center"  >
+            
+            <strong class="text-dark">{$sucess}</strong>
+            </div>
+            
+            {/if}
+            
+            
+            
+            
+            {if="$error"}
+            
+            <div class="alert alert-danger  mb-1 mt-1 text-center" >
+            
+            <strong class="text-dark">Ocorreu um erro inesperado! </strong> <strong>{$error}</strong>
+            </div>
+            
+            {/if}
+
+            <h2 class="title">Recuperação de senha</h2>
+            <p>Por favor, nos informe o seu e-mail e enviaremos um link para a recuperação da senha.</p>
+        </div><!-- End .heading -->
+
+        
+        <form action="/recuperar-senha/redefinir" method="POST">
+        
+        
+            <div class="form-group required-field">
+                <label for="reset-email">Insira a nova senha</label>
+                <input type="password" class="form-control" id="newpass" name="newpass" required>
+                <input type="hidden" name="codigo" id="code" value="{$code}">
+            </div><!-- End .form-group -->
+
+
+
+            <div class="form-group required-field">
+                <label for="reset-email">Repita a nova senha</label>
+                <input type="password" class="form-control" id="newpass_confirm" name="newpass_confirm" required>
+            </div><!-- End .form-group -->
+
+            <div class="form-footer">
+                <button type="submit" class="btn btn-primary">Enviar token de recuperação</button>
+            </div><!-- End .form-footer -->
+        </form>
+    </div><!-- End .container -->
+</main><!-- End .main -->

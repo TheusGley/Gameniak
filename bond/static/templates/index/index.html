@@ -1,0 +1,390 @@
+{% extends "index/header.html" %}
+{% load static %}
+
+{% block content %}
+
+			
+		
+	<main class="main">
+	
+		
+		   
+		<div class="home-slider owl-carousel owl-theme owl-carousel-lazy show-nav-hover nav-big mb-2 text-uppercase" data-owl-options="{
+				'loop': false
+			}">	
+		{% for i in imagens_banner %}
+			
+				<div class="home-slide home-slide1 banner">
+					<img class="owl-lazy slide-bg" src="{{i.imagem1.url}}" data-src="{{i.imagem1.url}}" alt="slider image">
+					<div class="container">
+						<div class="banner-layer banner-layer-middle">
+							<h4 class="text-transform-none m-b-3 text-white">{{i.descricao}}</h4>
+							<h2 class="text-transform-none mb-0 text-white">Gameniak Marketplace</h2>
+							<h3 class="m-b-3 text-white">{{i.titulo}}</h3>
+							<h5 class="d-inline-block mb-0 text-white">
+								A partir de
+								<b class="coupon-sale-text ml-4 mr-1 text-white bg-secondary align-middle">R$<em class="align-text-top">{{i.valor}}</em>00</b>
+							</h5>
+							<a href={% url 'lista_produtos' %}  class="btn btn-dark btn-lg ls-10 text-white">PÁGINA DE PRODUTOS</a>
+						</div><!-- End .banner-layer -->
+					</div>
+				</div><!-- End .home-slide -->
+
+		{% endfor %}
+			</div>
+
+			<div class="container">
+				<div class="info-boxes-slider owl-carousel owl-theme mb-2" data-owl-options="{
+					'dots': false,
+					'loop': false,
+					'responsive': {
+						'576': {
+							'items': 2
+						},
+						'992': {
+							'items': 3
+						}
+					}
+				}">
+
+		
+					<div class="info-box info-box-icon-left">
+						<i class="icon-shipping"></i>
+
+						<div class="info-box-content">
+							<h4>SISTEMA DE INTERMÉDIO</h4>
+							<p class="text-body">O dinheiro só é liberado para o freelancer após a confirmação do cliente!</p>
+						</div><!-- End .info-box-content -->
+					</div><!-- End .info-box -->
+
+					<div class="info-box info-box-icon-left">
+						<i class="icon-money"></i>
+
+						<div class="info-box-content">
+							<h4>PAGAMENTO SEGURO</h4>
+							<p class="text-body">Pagamento via Paypal com segurança 100% garantida!</p>
+						</div><!-- End .info-box-content -->
+					</div><!-- End .info-box -->
+
+					<div class="info-box info-box-icon-left">
+						<i class="icon-support"></i>
+
+						<div class="info-box-content">
+							<h4>SUPORTE 24/7</h4>
+							<p class="text-body">Qualquer dúvida basta entrar em contato!</p>
+						</div><!-- End .info-box-content -->
+					</div><!-- End .info-box -->
+				</div><!-- End .info-boxes-slider -->
+
+				
+				<style type="text/css">
+				
+				</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<section class="featured-products-section">
+				<div class="container">
+					<h2 class="section-title heading-border ls-20 border-0" id='mail-camp'>PRODUTOS EM ALTA</h2>
+
+					<div class="products-slider custom-products owl-carousel owl-theme nav-outer show-nav-hover nav-image-center" data-owl-options="{
+						'dots': false,
+						'nav': true
+					}">
+
+				{% for p in produto_destaque  %}
+								
+						<div class="product-default">
+							<figure >
+								{% comment %} <a href="{% url "lista_produtos" p.id %}" > {% endcomment %}
+									<img src="{{p.imagem.url}}" class="img-product-alta" alt="product">
+								</a>
+								<div class="label-group">
+									<div class="product-label label-hot">EM ALTA</div>
+									<div class="product-label label-sale">20% Off</div>
+								</div>
+							</figure>
+							<div class="product-details">
+								<div class="category-list">
+									<a href="{% url 'lista_produtos' %} " class="product-category">
+									  {{p.categoria}}
+									</a>
+								</div>
+								<h3 class="product-title">
+									<a href='/'>{{p.descricao}}</a>
+								</h3>
+								<div class="ratings-container">
+									<div class="product-ratings">
+										<span class="ratings" style="width:80%"></span><!-- End .ratings -->
+										<span class="tooltiptext tooltip-top"></span>
+									</div><!-- End .product-ratings -->
+								</div><!-- End .product-container -->
+								<div class="price-box">
+									<!-- <del class="old-price">R$59.00</del> -->
+									<span class="product-price"><b>R${{p.valor}}</b></span>
+								</div><!-- End .price-box -->
+								<div class="product-action">
+									<a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+									<a href='/modal-produtos/{function="setHash($value.idproduct)"}' class="btn-quickview" title="Quick View"><i class="fas fa-external-link-alt"></i></a>
+									<button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal{{p.id}}">CARRINHO</button></a>
+									<a href='{% url "addCarrinho" p.id %}' > </a>
+								</div>
+							</div><!-- End .product-details -->
+						</div>
+						{% endfor %}	
+						</div>
+					</div><!-- End .featured-proucts -->
+				</div>
+			</section>
+
+
+
+			{% for i in Produtos %}
+			<!-- Add Cart Modal -->
+			<div class="modal fade" id="addCartModal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="addCartModal{{i.id}}" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-body add-cart-box text-center">
+					<label>Você quer adicionar esse produto no seu  <br>carrinho?</label>
+					<h4 >{{i.nome}}</h4>
+					<img src="#" id="productImage" width="100" height="100" alt="adding cart image">
+					<div class="btn-actions">
+						<a href="{% url "addCarrinho"  i.id %}"><button class="btn-primary">Adicionar</button></a>
+						<a href="#"><button class="btn-primary" data-dismiss="modal">Fechar janela</button></a>
+					</div>
+					</div>
+				</div>
+				</div>
+			</div>
+			{% endfor %}
+			
+		 
+
+
+
+
+			<section class="new-products-section">
+				<div class="container">
+					<h2 class="section-title heading-border ls-20 border-0">Novidades</h2>
+
+					<div class="products-slider custom-products owl-carousel owl-theme nav-outer show-nav-hover nav-image-center" data-owl-options="{
+						'dots': false,
+						'nav': true,
+						'responsive': {
+							'992': {
+								'items': 5
+							}
+						}
+					}">
+
+
+
+				
+					{% for p in produto_recentes %}
+					
+						<div class="product-default">
+							
+							<figure>
+								<a href="/">
+									<img src='{{p.imagem.url}}' class="img-product-novidade"  alt="{{.nome}}">
+
+								</a>
+								<div class="label-group">
+									<div class="product-label label-hot">NOVIDADE</div>
+									<!-- <div class="product-label label-sale">20% Off</div> -->
+								</div>
+							</figure>
+
+							<div class="product-details">
+								<div class="category-list">
+									<a href={% url 'lista_produtos' %} class="product-category">
+										{{p.categoria}}
+									  </a>
+								</div>
+								<h3 class="product-title">
+									<a href='/'>{{p.descricao}}</a>
+								</h3>
+								<div class="ratings-container">
+									<div class="product-ratings">
+										<span class="ratings" style="width:80%"></span><!-- End .ratings -->
+										<span class="tooltiptext tooltip-top"></span>
+									</div><!-- End .product-ratings -->
+								</div><!-- End .product-container -->
+								<div class="price-box">
+									<!-- <del class="old-price">R$59.00</del> -->
+									<span class="product-price"><b>R${{p.valor}}</b></span>
+								</div><!-- End .price-box -->
+								<div class="product-action">
+									<a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+									<a href='#' class="btn-quickview" title="Quick View"><i class="fas fa-external-link-alt"></i></a>
+									<button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal{{p.id}}">CARRINHO</button></a>
+									<a href='{% url "addCarrinho" p.id %}' > </a>
+								</div>
+							</div><!-- End .product-details -->
+						</div>
+						{% endfor %}									
+
+						{% for p in servicos_recentes %}
+
+					<div class="product-default">
+							
+						<figure>
+							<a href="/">
+								<img src='{{p.imagens_produto.url}}' class="img-product-novidade"  alt="{{.nome}}">
+
+							</a>
+							<div class="label-group">
+								<div class="product-label label-hot">NOVIDADE</div>
+								<!-- <div class="product-label label-sale">20% Off</div> -->
+							</div>
+						</figure>
+
+						<div class="product-details">
+							<div class="category-list">
+								<a href={% url 'lista_produtos' %} class="product-category">
+									{{p.categoria}}
+								  </a>
+							</div>
+							<h3 class="product-title">
+								<a href='/'>{{p.descricao}}</a>
+							</h3>
+							<div class="ratings-container">
+								<div class="product-ratings">
+									<span class="ratings" style="width:80%"></span><!-- End .ratings -->
+									<span class="tooltiptext tooltip-top"></span>
+								</div><!-- End .product-ratings -->
+							</div><!-- End .product-container -->
+							<div class="price-box">
+								<!-- <del class="old-price">R$59.00</del> -->
+								<span class="product-price"><b>R${{p.valor}}</b></span>
+							</div><!-- End .price-box -->
+							<div class="product-action">
+								<a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+								<a href='#' class="btn-quickview" title="Quick View"><i class="fas fa-external-link-alt"></i></a>
+								<button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal{{p.id}}">CARRINHO</button></a>
+								<a href='{% url "addCarrinho" p.id %}' > </a>
+							</div>
+						</div><!-- End .product-details -->
+					</div>
+					{% endfor %}									
+
+
+				</div><!-- End .featured-proucts -->
+
+
+
+					<div class="banner banner-big-sale mb-5" style="background: #12c94f center/cover url('/res/UserDashboard/assets/images/banners/banner-4.jpg');">
+						<div class="banner-content row align-items-center py-4 mx-0">
+							<div class="col-md-9">
+								<h2 class="text-white text-uppercase ls-n-20 mb-md-0 px-4">
+									<b class="d-inline-block mr-4 mb-1 mb-md-0">RECEBA R$10,00</b>
+									BAIXE O PIC PAY E USE O NOSSO CÓDIGO 
+							
+								</h2>
+							</div>
+							<div class="col-md-3 text-center text-md-right">
+								<a class="btn btn-light btn-white btn-lg mr-3" href="#">BAIXAR PICPAY</a>
+							</div>
+						</div>
+					</div>
+
+				
+			<section class="feature-boxes-container">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="feature-box px-sm-5 feature-box-simple text-center">
+								<i class="icon-earphones-alt"></i>
+
+								<div class="feature-box-content">
+									<h3 class="m-b-1">SUPORTE AO CLIENTE</h3>
+									<h5 class="m-b-3">PODEMOS TE AJUDAR!</h5>
+
+									<p>Caso tenha alguma dúvida ou precise de ajuda para algum problema que possa ter ocorrido entre em contato conosco e iremos te ajudar!</p>
+								</div><!-- End .feature-box-content -->
+							</div><!-- End .feature-box -->
+						</div><!-- End .col-md-4 -->
+
+						<div class="col-md-4">
+							<div class="feature-box px-sm-5 feature-box-simple text-center">
+								<i class="icon-credit-card"></i>
+
+								<div class="feature-box-content">
+									<h3 class="m-b-1">Pagamento Seguro</h3>
+									<h5 class="m-b-3">Não precisa ter medo!</h5>
+
+									<p>Todos os pagamentos serão feitos diretamente pelo site oficial do Paypal, não deixaremos nenhuma informação do seu cartão salva!</p>
+								</div><!-- End .feature-box-content -->
+							</div><!-- End .feature-box -->
+						</div><!-- End .col-md-4 -->
+
+						<div class="col-md-4">
+							<div class="feature-box px-sm-5 feature-box-simple text-center">
+								<i class="icon-shipping"></i>
+
+								<div class="feature-box-content">
+									<h3 class="m-b-1">SISTEMA DE INTERMÉDIO</h3>
+									<h5 class="m-b-3">Garantia de recebimento!</h5>
+
+									<p>O cliente efetua o pagamento e o dinheiro fica com a gente! Após o trabalho ser entregue o cliente aceita que recebeu e os fundos são liberados!</p>
+								</div><!-- End .feature-box-content -->
+							</div><!-- End .feature-box -->
+						</div><!-- End .col-md-4 -->
+					</div><!-- End .row -->
+				</div><!-- End .container-->
+			</section><!-- End .feature-boxes-container -->
+
+
+
+			
+			<section class="promo-section bg-dark" data-parallax="{'speed': 1.8, 'enableOnMobile': true}" data-image-src="/res/UserDashboard/assets/images/banners/banner-5.jpg">
+				<div class="promo-banner banner container text-uppercase">
+					<div class="banner-content row align-items-center text-center">
+						<div class="col-md-4 ml-xl-auto text-md-right">
+							<h2 class="mb-md-0 text-white">CONFIRA AS NOVIDADES</h2>
+						</div>
+						<div class="col-md-4 col-xl-3 pb-4 pb-md-0">
+							<a href="#" class="btn btn-dark btn-black ls-10">Ver Produtos</a>
+						</div>
+						<div class="col-md-4 mr-xl-auto text-md-left">
+							<h4 class="mb-1 coupon-sale-text p-0 d-block ls-10 text-transform-none"><b>CUPOM EXCLUSIVO</b></h4>
+							<h5 class="mb-2 coupon-sale-text text-white ls-10 p-0"><i class="ls-0"></i><b class="text-white bg-secondary">R$5,00</b> Desconto</h5>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		
+
+					<!-- <hr class="mt-0 m-b-5">
+
+					<div class="brands-slider owl-carousel owl-theme images-center pb-2">
+						<img src="/res/UserDashboard/assets/images/brands/brand1.png" width="140" height="60" alt="brand">
+						<img src="/res/UserDashboard/assets/images/brands/brand2.png" width="140" height="60" alt="brand">
+						<img src="/res/UserDashboard/assets/images/brands/brand3.png" width="140" height="60" alt="brand">
+						<img src="/res/UserDashboard/assets/images/brands/brand4.png" width="140" height="60" alt="brand">
+						<img src="/res/UserDashboard/assets/images/brands/brand5.png" width="140" height="60" alt="brand">
+						<img src="/res/UserDashboard/assets/images/brands/brand6.png" width="140" height="60" alt="brand">
+					</div>
+
+					<hr class="mt-4 m-b-5"> -->
+
+				</main>
+				
+
+
+{% endblock  %}
+
+

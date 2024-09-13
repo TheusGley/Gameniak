@@ -1,0 +1,144 @@
+{% load static %}
+<html class="modern fixed has-top-menu has-left-sidebar-half" data-style-switcher-options="{'changeLogo': false}">
+	<head>
+
+		<!-- Basic -->
+		<meta charset="UTF-8">
+
+		<title>Gameniak Marketplace | Dashboard</title>
+		<meta name="keywords" content="HTML5 Admin Template" />
+		<meta name="description" content="Porto Admin - Responsive HTML5 Template">
+		<meta name="author" content="okler.net">
+
+		<!-- Mobile Metas -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<!-- Favicon -->
+	<link rel="icon" type="image/x-icon" href="{%static '/res/UserDashboard/assets/images/logoIcon.png' %}">
+	
+	<!-- Bootstrap icon -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+			<!-- Web Fonts  -->
+			<link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,600,700,800,900" rel="stylesheet" type="text/css">
+
+		<!-- Vendor CSS -->
+		<link rel="stylesheet" href="{% static '/res/UserManagement/vendor/animate/animate.compat.css'%}">
+		<link rel="stylesheet" href="{% static '/res/UserManagement/vendor/bootstrap/css/bootstrap.css'%}" />
+
+		<link rel="stylesheet" href="{% static '/res/UserManagement/vendor/font-awesome/css/all.min.css'%}" />
+		<link rel="stylesheet" href="{% static '/res/UserManagement/vendor/boxicons/css/boxicons.min.css'%}" />
+		<link rel="stylesheet" href="{%static '/res/UserManagement/vendor/magnific-popup/magnific-popup.css'%}" />
+		<link rel="stylesheet" href="{% static '/res/UserManagement/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css'%}" />  
+  
+		<!-- Specific Page Vendor CSS -->
+	
+		<!-- Theme CSS -->
+		<link rel="stylesheet" href="{% static '/res/UserManagement/css/theme.css'%}" />
+
+		<!-- Theme Layout -->
+		<link rel="stylesheet" href="{% static '/res/UserManagement/css/layouts/modern.css'%}" />
+		<!--(remove-empty-lines-end)-->
+
+		<link rel="icon" type="image/x-icon" href="{%static 'res/UserDashboard/assets/images/logoIcon.png'%}">
+		<!-- Plugins CSS File -->
+		<link rel="stylesheet" href="{% static 'res/UserDashboard/assets/css/bootstrap.min.css'%}">
+		
+		<!-- Main CSS File -->
+		<link rel="stylesheet" type="text/css" href="{%static 'res/UserDashboard/assets/vendor/fontawesome-free/css/all.min.css'%}">
+		<link rel="stylesheet" href="{% static "res/UserDashboard/assets/css/style.min.css"%}">
+
+	
+
+		<!-- Google Map-->
+
+
+
+
+		<!-- Theme Custom CSS -->
+		<link rel="stylesheet" href="{%static '/res/UserManagement/css/custom.css'%}">
+
+		<!-- Head Libs -->
+		<script src="{%static '/res/UserManagement/vendor/modernizr/modernizr.js'%}"></script>
+	</head> 
+
+
+	<div class="page-wrapper">
+		
+		<header class="header">
+			<div class="header-left">
+			</div>
+			<div class="header">
+				<div class="container">
+					<div class="header-left d-none d-sm-block">
+
+						<a href="{% url "home" %}" ><img style="width:28vh" src="{% static 'res/UserDashboard/assets/images/logo.png' %}"></a>
+					</div><!-- End .header-left -->
+
+					<div class="header-right header-dropdowns ml-0 ml-sm-auto w-sm-100">
+						<div class="header-dropdown dropdown-expanded d-none d-lg-block">
+							<a href="#">Links</a>
+							<div class="header-menu">
+								<ul>
+									<li><a  href="{% url 'dashboard' %}">Painel Inicial</a> </a></li>
+									<li><a  href="{% url 'minhaConta' %}">Minha Conta</a></li>
+									<li><a href="{% url 'mensagens' %}">Mensagens</a></li>
+									<li><a href="{% url 'pubAnuncio' %}">Publicar Anuncio</a></li>
+									<li><a  href="{% url 'gerAnuncio' %}">Gerenciar Anuncios</a></li>
+									<li><a href="{% url "logout" %}">Logout </a></li>
+								</ul>
+							</div><!-- End .header-menu -->
+						</div><!-- End .header-dropown -->
+
+						{% comment %} <span class="separator"></span> {% endcomment %}
+{% comment %}
+						<div class="header-dropdown ">
+							<a href="#">USD</a>
+							 <div class="header-menu">
+								<ul>
+									<li><a href="#">EUR</a></li>
+									<li><a href="#">USD</a></li>
+								</ul>
+							</div><!-- End .header-menu --> {% endcomment %}
+						</div><!-- End .header-dropown -->
+{% comment %} 
+						<div class="header-dropdown mr-auto mr-sm-3 mr-md-0">
+							<a href="#"><img src="assets/images/flags/en.png" alt="England flag">ENG</a>
+							<div class="header-menu">
+								<ul>
+									<li><a href="#"><img src="assets/images/flags/en.png" alt="England flag">ENG</a></li>
+									<li><a href="#"><img src="assets/images/flags/fr.png" alt="France flag">FRA</a></li>
+								</ul>
+							</div><!-- End .header-menu -->
+						</div><!-- End .header-dropown --> {% endcomment %}
+
+
+						<div class="social-icons">
+							<a href="#" class="social-icon social-instagram icon-instagram" target="_blank"></a>
+							<a href="#" class="social-icon social-twitter icon-twitter" target="_blank"></a>
+							<a href="#" class="social-icon social-facebook icon-facebook" target="_blank"></a>
+						</div><!-- End .social-icons -->
+					</div><!-- End .header-right -->
+				</div><!-- End .container -->
+			</div><!-- End .header-top -->
+
+			
+					</nav>
+				</div><!-- End .container -->
+			</div><!-- End .header-bottom -->
+		</header><!-- End .header -->
+
+	</div>
+
+	
+	
+		<!-- Main Content -->
+			{% block content %}
+			{% endblock %}
+<!-- Plugins JS File -->
+<script src="{%static 'res/UserDashboard/assets/js2/jquery.min.js'%}"></script>
+<script src="{%static 'res/UserDashboard/assets/js2/bootstrap.bundle.min.js'%}"></script>
+<script src="{%static 'res/UserDashboard/assets/js2/plugins.min.js'%}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+<!-- Main JS File -->
+<script src="{%static 'res/UserDashboard/assets/js2/main.min.js'%}"></script>	

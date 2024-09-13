@@ -1,0 +1,41 @@
+{% extends "dashboard/header.html" %}
+{% load static %}
+{% block content %}
+ <div class="container">
+	<section role="main" >
+		
+					<!-- start: page -->
+						<section class="body-error error-inside">
+							<div class="center-error">
+
+								<div class="row">
+									<div class="col-lg-8">
+										<div class="main-error mb-3">
+											<h2 class="error-code text-dark text-center font-weight-semibold m-0">404 <i class="fas fa-file"></i></h2>
+											<p class="error-explanation text-center">Página inexistente.</p>
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<h4 class="text">Você pode procurar por :</h4>
+										<ul class="nav nav-list flex-column primary">
+											<li class="nav-item">
+												<a class="nav-link text-primary" href="{% url "dashboard" %}"><i class="fas fa-caret-right text-dark"></i> Meu Perfil</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link text-primary" href="{% url "carrinho" %}"><i class="fas fa-caret-right text-dark"></i> Minhas Compras</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link text-primary" href="/dashboard/mudar-informacao"><i class="fas fa-caret-right text-dark"></i> Informações de cobrança</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</section>
+					<!-- end: page -->
+				</section>
+			</div>
+
+		
+		</section>
+{% endblock  %}

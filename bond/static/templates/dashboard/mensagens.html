@@ -1,0 +1,232 @@
+{% extends "dashboard/header.html" %}
+{% load static %}
+{% block content %}
+ <div class="container">
+	<div class="row">
+		<div class="col">
+			<div class="row">
+				<div class="col">
+					<section class="card card-modern">
+						<header class="card-header">
+						
+							<h2 class="card-title text-5">Mensagens</h2>
+							<p clas="text-danger">{{error_message}} </p>
+
+							
+							<div class="row">
+								<div class="col-8">
+									<a data-bs-toggle="modal" data-bs-target="#exampleModal" class=" btn btn-success btn-px-4 rounded font-weight-bold text-color-dark text-3">Nova mensagem</a>
+									
+									<a href="#modal{$counter}"  class="modal-with-zoom-anim ws-normal  btn btn-danger btn-px-4  rounded font-weight-bold  text-color-dark text-3">DELETAR</a>  
+								</div>
+							</div>
+						</header>
+					
+						<div class="card-body">
+							<table class="table table-bordered table-striped mb-0" id="datatable-default">
+							
+								<thead>
+									<tr>
+									<th width="20%">Titulo</th>
+									<th width="10%">Usuario</th>
+									<th width="20%"></th>
+									<th width="8%">Status </th>
+									<th width="1%" > </th>
+									</tr>
+								</thead>
+								<tbody>
+								
+								
+
+									{% if not mensagens_envi  and not mensagens_rec %} 
+									
+									
+									<td>Nenhuma </td>
+									<td>Mensagem </td>
+									<td> </td>
+
+									<td>Encontrada</td>
+								
+									{% elif not mensagens_rec  %}
+									{% for m in mensagens_envi  %}
+									
+									<tr class="text-primary">
+									
+									<td><a href='/admin-secret/visualizar-compra/{function="setHash($value.idcompra)"}' class="text-primary"><strong>{{m.titulo}}</strong></a></td>
+									<td><a href='/admin-secret/visualizar-compra/{function="setHash($value.idcompra)"}' class="text-primary"><strong>{{m.user_env}}</strong></a></td>
+									<td>Enviado</td>
+									<td>{{m.status}}</td>
+									<td><i class="bi bi-trash3  text-danger"></i></td>
+
+									</tr>
+									{% endfor %}
+
+									
+
+									{% elif not mensagens_env  %}
+									
+									{% for m in mensagens_rec  %}
+									
+									<tr class="text-primary">
+									
+									<td><a href='/admin-secret/visualizar-compra/{function="setHash($value.idcompra)"}' class="text-primary"><strong>{{m.titulo}}</strong></a></td>
+									<td><a href='/admin-secret/visualizar-compra/{function="setHash($value.idcompra)"}' class="text-primary"><strong>{{m.user_env}}</strong></a></td>
+									<td>Enviado</td>
+									<td>{{m.status}}</td>
+									<td><i class="bi bi-trash3  text-danger"></i></td>
+
+									</tr>
+									{% endfor %}
+
+									{% else %}
+									
+									{% for m in mensagens_envi  %}
+									
+									<tr class="text-primary">
+									
+									<td><a href='/admin-secret/visualizar-compra/{function="setHash($value.idcompra)"}' class="text-primary"><strong>{{m.titulo}}</strong></a></td>
+									<td><a href='/admin-secret/visualizar-compra/{function="setHash($value.idcompra)"}' class="text-primary"><strong>{{m.user_env}}</strong></a></td>
+									<td>Enviado</td>
+									<td>{{m.status}}</td>
+									<td><i class="bi bi-trash3  text-danger"></i></td>
+									</tr>
+									{% endfor %}
+
+									{% for m in mensagens_rec  %}
+									
+									<tr class="text-success">
+									
+									<td><a href='/admin-secret/visualizar-compra/{function="setHash($value.idcompra)"}' class="text-primary"><strong>{{m.titulo}}</strong></a></td>
+									<td><a href='/admin-secret/visualizar-compra/{function="setHash($value.idcompra)"}' class="text-primary"><strong>{{m.user_rec}}</strong></a></td>
+									<td>Recebidos</td>
+									<td>{{m.status}}</td>
+									<td><i class="bi bi-trash3  text-danger"></i></td>
+
+									</tr>
+									{% endfor %}
+
+									{% endif %} 
+				
+									<div id="modal{$counter}" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+										<section class="card">
+										<header class="card-header">
+									
+										</header>
+										<div class="card-body">
+											<div class="modal-wrapper">
+											
+											<div class="text-center">
+												<p class="mb-2"><strong class="text-8 font-weight-bold text-decoration-none text-primary ">Tem certeza disso?</strong></p> 
+					
+												<P class="text-8 font-weight-bold text-decoration-none text-primary" >{$value.desproduct} -  <b class="text-success">[R$ {$value.vlprice}]</b>   </p>
+											</div>
+									
+											<div class="text-center col-md-12" >
+									
+										
+														<hr>
+													
+														<h5 class="text-7 text-danger" style="line-height:25px"><strong>Essa ação irá DELETAR este serviço permanentemente do sistema!</strong> </h5>   
+													
+														<br>
+														<span class="lighter-1 text-5">Descrição do Serviço :</span>
+														<h5 class="text-5"><strong>{$value.desdescription}</strong> </h5>   
+														
+														<br>
+														<span class="lighter-1 text-5">Resumo do Serviço :</span>
+														<h5 class="text-5"><strong>{$value.desresume}</strong> </h5> 
+														
+														<br>
+														<span class="lighter-1 text-5">Categoria do Serviço :</span>
+														<h5 class="text-5"><strong>{function="getCategoryByID($value.incategory,'descat')"}</strong> </h5> 
+														
+														<br>
+														<span class="lighter-1 text-5">Descrição da Categoria :</span>
+														<h5 class="text-5"><strong>{function="getCategoryByID($value.incategory,'desresume')"}</strong> </h5> 
+					
+													
+										
+											</div>
+										</div>
+										</div>
+										<footer class="card-footer">
+										<div class="row">
+											<div class="col-md-12 text-center">
+											
+											<a href='{function="getProductInfoAndReturnHashOnURL($value.idproduct)"}'  class="btn btn-danger text-7 " style="text-decoration: none;" >
+											Deletar </a>
+											<button class="btn btn-info text-7 modal-dismiss">Fechar</button>
+											</div>
+										</div>
+										</footer>
+									</section>
+									</div>
+									</tbody>
+								</table>
+				
+				
+				
+				
+				
+				
+								<hr class="solid mt-5 opacity-4">
+								<div class="datatable-footer">
+								<div class="row align-items-center justify-content-between mt-3">
+								
+									<div class="col-lg-auto text-center order-3 order-lg-2">
+									<div class="results-info-wrapper"></div>
+									</div>
+									<div class="col-lg-auto order-2 order-lg-3 mb-3 mb-lg-0">
+									<div class="pagination-wrapper"></div>
+									</div>
+								</div>
+								</div>
+							</table>
+							</div>
+						</div>
+								
+									</div>   
+								</div>   
+								</div>        
+							</div>
+							</div>
+				
+					</div>
+
+
+					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+						<div class="modal-header">
+							<h1 class="modal-title fs-5" id="exampleModalLabel">Nova mensagem</h1>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+								<form action="{% url "mensagens" %}" method="POST" >
+									{% csrf_token %}
+								<div class="mb-3">
+									<label for="recipient-name" class="col-form-label">Para:</label>
+									<input type="text" id="user_rec" name="user_rec" class="form-control" 	 >
+								</div>
+								<div class="mb-3">
+									<label for="recipient-name" class="col-form-label">Titulo:</label>
+									<input type="text" id="titulo" name="titulo" class="form-control" >
+								</div>
+								<div class="mb-3">
+									<label for="message-text" class="col-form-label">Messagem:</label>
+									<textarea class="form-control" id="mensagem" name="mensagem"></textarea>
+								</div>
+							</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-success">Enviar</button>
+
+						</div>
+						</div>
+					</form>
+					</div>
+					</div>
+	</div>		<!-- end: page -->
+</div>
+
+{% endblock content %}

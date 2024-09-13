@@ -1,0 +1,137 @@
+	<main class="main">
+			<nav aria-label="breadcrumb" class="breadcrumb-nav">
+				<div class="container">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
+						<li class="breadcrumb-item active" aria-current="page">Checkout</li>
+					</ol>
+				</div><!-- End .container -->
+			</nav>
+
+			<div class="container">
+				<ul class="checkout-progress-bar">
+				
+					<a href="/carrinho-comprar">
+					<li>				
+						<span>Suas Informações</span>
+					</li></a>
+
+
+					<li class="active">
+						<span>Pagamento</span>
+					</li>
+				</ul>
+				<div class="row">
+					<div class="col-lg-8">
+						<ul class="checkout-steps">
+							<li>
+						
+							
+
+								<form action="/carrinho-comprar-2" method="POST">
+							
+
+
+
+
+
+
+
+							<li>
+								<div class="checkout-step-shipping">
+									<h2 class="step-title">Método de pagamento</h2>
+
+									<table class="table table-step-shipping">
+										<tbody>
+											<tr>
+												<td><input type="radio" required selected name="shipping-method" value="flat"></td>
+												<td><strong>R${function="ConvertVirgulaToPonto($CartPrice)"}</strong></td>
+												<td>Mercado Pago</td>
+												<td>Melhor Opção</td>
+											</tr>
+
+											<tr style="background-color: rgb(214, 214, 214);">
+												<td><input type="radio" disabled name="shipping-method" value="best"></td>
+												<td><strong>R${function="ConvertVirgulaToPonto($CartPrice)"} </strong></td>
+												<td>Indisponível no momento</td>
+												<td>Segunda Opção</td>
+											</tr>
+											
+										</tbody>
+									</table>
+								</div><!-- End .checkout-step-shipping -->
+							</li>
+						</ul>
+					</div><!-- End .col-lg-8 -->
+					
+
+					<div class="col-lg-4">
+						<div class="order-summary">
+							<h3>Resumo da compra</h3>
+
+							<h4>
+								<a data-toggle="collapse" href="#order-cart-section" class="collapsed" role="button" aria-expanded="false" aria-controls="order-cart-section">{$CartCount} produtos no carrinho</a>
+							</h4>
+
+							<div class="collapse" id="order-cart-section">
+								<table class="table table-mini-cart">
+									<tbody>
+							
+										{loop="$Item"}
+										<tr>
+											<td class="product-col">
+												<figure class="product-image-container">
+													<a href="/produto" class="product-image">
+														<img src='/{function="getArrayFromProducts($value[0].desimages)"}' alt="product">
+													</a>
+												</figure>
+												<div>
+													<h2 class="product-title">
+														<a href="/produto">{$value[0].desproduct}</a>
+													</h2>
+
+													<span class="product-qty">Qtd: 1</span>
+												</div>
+											</td>
+											<td class="price-col">R${function="ConvertVirgulaToPonto($value[0].vlprice)"}</td>
+										</tr>
+										{/loop}
+										
+									</tbody>	
+								</table>
+							</div><!-- End #order-cart-section -->
+						</div><!-- End .order-summary -->
+					</div><!-- End .col-lg-4 -->
+			
+
+
+
+				</div><!-- End .row -->
+
+
+				<div class="row">
+
+
+					
+						<div class="checkout-steps-action">
+							<button type="submit" class="btn btn-primary float-left">SEGUIR PARA PAGAMENTO</a>
+						</div><!-- End .checkout-steps-action -->
+				
+
+					
+
+
+				</div><!-- End .row -->
+
+				
+
+			</form>
+
+           
+			</div><!-- End .container -->
+
+
+
+
+			<div class="mb-6"></div><!-- margin -->
+		</main><!-- End .main -->

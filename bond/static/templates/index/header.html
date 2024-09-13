@@ -1,0 +1,395 @@
+ {% load static %}
+
+<html lang="en" >
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+		<title>Gameniak Marketplace</title>
+	
+		<meta name="keywords" content="HTML5 Template" />
+		<meta name="description" content="Gameniak Marketplace">
+		<meta name="author" content="GleyDevelopment">
+		<!-- Favicon -->
+		<link rel="icon" type="image/x-icon" href="{%static 'res/UserDashboard/assets/images/logoIcon.png'%}">
+		<!-- Plugins CSS File -->
+		<link rel="stylesheet" href="{% static 'res/UserDashboard/assets/css/bootstrap.min.css'%}">
+		
+		<!-- Main CSS File -->
+		<link rel="stylesheet" type="text/css" href="{%static 'res/UserDashboard/assets/vendor/fontawesome-free/css/all.min.css'%}">
+		<link rel="stylesheet" href="{% static "res/UserDashboard/assets/css/style.min.css"%}">
+
+
+		
+
+	
+		<script type="text/javascript">
+			WebFontConfig = {
+				google: { families: [ 'Open+Sans:300,400,600,700,800','Poppins:300,400,500,600,700', 'Shadows+Into+Light:400' ] }
+			};
+			(function(d) {
+				var wf = d.createElement('script'), s = d.scripts[0];
+				wf.src =' {% static "res/UserDashboard/assets/js2/webfont.js" %}';
+				wf.async = true;
+				s.parentNode.insertBefore(wf, s);
+			})(document);
+		</script> 
+	</head>
+
+
+	
+	
+
+
+	<!-- Plugins JS File -->
+	<script src="{% static '/res/UserDashboard/assets/js2/jquery.min.js' %}"></script>
+	<script src="{% static '/res/UserDashboard/assets/js2/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static '/res/UserDashboard/assets/js2/plugins.min.js' %}"></script>
+
+
+
+	<!-- Main JS File -->
+	<script src="{% static '/res/UserDashboard/assets/js2/main.min.js'%}"></script>
+
+	<!-- Google Map-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDc3LRykbLB-y8MuomRUIY0qH5S6xgBLX4"></script>
+	<script src="{%static 'res/UserDashboard/assets/js2/map.js'%}"></script>
+</body>
+</html>
+		
+	
+	
+<body>
+
+	<div class="page-wrapper">
+		<header class="header">
+			<div class="header-top">
+				<div class="container">
+					<div class="header-left d-none d-sm-block">
+							<img href="{% static 'res/UserDashboard/assets/images/logoIcon.png' %}"> 
+						{% comment %} <label class="top-message text-uppercase">Gameniak Marketplace - Compras e Vendas</label>  {% endcomment %}
+					<!-- End .header-left -->
+
+					{% comment %} <div class="header-right header-dropdowns ml-0 ml-sm-auto w-sm-100">
+						<div class="header-dropdown dropdown-expanded d-none d-lg-block">
+							<a href="#">Links</a>
+							<div class="header-menu">
+								 <ul>
+									<li><a href="my-account.html">Sobre nós </a></li>
+									<li><a href="about.html">Nossa equipe</a></li>						
+									<li><a href="blog.html">Blog</a></li>
+									<li><a href="contact.html">Fale Conosco</a></li>
+									<li><a href="#">Perguntas Frequentes</a></li>
+								</ul>
+							</div><!-- End .header-menu --> {% endcomment %}
+						</div><!-- End .header-dropown -->
+{% comment %} 
+						<span class="separator"></span>
+
+						<div class="header-dropdown ">
+							<a href="#">BRL</a>
+							<div class="header-menu">
+								<ul>
+									<li><a href="/">BRL</a></li>
+									<!-- <li><a href="#">USD</a></li> -->
+								</ul>
+							</div><!-- End .header-menu -->
+						</div><!-- End .header-dropown --> {% endcomment %}
+{% comment %} 
+						<div class="header-dropdown mr-auto mr-sm-3 mr-md-0">
+							<a href="#"><img src="{%static '/res/UserDashboard/assets/images/flags/br.png'%}" alt="England flag">PT-BR</a>
+							<div class="header-menu">
+								<ul>
+									<li><a href="/"><img src="{%static '/res/UserDashboard/assets/images/flags/br.png'%}" alt="England flag">PT-BR</a>
+									<!-- <li><a href="#"><img src="/res/UserDashboard/assets/images/flags/fr.png" alt="France flag">FRA</a></li> -->
+								</ul>
+							</div><!-- End .header-menu -->
+						</div><!-- End .header-dropown -->
+
+						<img href="{% static '/res/UserDashboard/assets/images/logo.png' %}"> 
+
+
+ {% endcomment %}
+
+
+
+						<span class="separator"></span>
+
+						<div class="social-icons">
+							<a href="#" class="social-icon social-instagram icon-instagram" target="_blank"></a>
+							<a href="#" class="social-icon social-twitter icon-twitter" target="_blank"></a>
+							<a href="#" class="social-icon social-facebook icon-facebook" target="_blank"></a>
+						</div><!-- End .social-icons -->
+					</div><!-- End .header-right -->
+				</div><!-- End .container -->
+			</div><!-- End .header-top -->
+
+			<div class="header-middle">
+				
+				 <div class="container">
+				
+				
+					<div class="header-left col-lg-2 w-auto pl-0">
+						<button class="mobile-menu-toggler text-primary mr-2" type="button">
+							<i class="icon-menu"></i>
+						</button>
+						<a href="/" class="logo">
+							<img src="{%static '/res/UserDashboard/assets/images/logo.png'%}" alt="Gameniak">
+						</a>
+					</div><!-- End .header-left -->
+
+					<div class="header-right w-lg-max">
+						<div class="header-icon header-icon header-search header-search-inline header-search-category w-lg-max text-right">
+					
+							<a href="#" class="search-toggle" role="button"><i class="icon-search-3"></i></a>
+						
+
+							<form action="/produtos" method="get" novalidate>
+								<div class="header-search-wrapper">
+									
+									<input type="search" class="form-control" name="procurar" placeholder="Pesquisar serviço..." required>
+									
+									<div class="select-custom">
+										<select id="cat" name="categoria">
+										
+											<option value="0" selected>Mostrar Tudo</option>
+											<option value="{$value.idcat}">{$value.descat}</option>
+											
+										</select>
+									</div><!-- End .select-custom -->
+									<button class="btn icon-search-3 p-0" type="submit"></button>
+								</div><!-- End .header-search-wrapper -->
+							</form>
+
+			
+						</div>
+			
+
+
+
+
+
+						<!-- ÍCONE DO LOGIN -->
+						<a href="{% url "dashboard" %}" title="ir para a dashboard" class="header-icon "><i class="fas fa-tools"></i></a>
+						<!-- ÍCONE DO LOGIN -->
+						<a href="{% url "login" %}" class="header-icon ">
+							<i class="icon-user-2"></i>
+						</a>
+
+
+						<!-- ÍCONE DOS FAVORITOS -->
+						<a href="/ativar-modo-escuro" title="Ativar modo escuro" class="header-icon"><i class="far fa-lightbulb"></i></a>
+						<!-- ÍCONE DOS FAVORITOS -->
+
+
+
+
+
+
+						<!-- ======================== -->
+							   <!-- CARRINHO -->
+						<!-- ======================== -->
+							
+							<div class="dropdown cart-dropdown">
+								<a href="#" class="dropdown-toggle dropdown-arrow" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+									<i class="icon-shopping-cart"></i>
+									{% comment %} {% if not contagem  %} {% endcomment %}
+										<span class="cart-count badge-circle">{{contagem}}</span>
+									{% comment %} {% else %} {% endcomment %}
+										<span class="cart-count badge-circle">{{contagem}}</span>
+
+										{% comment %} {% endif %} {% endcomment %}
+								</a>
+
+
+								<div class="dropdown-menu">
+									<div class="dropdownmenu-wrapper">
+										<div class="dropdown-cart-header">
+											
+											<span>{{contagem}} Itens</span>
+											
+
+											<a href="/limpar-carrinho" class="float-right">Limpar Carrinho</a>
+										</div><!-- End .dropdown-cart-header -->
+									<div class="dropdown-cart-products">
+											
+										
+								
+
+											{% for i in  produto_carrinho %}
+											 <div class="product">
+												<div class="product-details">
+													<h4 class="product-title">
+														<a href='/servico/visualizar/{function="setHash($value[0].idproduct)"}' title="{{i.produto.nome}}">{{i.produto.nome}}</a>
+													</h4>
+													<span class="cart-product-info">
+														<span class="cart-product-qty">{{i.quantidade}}</span>
+													</span>
+												</div>
+
+												<figure class="product-image-container">
+													<a href='/servico/visualizar/{function="setHash($value[0].idproduct)"}' class="product-image">
+														<img src='/{function="getArrayFromProducts($value[0].desimages)"}'  class="img-product-cart" >
+													</a>
+													<a href='/remover-carrinho/{function="setHash($value[0].idproduct)"}' class="btn-remove icon-cancel" title="Remover Produto"></a>
+												</figure>
+											</div> 
+											{% endfor %}
+											  
+
+							
+
+
+										</div><!-- End .cart-product -->
+
+										<div class="dropdown-cart-total">
+											<span>Total</span>
+
+											<span class="cart-total-price float-right">R${function="ConvertVirgulaToPonto($CartPrice)"}</span>
+										</div><!-- End .dropdown-cart-total -->
+
+										<div class="dropdown-cart-action">
+											<a href="/carrinho" class="btn btn-info btn-block font-weight-bold">Visualizar Carrinho</a>
+											
+										</div><!-- End .dropdown-cart-total -->
+									</div><!-- End .dropdownmenu-wrapper -->
+								</div><!-- End .dropdown-menu -->
+							</div><!-- End .dropdown -->
+
+
+						<!-- ======================== -->
+							   <!-- CARRINHO -->
+						<!-- ======================== -->
+
+
+
+
+
+
+
+					</div><!-- End .header-right -->
+				</div><!-- End .container -->
+			</div><!-- End .header-middle -->
+
+
+
+
+
+			<div class="header-bottom sticky-header d-none d-lg-block  ">
+				<div class="container">
+					
+					<nav class="main-nav w-100">
+						<ul class="menu">
+							<li class="active">
+								<a href="/">INÍCIO</a>
+							</li>
+						
+							<li><a href="{% url 'lista_produtos' %} ">PRODUTOS</a></li>
+							<li><a href="{% url "servicos" %}">SERVIÇOS</a></li>
+							{% comment %} <li><a href="/logout">Desconectar-se</a></li> {% endcomment %}
+							{% comment %} <li><a href="/logar">CONECTAR-SE</a></li> {% endcomment %}
+							<!-- 
+							<li><a href="/carrinho">Mostrar carrinho</a></li>		 
+							<li><a href="/">COMO FUNCIONA?</a></li> 						
+							<li><a href="/"> NÓS</a></li>
+							<li><a href="/">TERMOS DE USO</a></li> 
+						    -->
+				
+						</ul>
+					</nav>
+				</div><!-- End .container -->
+			</div><!-- End .header-bottom -->
+		</header><!-- End .header -->
+
+
+
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+			  <div class="modal-content">
+				<div class="row row-sparse">
+					<div class="col-md-6">
+						<h2 class="title mb-2">Conectar-se</h2>
+						<form action="/logar" method="POST" class="mb-1" novalidate>
+							<label for="login-email">Seu Email <span class="required">*</span></label>
+							<input type="email" name="deslogin" class="form-input form-wide mb-2" id="login-email" required />
+		
+							<label for="login-password">Sua Senha <span class="required">*</span></label>
+							<input type="password" name="despassword" class="form-input form-wide mb-2" id="login-password" required />
+		
+							<div class="form-footer">
+								<button type="submit" class="btn btn-primary btn-md">LOGIN</button>
+		
+								<div class="custom-control custom-checkbox form-footer-right">
+									<input type="checkbox" class="custom-control-input" id="lost-password">
+									<label class="custom-control-label form-footer-right "  style="text-transform :none !important; " for="lost-password">Lembrar-se de mim</label>
+								</div>
+							</div><!-- End .form-footer -->
+							<a href="#" class="forget-password">Esqueceu a senha?</a>
+						</form>
+		
+		
+						
+					</div><!-- End .col-md-6 -->
+				</div>
+		
+		
+		
+		
+		
+		
+					<div class="col-md-6">
+						<h2 class="title mb-2">Cadastrar-se</h2>
+		
+		
+		
+		
+						<form action="/cadastrar" method="post" novalidate>
+		
+							<label for="register-email">Insira o seu nome completo <span class="required">*</span></label>
+							<input type="email" class="form-input form-wide mb-2" id="register-email" required>
+		
+							<label for="register-email">Insira seu Email <span class="required">*</span></label>
+							<input type="email" class="form-input form-wide mb-2" id="register-email" required>
+		
+							<label for="register-email">Confirme o seu Email<span class="required">*</span></label>
+							<input type="email" class="form-input form-wide mb-2" id="register-email" required>
+		
+							<label for="register-password">Insira sua senha<span class="required">*</span></label>
+							<input type="password" class="form-input form-wide mb-2" id="register-password" required>
+		
+							<div class="form-footer">
+								<button type="submit" class="btn btn-primary btn-md">Registrar</button>
+		
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="newsletter-signup">
+									<label class="custom-control-label" for="newsletter-signup" style="text-transform :none !important; ">Desejo receber as novidades</label>
+								</div><!-- End .custom-checkbox -->
+							</div><!-- End .form-footer -->
+						</form>
+		
+		
+		
+		
+					</div><!-- End .col-md-6 -->
+				</div><!-- End .row -->
+			</div><!-- End .container -->
+		
+			<div class="social-login-wrapper">
+				<p>CONECTE-SE COM : (NECESSÁRIO CONFIGURAR API'S).</p>
+		
+				<div class="btn-group">
+					<a class="btn btn-social-login btn-md btn-gplus mb-1"><i class="fab fa-google pt-1"></i><span>Google</span></a>
+					<a class="btn btn-social-login btn-md btn-facebook mb-1"><i class="icon-facebook"></i><span>Facebook</span></a>
+					<a class="btn btn-social-login btn-md btn-twitter mb-1"><i class="icon-twitter"></i><span>Twitter</span></a>
+				</div>
+			</div>
+		</div>
+
+{% block content %}
+
+{% endblock  %}
+
+
+{% include "index/footer.html" %} 

@@ -1,0 +1,212 @@
+
+<!-- start: page -->
+<section class="action-buttons-fixed" >
+       
+
+
+
+
+
+
+
+
+
+
+
+    {if="$sucess"}
+
+    <div class="alert alert-success  mb-1 mt-1 text-center" >
+    
+    <strong class="text-dark">{$sucess}</strong>
+    </div>
+    
+    {/if}
+
+
+
+
+    {if="$error"}
+
+    <div class="alert alert-danger  mb-1 mt-1 text-center" >
+    
+    <strong class="text-dark">Ocorreu um erro inesperado! </strong> <strong>{$error}</strong>
+    </div>
+    
+    {/if}
+
+
+
+
+
+
+
+
+
+
+    <form action="/admin/adicionar-tag" method="post">  
+        <div class="row">
+            <div class="col">
+                <section class="card card-modern card-big-info">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-2-5 col-xl-1-5">
+                                <i class="card-big-info-icon bx bxs-bookmark-alt-plus text-primary"></i>
+                                <h2 class="card-big-info-title">Criar Categoria</h2>
+                                <p class="card-big-info-desc">Utilize essa aba para adicionar novas categorias para os produtos do site em geral.</p>
+                            </div>
+        
+                      
+                            <div class="col-lg-3-5 col-xl-4-5">
+        
+                                
+                                <div class="form-group row align-items-center">
+                                    <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-semibold">Nome da <strong>Categoria</strong> </label>
+                                    <div class="col-lg-7 col-xl-6">
+                                        <input type="text" class="form-control form-control-modern" name="descat" placeholder="ex: Tíbia Coins" data-plugin-maxlength maxlength="35" required style="background-color: rgb(240, 240, 240);"/>
+                                    </div>                                
+                                </div>
+        
+        
+                                <div class="form-group row align-items-center">
+                                    <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-semibold">Descrição da <strong>Categoria</strong> </label>
+                                    <div class="col-lg-7 col-xl-6">
+                                        <input type="text" class="form-control form-control-modern" name="desresume" data-plugin-maxlength maxlength="128" placeholder="ex: categoria voltada para moedas do jogo tíbia" required style="background-color: rgb(240, 240, 240);"/>
+                                    </div>                                
+                                </div>
+        
+        
+                              
+        
+                      
+                      
+                                <div class="form-group row align-items-center justify-content-center">
+                                    <button type="submit" class="submit-button bg-primary btn btn-primary btn-px-4 py-3 d-flex align-items-center font-weight-semibold line-height-1" data-loading-text="Carregando...">
+                                        <i class="bx bx-save text-4 mr-2"></i> Criar Categoria
+                                    </button>
+                                    <button type="reset" class="submit-button bg-danger btn btn-danger btn-px-4 py-3 d-flex align-items-center font-weight-semibold line-height-1" data-loading-text="Carregando...">
+                                        <i class="bx bx-save text-4 mr-2"></i> Limpar Campos
+                                    </button>
+                                </div>
+                            
+        
+        
+                            </div>
+        
+        
+        
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>  
+        </form>
+        
+
+
+
+
+
+        <div class="separator"><br></div>
+
+        
+
+
+
+
+
+
+
+        <form action="/admin/adicionar-tag" method="post">  
+            <div class="row">
+                <div class="col">
+                    <section class="card card-modern card-big-info">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-2-5 col-xl-1-5">
+                                    <i class="card-big-info-icon bx bxs-notepad text-primary"></i>
+                                    <h2 class="card-big-info-title">Criar Categoria</h2>
+                                    <p class="card-big-info-desc">Utilize essa aba para adicionar novas categorias para os produtos do site em geral.</p>
+                                </div>
+            
+                                
+                          
+                                <div class="col-lg-3-5 col-xl-4-5">
+            
+                                    
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-semibold">Nome da <strong>Categoria</strong> </label>
+                                        <div class="col-lg-7 col-xl-6">
+                                            <input type="text" class="form-control form-control-modern" name="desdevelopment" placeholder="ex: Tíbia Coins" required style="background-color: rgb(240, 240, 240);"/>
+                                        </div>                                
+                                    </div>
+            
+            
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-semibold">Descrição da <strong>Categoria</strong> </label>
+                                        <div class="col-lg-7 col-xl-6">
+                                            <input type="text" class="form-control form-control-modern" name="deswebsite_root_url" placeholder="ex: categoria voltada para moedas do jogo tíbia" required style="background-color: rgb(240, 240, 240);"/>
+                                        </div>                                
+                                    </div>
+            
+            
+                                  
+            
+                          
+                          
+                                    <div class="form-group row align-items-center justify-content-center">
+                                        <button type="submit" class="submit-button bg-primary btn btn-primary btn-px-4 py-3 d-flex align-items-center font-weight-semibold line-height-1" data-loading-text="Carregando...">
+                                            <i class="bx bx-save text-4 mr-2"></i> Salvar Informações
+                                        </button>
+                                        <button type="reset" class="submit-button bg-danger btn btn-danger btn-px-4 py-3 d-flex align-items-center font-weight-semibold line-height-1" data-loading-text="Carregando...">
+                                            <i class="bx bx-save text-4 mr-2"></i> Limpar Campos
+                                        </button>
+                                    </div>
+                                
+            
+            
+                                </div>
+            
+            
+            
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>  
+            </form>
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</section>
+<!-- end: page -->
+

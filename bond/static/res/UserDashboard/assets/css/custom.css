@@ -1,0 +1,59 @@
+.Form-Color{
+    background-color: rgb(240, 240, 240) !important; border-color: rgb(247, 247, 247) !important;
+}
+
+
+.img-product-alta{										
+    width: 600px !important;
+    height: 300px !important; 
+    object-fit: cover;
+    /* object-fit: contain; */
+} 
+
+.img-product-novidade{										
+    width: 600px !important;
+    height: 210px !important; 
+    object-fit: cover;
+    /* object-fit: contain; */
+} 
+
+.img-product-related{										
+    width: 600px !important;
+    height: 320px !important; 
+    object-fit: cover;
+    /* object-fit: contain; */
+} 
+
+
+												
+.img-product-cart
+{										
+height: 80px !important; 
+width:  100px !important;
+object-fit: cover !important;
+
+} 
+
+
+
+.img-product-modal{										
+
+    height: 390px !important; 
+    object-fit: cover;
+    /* object-fit: contain; */
+} 
+
+.img-product-pagina{										
+  
+    height: 480px !important; 
+    object-fit: cover;
+    /* object-fit: contain; */
+} 
+
+
+.img-product-pagina-icon{										
+  
+    height: 100% !important; 
+    object-fit: cover;
+    /* object-fit: contain; */
+} 

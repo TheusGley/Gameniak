@@ -1,0 +1,259 @@
+{% extends "dashboard/header.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+<div class="row" >
+  <div class="col-lg-4 col-xl-3  mb-xl-0 " >
+
+    <section class="card" >
+      <div class="card-body" >
+        <div class="thumb-info" >
+
+          {% if not userInfo.imagem %}
+          <i class="bi bi-person-bounding-box ps-5" style="font-size:20vh"></i>
+
+          {% else %}
+          <img src="{{ userInfo.imagem.url }}" style="background-color: rgb(235, 235, 235);" class="rounded img-fluid">
+          
+          {% endif %}
+                    <div class="thumb-info-title" >
+            <span class="thumb-info-inner">{{request.user.first_name}}</span>       
+            
+          </div>
+       
+        </div>
+
+        <h1 class="font-weight-bold " >{{request.user.username}}</h1>
+
+        <hr class="dotted short">
+      
+        <h5 class="mb-2 mt-3 font-weight-semibold">Sobre mim</h5>
+        <p class="text-3 font-weight-bold">
+         {{userInfo.sobre}} 
+         </p>
+       
+        <hr class="dotted short">
+
+   
+      </div>
+    </section>
+
+  
+  
+
+   
+  </div>
+
+  
+  <div class="col-lg-9" >
+
+    <div class="tabs">
+ 
+      <div class="tab-content">
+        <div id="overview" class="tab-pane active">
+
+       <div id="edit" class="tab-pane" >
+
+
+          <form class="p-3" action="{% url "minhaConta" %}" method="POST">
+
+            {% csrf_token %}  
+
+
+                <h4 class="mb-3">Informações do usuário </h4>
+              
+
+
+
+
+                <div class="form-row mb-4">
+                  <div class="form-group col">
+                    <label for="inputAddress">Seu Usuario </label>
+
+                    <div class="form-group row align-items-center">          
+                      <div class="col-lg-12 col-xl-12">
+                          <input type="text" class="form-control form-control-modern Form-Color" name="username" id="username" maxlength="15"  value="{{request.user.username}}"  required />
+                      </div>   
+                    </div>
+
+                  </div>
+                </div>
+
+
+                <div class="form-row">
+
+
+
+                <div class="col-md-6 mb-3">
+                    <label for="new_pass_confirm" class="form-label">Seu Contato</label>
+
+                    <input type="tel" class="form-control text-4 form-control-modern Form-Color" name="telefone" id="telefone" maxlength="15"  value="{{userInfo.telefone}}"  required />
+
+
+
+                </div> 
+          
+
+
+
+                  <div class="col-md-6 mb-3">
+                    <label for="new_pass_confirm" class="form-label">Seu Aniversário</label>
+                      <label  class="form-control form-control-modern text-4 Form-Color"  > {{ userInfo.data_nas|date:'d-m-Y' }} </label> 
+                  </div>
+
+                
+
+              
+                
+
+            </div>
+
+
+            <div class="col-lg-3-5 col-xl-4-5">
+              <div class="form-group row align-items-center">
+                  <div class="col">
+                      <div id="dropzone-form-image"  >
+                          <span class="dropzone-upload-message text-center ">
+                              <div class="dropzone" id="dropzone">
+                                  <span class="dropzone-upload-message">
+                                      <i class="bx bxs-cloud-upload"></i>
+                                      <p>Arraste/Envie <span style="color: rgb(47, 182, 58);">imagens aqui</span> (Recomendado: <span style="color: red;">600 x 600</span>).</p>
+                                  </span>
+                                  <input type="file" id="fileInput" name="imagem" style="display: none;">
+                              </div>
+                          
+                              <div id="preview"></div>
+                  </div>
+              </div>
+
+              <style>
+                .dropzone {
+                    border: 2px dashed #4CAF50;
+                    border-radius: 10px;
+                    padding: 20px;
+                    text-align: center;
+                    cursor: pointer;
+                    margin-bottom: 20px;
+                }
+        
+                .dropzone i {
+                    font-size: 50px; /* Aumenta o tamanho do ícone */
+                    color: #4CAF50;  /* Cor do ícone */
+                }
+        
+                #preview img {
+                    max-width: 100px;
+                    margin: 10px;
+                    display: inline-block;
+                    border: 1px solid #ccc;
+                    padding: 5px;
+                    border-radius: 5px;
+                }
+            </style>
+
+            <script>
+                const dropzone = document.getElementById('dropzone');
+                const fileInput = document.getElementById('fileInput');
+                const preview = document.getElementById('preview');
+        
+                dropzone.addEventListener('click', () => {
+                    fileInput.click();
+                });
+        
+                dropzone.addEventListener('dragover', (event) => {
+                    event.preventDefault();
+                    dropzone.classList.add('hover');
+                });
+        
+                dropzone.addEventListener('dragleave', () => {
+                    dropzone.classList.remove('hover');
+                });
+        
+                dropzone.addEventListener('drop', (event) => {
+                    event.preventDefault();
+                    dropzone.classList.remove('hover');
+        
+                    const files = event.dataTransfer.files;
+                    handleFiles(files);
+                });
+        
+                
+                fileInput.addEventListener('change', (event) => {
+                    const files = event.target.files;
+                    handleFiles(files);
+                });
+        
+                
+                function handleFiles(files) {
+                    preview.innerHTML = '';
+                    for (const file of files) {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = (e) => {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            preview.appendChild(img);
+                        };
+                    }
+                }
+                  
+                </script>
+
+
+
+                <div class="form-row mb-4">
+                  <div class="form-group col">
+                    <label for="inputAddress2">Fale um pouco sobre você</label>
+                        
+                    <div class="form-group row align-items-center">          
+                      <div class="col-lg-12 col-xl-12">
+                          <textarea type="text" class="form-control form-control-modern  Form-Color" name="sobre" id="sobre" maxlength="256" rows="5" cols="33"  required style=" resize: none;">{{userInfo.sobre}}</textarea>
+                      </div>   
+                    </div>
+
+                  </div>
+                </div>
+                
+                <p> {{error_messages}} </p>
+        
+                <div class="form-row">
+                  <div class="col-md-12 text-right mt-2">
+                    <button class="btn btn-success text-5" >Salvar informações</button>
+                  </div>
+                </div>
+                
+
+
+                <div class="form-row">
+                  <div class="col-md-12 text-right mt-2">
+                  </div>
+                </div>
+                
+
+                </div>
+
+
+          
+
+
+
+
+            
+
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<!-- end: page -->
+</section>
+</div>
+
+{% endblock %}
