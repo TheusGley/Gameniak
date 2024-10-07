@@ -150,10 +150,10 @@
 								<div class="modal-content">
 									<div class="modal-body add-cart-box text-center">
 									<label>Você quer adicionar esse produto no seu  <br>carrinho?</label>
-									<h4 >{{S.nome}}</h4>
+									<h4 >{{s.nome}}</h4>
 									<img src="#" id="productImage" width="100" height="100" alt="adding cart image">
 									<div class="btn-actions">
-										<a href="{% url "addCarrinho"  S.id %}"><button class="btn-primary">Adicionar</button></a>
+										<a href="{% url "addCarrinho"  s.id %}"><button class="btn-primary">Adicionar</button></a>
 										<a href="#"><button class="btn-primary" data-dismiss="modal">Fechar janela</button></a>
 									</div>
 									</div>

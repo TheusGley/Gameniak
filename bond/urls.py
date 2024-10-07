@@ -6,6 +6,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('', homeSiteView, name='home'),
+    path('colaborador', groupsColaborador, name='colaborador'),
+    path('cliente', groupsCliente, name='cliente'),
+    path('cadastro', cadastroView, name='cadastro'),
     path('login', loginView, name='login'),
     path('addCarrinho/<id>/', carrinho_add,  name='addCarrinho'),
     path('carrinho/', carrinho,  name='carrinho'),
@@ -21,6 +24,8 @@ urlpatterns = [
     path('pubAnuncio', pubAnuncioView, name='pubAnuncio'),
     path('gerAnuncio', gerAnuncioView, name='gerAnuncio'),
     path('logout', logoutView, name='logout'),
+    path('tipo', tipoView, name='tipo'),
+    
     
     
 

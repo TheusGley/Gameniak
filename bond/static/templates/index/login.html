@@ -73,26 +73,31 @@
 
 					
 					
-						<form action="/cadastrar" method="post" novalidate>
+						<form action="{% url "cadastro" %}" method="post" novalidate>
+							{% csrf_token %}
+
 							
 						
 
-							<input type="text" class="form-control" name="desperson" placeholder="Insira o seu nome completo" required>
-							<input type="email" class="form-control" name="deslogin" placeholder="Insira o seu email" required>
+							<input type="text" id="nome"class="form-control" name="nome" placeholder="Insira o seu nome completo" required>
+							<input type="text" id="username" class="form-control" name="username" placeholder="Insira um username" required>
+							<input type="email" id="email" class="form-control" name="email"  placeholder="Insira o seu email" required>
 							<input type="email" class="form-control" name="deslogin_confirm" placeholder="Repita o seu email" required>
-							<input type="password" class="form-control"  name="despassword" placeholder="Insira sua senha" required>
+							<input type="password" id="senha" class="form-control"  name="senha" placeholder="Insira sua senha" required>
+							<input type="password" id="senha2" class="form-control"  name="despassword2" placeholder="Repita sua senha" required>
 						
+							<p id="mensagemErro" style="color: red; display: none;">Senha não confere</p>
 						
 							<div class="checkbox mb-3">
 								<label>
-								  <input type="checkbox" id="interms" name="interms" value="1" target="_blank"> Li e Aceito os termos de uso
+								  <input type="checkbox" id="meuCheckbox" name="interms" value="1" target="_blank"> Li e Aceito os termos de uso
 								</label>
 							  </div>
 
 							  
 					
 							<div class="form-footer">
-								<button type="submit" class="btn btn-primary">CADASTRAR-SE</button>
+								<button type="submit" id="meuBotao" disabled class="btn btn-primary">CADASTRAR-SE</button>
 							
 							</div><!-- End .form-footer -->
 						</form>
@@ -109,5 +114,45 @@
 
 			<div class="mb-5"></div><!-- margin -->
 		</main><!-- End .main -->
+
+
+		<script>
+
+			document.addEventListener("DOMContentLoaded", function() {
+				var checkbox = document.getElementById('meuCheckbox');
+				var botao = document.getElementById('meuBotao');
+			
+				// Função para verificar o estado do checkbox
+				checkbox.addEventListener('change', function() {
+					if (checkbox.checked) {
+						botao.removeAttribute('disabled');
+					} else {
+						botao.setAttribute('disabled', 'disabled');
+					}
+				});
+			});
+
+			document.addEventListener("DOMContentLoaded", function() {
+				var senha = document.getElementById('senha');
+				var confirmarSenha = document.getElementById('senha2');
+				var mensagemErro = document.getElementById('mensagemErro');
+				var botaoEnviar = document.getElementById('enviar');
+			
+				// Função para verificar se as senhas coincidem
+				function verificarSenhas() {
+					if (senha.value === confirmarSenha.value && senha.value !== "") {
+						mensagemErro.style.display = 'none';
+						botaoEnviar.removeAttribute('disabled');
+					} else {
+						mensagemErro.style.display = 'block';
+						botaoEnviar.setAttribute('disabled', 'disabled');
+					}
+				}
+			
+				// Verifica as senhas toda vez que o usuário digita em um dos campos
+				senha.addEventListener('input', verificarSenhas);
+				confirmarSenha.addEventListener('input', verificarSenhas);
+			});
+	</script>			
 
 		{% endblock  %}

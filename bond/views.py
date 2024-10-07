@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login ,  logout
 import datetime
 from django.shortcuts import render,get_object_or_404, redirect
 from decimal import Decimal
-
+from django.contrib.auth.models import  Group
 
 
 def loginView (request):
@@ -32,6 +32,32 @@ def loginView (request):
             
             
     return render(request, 'index/login.html')
+
+def cadastroView (request):
+    nome  = request.POST.get('nome')
+    email = request.POST.get('email') 
+    username = request.POST.get('username')
+    senha = request.POST.get('senha')
+
+    if request.method == 'POST':
+        user  = User.objects.all()
+        customuser = Customuser.objects.all()
+        try:
+            user.create(email=email, password=senha, first_name=nome, username=username)
+            user_request = User.objects.get(username=username)
+            customuser.create(sobre="", telefone="", creditos=0, data_nas = datetime.datetime.now() , user=user_request)
+            login(request, user_request)
+            
+        
+            return redirect('tipo')
+            
+        except IntegrityError as e :
+            print (e)
+            context = {'error':str(e)}
+            return redirect('dashboard',context)
+            
+    return redirect('dashboard',context)
+
 
 
 # Index 
@@ -160,6 +186,28 @@ def homeView (request):
     
     return render(request, 'dashboard/index.html')
 
+def tipoView (request):
+    
+    return render(request, 'index/tipoConta.html')
+
+def groupsCliente (request):
+
+    user = User.objects.get(username=request.user.username)
+    grupo = Group.objects.get(name="Cliente")
+    user.groups.add(grupo)
+    
+    return redirect('home')
+
+def groupsColaborador (request):
+    
+    
+    user = User.objects.get(username=request.user.username)
+    grupo = Group.objects.get(name="Colaborador")
+    user.groups.add(grupo)
+    
+    return redirect('dashboard')
+
+
 
 def meuPerfilView(request):
     
@@ -170,6 +218,7 @@ def meuPerfilView(request):
 def dashboardView (request):
     
     now=  datetime.datetime.now()
+    print(request.user)
     user = Customuser.objects.get(user=request.user)     
     creditos = user.creditos
     transacoes = Transaction.objects.filter(seller=request.user.id)
