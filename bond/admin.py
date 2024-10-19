@@ -12,8 +12,9 @@ admin.site.register(Carrinho)
 admin.site.register(Transaction)
 admin.site.register(Order)
 admin.site.register(CreditTransaction)
-
+admin.site.register(Creditos)
 admin.site.register(Produto_Carrinho) 
+admin.site.register(Comentario) 
 
 
 

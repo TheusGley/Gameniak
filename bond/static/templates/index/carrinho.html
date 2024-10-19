@@ -1,4 +1,10 @@
-	    <main class="main">
+	{% extends "index/header.html" %}
+
+	{% block content %}
+	
+	
+	
+	<main class="main">
 			<nav aria-label="breadcrumb" class="breadcrumb-nav">
 				<div class="container">
 					<ol class="breadcrumb">
@@ -14,97 +20,63 @@
 						<div class="cart-table-container">
 							<table class="table table-cart">
 								<thead>
-								
-								
-								
 									<tr>
 										<th class="product-col">Produto</th>
-									
-								
 										<th>Valor Únitário</th>
 									</tr>
-
-
-
 								</thead>
-							
-							
 								<tbody>
 
-
-
-
-
-									{loop="$Item"}
+									{% for i in produtos   %}
+									
 									<tr class="product-row">
 										<td class="product-col">
 											<figure class="product-image-container">
-												<a href='/servico/visualizar/{function="setHash($value[0].idproduct)"}' class="product-image">
-													<img src='/{function="getArrayFromProducts($value[0].desimages)"}' class="img-product-novidade" alt="product">
+												<a href='{% url "produto" i.id %}' class="product-image">
+													<img src='{{i.produto.imagem.url}}' class="img-product-novidade" alt="product">
 												</a>
 											</figure>
 											<h2 class="product-title">
-												<a href='/servico/visualizar/{function="setHash($value[0].idproduct)"}'>{$value[0].desproduct}</a>
+												<a href='{% url "produto" i.id %}'>{{i.produto.nome}}</a>
 											</h2>
 										</td>
 									
 								
-										<td>R${function="ConvertVirgulaToPonto($value[0].vlprice)"}</td>
-									</tr>
-
-
-
-
-									<tr class="product-action-row">
+										<td>R${{i.produto.valor}}</td>
 									
 										<td colspan="4" class="clearfix">
 											<div class="float-left">
-												<a href='/remover-carrinho/{function="setHash($value[0].idproduct)"}' class="btn-move">Clique para remover do carrinho</a>
+												<a href='{% url "delete" i.id %}' class="btn-move">Clique para remover do carrinho</a>
 											</div>
 											
 											<div class="float-right">
-												<a href='/remover-carrinho/{function="setHash($value[0].idproduct)"}' title="Remover Produto" class="btn-edit"><span class="sr-only">Editar</span><i class="icon-cancel"></i></a>
+												<a href='{% url "limparCarrinho"%}}' title="Remover Produto" class="btn-edit"><span class="sr-only">Editar</span><i class="icon-cancel"></i></a>
 											</div>
 										</td>
 
 									</tr> 
-									{/loop}
-
-
-
-
-								
-
-
+									{% endfor %}
 
 
 								</tbody>
-
-
-
 
 								<tfoot>
 									<tr>
 										<td colspan="4" class="clearfix">
 											<div class="float-left">
-												<a href="/" class="btn btn-outline-secondary">Continuar comprando</a>
+												<a href="{% url "home" %}" class="btn btn-outline-secondary">Continuar comprando</a>
 											</div><!-- End .float-left -->
 
 											<div class="float-right">
-												<a href="/limpar-carrinho" class="btn btn-outline-secondary btn-clear-cart">Limpar carrinho de compras</a>
+												<a href='{% url "limparCarrinho" %}' class="btn btn-outline-secondary btn-clear-cart">Limpar carrinho de compras</a>
 										
 											</div><!-- End .float-right -->
 										</td>
 									</tr>
 								</tfoot>
 
-
-
 							</table>
 						</div><!-- End .cart-table-container -->
-
-
-
 
 <!-- 
 
@@ -120,18 +92,6 @@
 							</form>
 						</div> -->
 					</div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 					<div class="col-lg-4">
 						<div class="cart-summary">
@@ -213,12 +173,13 @@
 							<table class="table table-totals">
 								<tbody>
 
-									{loop="$Item"}
+									{% for i in produtos%}
+									
 									<tr>
-										<td>{$value[0].desproduct} </td>
-										<td>R${function="ConvertVirgulaToPonto($value[0].vlprice)"}</td>
+										<td>{{i.produto.valor}} </td>
 									</tr>
-									{/loop}
+									{% endfor %}
+
 
 						
 							
@@ -226,7 +187,7 @@
 								<tfoot>
 									<tr>
 										<td>Valor Final</td>
-										<td>R${function="ConvertVirgulaToPonto($CartPrice)"}</td>
+										<td>R$ {{valorTotal}}</td>
 									</tr>
 								</tfoot>
 							</table>
@@ -244,4 +205,7 @@
 			<div class="mb-6"></div><!-- margin -->
 		</main><!-- End .main -->
 
+		{% include "index/footer.html" %}
+
+		{% endblock  %}
 	

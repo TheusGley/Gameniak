@@ -77,6 +77,14 @@
 						<div class="header-dropdown dropdown-expanded d-none d-lg-block">
 							<a href="#">Links</a>
 							<div class="header-menu">
+								{% if group == "clientes" %}
+								<ul>
+									<li><a  href="{% url 'home' %}">Painel Inicial</a> </a></li>
+									<li><a href="{% url 'mensagens' %}">Mensagens</a></li>
+									<li><a href="{% url "logout" %}">Logout </a></li>
+								</ul>
+								
+								{% elif  group == "colaborador"  %}
 								<ul>
 									<li><a  href="{% url 'dashboard' %}">Painel Inicial</a> </a></li>
 									<li><a  href="{% url 'minhaConta' %}">Minha Conta</a></li>
@@ -85,6 +93,8 @@
 									<li><a  href="{% url 'gerAnuncio' %}">Gerenciar Anuncios</a></li>
 									<li><a href="{% url "logout" %}">Logout </a></li>
 								</ul>
+							{%endif%}
+								
 							</div><!-- End .header-menu -->
 						</div><!-- End .header-dropown -->
 

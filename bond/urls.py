@@ -10,13 +10,23 @@ urlpatterns = [
     path('cliente', groupsCliente, name='cliente'),
     path('cadastro', cadastroView, name='cadastro'),
     path('login', loginView, name='login'),
-    path('addCarrinho/<id>/', carrinho_add,  name='addCarrinho'),
-    path('carrinho/', carrinho,  name='carrinho'),
-    path('dashboard', dashboardView, name='dashboard'),
+    #home
+  
     path('lista_produtos', listaProdutosView, name='lista_produtos'),
-    path('servicos', servicosView, name='servicos'),
+    path('lista_produtos/<categoria>', listaCategoriaView, name='lista_categorias'),
+    path('lista_servicos', listaServicosView, name='lista_servicos'),
+    
+    
+    path('produto/<id>', produtoView, name='produto'),
+    path('servico/<id>', servicosView, name='servico'),
     path('servicos/<search>', listaProdutosView, name='lista_produtos'),
     path('lista_produtos/<search>', listaProdutosView, name='lista_produtos'),
+    path('categoria/<cat>', categoriaView, name='categoria'),
+    
+    
+    
+    # dashboard
+    path('dashboard', dashboardView, name='dashboard'),
     path('mudarInfo', mudarInfoView, name='mudarInfo'),
     path('minhaConta', minhaContaView, name='minhaConta'),
     path('meuPerfil', meuPerfilView, name='meuPerfil'),
@@ -25,6 +35,16 @@ urlpatterns = [
     path('gerAnuncio', gerAnuncioView, name='gerAnuncio'),
     path('logout', logoutView, name='logout'),
     path('tipo', tipoView, name='tipo'),
+    
+    #carrinho 
+    path('addCarrinho/<id>/url', carrinho_add,  name='addCarrinho'),
+    path('carrinho/', carrinho,  name='carrinho'),
+    path('limpar_carrinho/', limparCarrinhoView,  name='limparCarrinho'),
+    path('delete/<idObj>', deleteView,  name='delete'),
+    
+    #comentarios
+    path('comentario/<id_obj>/', comentarioView,  name='addComentario'),
+    
     
     
     

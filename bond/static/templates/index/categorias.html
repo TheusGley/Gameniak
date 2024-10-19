@@ -33,7 +33,6 @@
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="{% url "home" %}"><i class="icon-home"></i></a></li>
 						<li class="breadcrumb-item"><a href="{% url "home" %}">INÍCIO</a></li>
-						<li class="breadcrumb-item active"><a href="{% url "lista_servicos" %}">SERVIÇOS</a></li>
 					
 					</ol>
 				</nav>
@@ -89,36 +88,46 @@
 							</div><!-- End .toolbox-right -->
 						</nav>
 
+
+
+
+
+
+
+
+
+
+
 						<div class="row">
 						
 
-							{% for s  in servicos  %}
+							{% for p  in produtos  %}
 							
 							
 							
 							<div class="col-6 col-sm-4">
 								<div class="product-default inner-quickview inner-icon">
 									<figure>
-										<a href='{% url "servico" s.id %}' >
-											<img src='{{s.imagem.url}}' class="img-product-alta" alt="{{s.nome}}">
+										<a href='{% url "produto" p.id %}' >
+											<img src='{{p.imagem.url}}' class="img-product-alta" alt="{{p.nome}}">
 										</a>
 									
 										<div class="btn-icon-group">
 											
-											<button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal{{s.id}}"><i class="icon-shopping-cart"></i></button>
+											<button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal{{p.id}}"><i class="icon-shopping-cart"></i></button>
 										</div>
-										<a href='{% url "servico" s.id %}' class="btn-quickview" title="Quick View">VISUALIZAR</a> 
+										<a href='{% url "produto" p.id %}' class="btn-quickview" title="Quick View">VISUALIZAR</a> 
 									</figure>
 									<div class="product-details">
 										<div class="category-wrap">
 											<div class="category-list">
-												<a href="{% url "categoria" s.categoria %}" class="product-category"> 
-													{{s.categoria}}</a>
+												<a href="/produtos?procurar=&categoria={$value.incategory}" class="product-category"> 
+													{function="getCategoryByID($value.incategory,'descat')"}</a>
 											</div>
 											<a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
 										</div>
 										<h2 class="product-title">
-											<a href='{% url "servico" s.id %}'>{{p.nome}}</a>
+											<a href='/servico/visualizar/{function="setHash($value.idproduct)"}'>{{p.nome}}</a>
 										</h2>
 										<div class="ratings-container">
 											<div class="product-ratings">
@@ -135,15 +144,76 @@
 							</div><!-- End .col-sm-4 -->
 					
 							<!-- Add Cart Modal -->
-							<div class="modal fade" id="addCartModal{{s.id}}" tabindex="-1" role="dialog" aria-labelledby="addCartModal{{s.id}}" aria-hidden="true">
+							<div class="modal fade" id="addCartModal{{p.id}}" tabindex="-1" role="dialog" aria-labelledby="addCartModal{{p.id}}" aria-hidden="true">
 								<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									<div class="modal-body add-cart-box text-center">
 									<label>Você quer adicionar esse produto no seu  <br>carrinho?</label>
-									<h4 >{{s.nome}}</h4>
+									<h4 >{{i.nome}}</h4>
 									<img src="#" id="productImage" width="100" height="100" alt="adding cart image">
 									<div class="btn-actions">
-										<a href="{% url "addCarrinho"  s.id %}"><button class="btn-primary">Adicionar</button></a>
+										<a href="{% url "addCarrinho"  p.id %}"><button class="btn-primary">Adicionar</button></a>
+										<a href="#"><button class="btn-primary" data-dismiss="modal">Fechar janela</button></a>
+									</div>
+									</div>
+								</div>
+								</div>
+							</div>
+							{% endfor %}
+
+
+							{% for p  in servicos  %}
+							
+							
+							
+							<div class="col-6 col-sm-4">
+								<div class="product-default inner-quickview inner-icon">
+									<figure>
+										<a href='{% url "servico" p.id %}' >
+											<img src='{{p.imagem.url}}' class="img-product-alta" alt="{{p.nome}}">
+										</a>
+									
+										<div class="btn-icon-group">
+											
+											<button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal{{p.id}}"><i class="icon-shopping-cart"></i></button>
+										</div>
+										<a href='{% url "servico" p.id %}' class="btn-quickview" title="Quick View">VISUALIZAR</a> 
+									</figure>
+									<div class="product-details">
+										<div class="category-wrap">
+											<div class="category-list">
+												<a href="{% url "categoria" p.categoria %}" class="product-category"> 
+													{{p.categoria}}</a>
+											</div>
+											<a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
+										</div>
+										<h2 class="product-title">
+											<a href='{% url "produto" p.nome %}'>{{p.nome}}</a>
+										</h2>
+										<div class="ratings-container">
+											<div class="product-ratings">
+												<span class="ratings" style="width:100%"></span><!-- End .ratings -->
+												<span class="tooltiptext tooltip-top"></span>
+											</div><!-- End .product-ratings -->
+										</div><!-- End .product-container -->
+										<div class="price-box">
+											<!-- <span class="old-price">$90.00</span> -->
+											<span class="product-price">R${{p.valor}}</span>
+										</div><!-- End .price-box -->
+									</div><!-- End .product-details -->
+								</div>
+							</div><!-- End .col-sm-4 -->
+					
+							<!-- Add Cart Modal -->
+							<div class="modal fade" id="addCartModal{{p.id}}" tabindex="-1" role="dialog" aria-labelledby="addCartModal{{p.id}}" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-body add-cart-box text-center">
+									<label>Você quer adicionar esse produto no seu  <br>carrinho?</label>
+									<h4 >{{i.nome}}</h4>
+									<img src="#" id="productImage" width="100" height="100" alt="adding cart image">
+									<div class="btn-actions">
+										<a href="{% url "addCarrinho"  p.id %}"><button class="btn-primary">Adicionar</button></a>
 										<a href="#"><button class="btn-primary" data-dismiss="modal">Fechar janela</button></a>
 									</div>
 									</div>
@@ -231,16 +301,16 @@
 
 										<div class="featured-col">
 
-											{% for p in servicos  %}
+											{% for p in produtos %}
 											<div class="product-default left-details product-widget">
 												<figure>
-													<a href='/servico/visualizar/{function="setHash($value.idproduct)"}' >
+													<a href='{% url "produto" p.id %}' >
 														<img src='{{p.imagem.url}}' alt="product">
 													</a>											
 												</figure>
 												<div class="product-details">
 													<h2 class="product-title">
-														<a href='/servico/visualizar/{function="setHash($value.idproduct)"}'>{{p.nome}}</a>
+														<a href='{% url "produto" p.id %}'>{{p.nome}}</a>
 													</h2>
 													<div class="ratings-container">
 														<div class="product-ratings">
@@ -248,7 +318,7 @@
 															<span class="tooltiptext tooltip-top"></span>
 														</div><!-- End .product-ratings -->
 													</div><!-- End .product-container -->
-													<div class="price-box  ">aaaaaaaaaaaaaaaaaa
+													<div class="price-box  ">
 														<span class="product-price">R${{p.valor}}</span>
 													</div><!-- End .price-box -->
 												</div><!-- End .product-details -->

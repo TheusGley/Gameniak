@@ -165,11 +165,14 @@
 
 			
 						</div>
-			
-
-
-
-
+						{% if group == "clientes" %}
+					
+						<!-- ÍCONE DOS FAVORITOS -->
+						<a href="/ativar-modo-escuro" title="Ativar modo escuro" class="header-icon"><i class="far fa-lightbulb"></i></a>
+						<a href="{% url "minhaConta" %}" class="header-icon ">
+							<i class="icon-user-2"></i>
+						</a>
+						{% elif  group == "colaborador"  %}
 
 						<!-- ÍCONE DO LOGIN -->
 						<a href="{% url "dashboard" %}" title="ir para a dashboard" class="header-icon "><i class="fas fa-tools"></i></a>
@@ -177,17 +180,23 @@
 						<a href="{% url "login" %}" class="header-icon ">
 							<i class="icon-user-2"></i>
 						</a>
-
-
 						<!-- ÍCONE DOS FAVORITOS -->
 						<a href="/ativar-modo-escuro" title="Ativar modo escuro" class="header-icon"><i class="far fa-lightbulb"></i></a>
 						<!-- ÍCONE DOS FAVORITOS -->
 
+						{% else %}
 
-
-
-
-
+							<!-- ÍCONE DO LOGIN -->
+							<a href="{% url "login" %}" class="header-icon ">
+								<i class="icon-user-2"></i>
+							</a>
+							<!-- ÍCONE DOS FAVORITOS -->
+							<a href="/ativar-modo-escuro" title="Ativar modo escuro" class="header-icon"><i class="far fa-lightbulb"></i></a>
+							<!-- ÍCONE DOS FAVORITOS -->
+	
+						{% endif %}
+			
+						
 						<!-- ======================== -->
 							   <!-- CARRINHO -->
 						<!-- ======================== -->
@@ -211,7 +220,7 @@
 											<span>{{contagem}} Itens</span>
 											
 
-											<a href="/limpar-carrinho" class="float-right">Limpar Carrinho</a>
+											
 										</div><!-- End .dropdown-cart-header -->
 									<div class="dropdown-cart-products">
 											
@@ -222,7 +231,7 @@
 											 <div class="product">
 												<div class="product-details">
 													<h4 class="product-title">
-														<a href='/servico/visualizar/{function="setHash($value[0].idproduct)"}' title="{{i.produto.nome}}">{{i.produto.nome}}</a>
+														<a href='{% url "produto" i.id %}' title="{{i.produto.nome}}">{{i.produto.nome}}</a>
 													</h4>
 													<span class="cart-product-info">
 														<span class="cart-product-qty">{{i.quantidade}}</span>
@@ -230,10 +239,10 @@
 												</div>
 
 												<figure class="product-image-container">
-													<a href='/servico/visualizar/{function="setHash($value[0].idproduct)"}' class="product-image">
-														<img src='/{function="getArrayFromProducts($value[0].desimages)"}'  class="img-product-cart" >
+													<a href='{% url "produto" i.id %}' class="product-image">
+														<img src='{{i.image.url}}'  class="img-product-cart" >
 													</a>
-													<a href='/remover-carrinho/{function="setHash($value[0].idproduct)"}' class="btn-remove icon-cancel" title="Remover Produto"></a>
+													<a href='{%url "delete"  i.id %}' class="btn-remove icon-cancel" title="Remover Produto"></a>
 												</figure>
 											</div> 
 											{% endfor %}
@@ -245,9 +254,16 @@
 										</div><!-- End .cart-product -->
 
 										<div class="dropdown-cart-total">
-											<span>Total</span>
+											{% if not total_valor  %}
+											
+												Nenhum produto Selecionado
+												{%else%}
+												<span>Total</span>
+													<span class="cart-total-price float-right">R$
+														{{total_valor}}
+													</span>
 
-											<span class="cart-total-price float-right">R${function="ConvertVirgulaToPonto($CartPrice)"}</span>
+												{% endif %}
 										</div><!-- End .dropdown-cart-total -->
 
 										<div class="dropdown-cart-action">
@@ -287,7 +303,7 @@
 							</li>
 						
 							<li><a href="{% url 'lista_produtos' %} ">PRODUTOS</a></li>
-							<li><a href="{% url "servicos" %}">SERVIÇOS</a></li>
+							<li><a href="{% url "lista_servicos" %}">SERVIÇOS</a></li>
 							{% comment %} <li><a href="/logout">Desconectar-se</a></li> {% endcomment %}
 							{% comment %} <li><a href="/logar">CONECTAR-SE</a></li> {% endcomment %}
 							<!-- 

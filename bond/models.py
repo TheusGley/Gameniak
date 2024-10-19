@@ -1,17 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User 
+import datetime
 
 
 class Categoria(models.Model):
-    nome = models.CharField(max_length=40)
-
-    
-    
+    nome = models.CharField(max_length=40)    
     def __str__(self):
         return self.nome
     
+    
+    
+    
+class Creditos(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='creditos_usuario')
+    quantia = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False, default=0)
+    
+    
+    def __str__(self):
+        return self.user.username    
+    
+    
 class Produto(models.Model):
-    usuario = models.OneToOneField(User,on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User,on_delete=models.CASCADE)
     nome = models.CharField(max_length=40)
     bv_desc = models.CharField(max_length=60)
     descricao = models.CharField(max_length=300)
@@ -22,7 +32,7 @@ class Produto(models.Model):
     categoria = models.ForeignKey(Categoria,on_delete=models.CASCADE, related_name= 'categoria_produto')
     valor = models.DecimalField(max_digits=5,decimal_places=2)
     visualizacao = models.PositiveIntegerField(default=0) 
-
+    avaliacao = models.PositiveIntegerField(default=0)
     
     
     
@@ -38,7 +48,7 @@ class Servico(models.Model):
     descricao = models.CharField(max_length=300)
     funcao = models.CharField(max_length=60)
     tags = models.CharField(max_length=40)  
-    imagens_produto = models.ImageField( upload_to='imagens_produtos', height_field=None, width_field=None, max_length=None, blank=True, null=True)
+    imagem = models.ImageField( upload_to='imagens_produtos', height_field=None, width_field=None, max_length=None, blank=True, null=True)
     data_adicionada = models.DateField(auto_now=True)
     categoria = models.ForeignKey(Categoria,on_delete=models.CASCADE, related_name= 'categoria_servico')
     valor = models.DecimalField(max_digits=5,decimal_places=2)
@@ -56,9 +66,10 @@ class Customuser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     sobre = models.CharField(max_length=200)
     telefone = models.CharField(max_length=15, blank=True, null=True)
-    creditos = models.DecimalField(max_digits=5,decimal_places=2)
+    creditos = models.ForeignKey(Creditos,on_delete=models.CASCADE,related_name='creditosCustom')
+    # creditos= models.DecimalField(max_digits=10, decimal_places=3)
     data_nas = models.DateTimeField(auto_now_add=False,)
-    imagem = models.ImageField( upload_to='users/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
+    imagem = models.ImageField( upload_to='users', height_field=None, width_field=None, max_length=None, blank=True, null=True)
     
     def __str__(self):
         return self.user.username
@@ -104,7 +115,7 @@ class Carrinho (models.Model):
 
 class Produto_Carrinho (models.Model):
     carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE)
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    produto = models.ForeignKey(Produto, on_delete=models.SET_NULL, null=True)
     avaliacao =  models.PositiveIntegerField()
     quantidade = models.PositiveIntegerField()
     subtotal = models.PositiveIntegerField()
@@ -142,3 +153,16 @@ class CreditTransaction(models.Model):
 
     def __str__(self):
         return f'{self.transaction_type} - {self.amount} créditos para {self.user.user.username}'
+    
+    
+class Comentario (models.Model):
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comentario = models.CharField(max_length=100, blank=True, null=True)
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, blank=True, null=True)
+    servico = models.ForeignKey(Servico, on_delete=models.CASCADE, blank=True, null=True)
+    avaliacao = models.IntegerField(null=False, blank=False, default=0)
+    data_create = models.DateField(auto_now_add=True, null=True, blank=False)
+    customUser =  models.ForeignKey(Customuser,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.user.username

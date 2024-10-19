@@ -1,9 +1,12 @@
+{% extends "index/header.html" %}
+
+{% block content %}
 <main class="main">
 			<div class="container">
 				<nav aria-label="breadcrumb" class="breadcrumb-nav">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
-						<li class="breadcrumb-item"><a href="#">TÍBIA COINS</a></li>
+						<li class="breadcrumb-item"><a href="{% url "home" %}"><i class="icon-home"></i></a></li>
+						<li class="breadcrumb-item"><a href="{% url "categoria" produto.categoria %}">{{produto.categoria}}</a></li>
 					</ol>
 				</nav>
 				<div class="product-single-container product-single-default">
@@ -12,16 +15,7 @@
 							<div class="product-slider-container">
 								<div class="product-single-carousel owl-carousel owl-theme">
 									<div class="product-item">
-										<img class="product-single-image img-product-pagina" src="{$img_link_1}"   data-zoom-image="{$img_link_1}"/>
-									</div>
-									<div class="product-item">
-										<img class="product-single-image img-product-pagina" src="{$img_link_2}" data-zoom-image="{$img_link_2}"/>
-									</div>
-									<div class="product-item">
-										<img class="product-single-image img-product-pagina" src="{$img_link_3}" data-zoom-image="{$img_link_3}"/>
-									</div>
-									<div class="product-item">
-										<img class="product-single-image img-product-pagina" src="{$img_link_4}" data-zoom-image="{$img_link_4}"/>
+										<img class="product-single-image img-product-pagina" src="{{produto.imagem.url}}"   data-zoom-image="{{produto.imagem.url}}"/>
 									</div>
 								</div>
 								<!-- End .product-single-carousel -->
@@ -31,40 +25,32 @@
 							</div>
 							<div class="prod-thumbnail owl-dots" id='carousel-custom-dots'>
 								<div class="owl-dot">
-									<img src="{$img_link_1}" class="img-product-pagina-icon"/>
+									<img src="{{produto.imagem.url}}"  style="width:4vw; height:8vh;" class="img-product-pagina-icon"/>
 								</div>
-								<div class="owl-dot">
-									<img src="{$img_link_2}" class="img-product-pagina-icon"/>
-								</div>
-								<div class="owl-dot">
-									<img src="{$img_link_3}" class="img-product-pagina-icon"/>
-								</div>
-								<div class="owl-dot">
-									<img src="{$img_link_4}" class="img-product-pagina-icon"/>
-								</div>
+							
 							</div>
 						</div><!-- End .product-single-gallery -->
 
 						<div class="col-md-7 product-single-details">
-							<h1 class="product-title">{$produto.desproduct}</h1>
+							<h1 class="product-title">{{produto.nome}}</h1>
 
 							<div class="ratings-container">
 								<div class="product-ratings">
-									<span class="ratings" style="width:100%"></span><!-- End .ratings -->
+									<span class="ratings" style="width:100%"></span><!-- End .ratings --> 
 								</div><!-- End .product-ratings -->
 
-								<a href="#" class="rating-link">( 6 Reviews )</a>
+								<a href="#" class="rating-link">( {{produto.visualizacao}} )</a>
 							</div><!-- End .ratings-container -->
 
 							<hr class="short-divider">
 
 							<div class="price-box">
-								<span class="product-price">R${function="ConvertVirgulaToPonto($produto.vlprice)"}</span>
+								<span class="product-price">R$ {{produto.valor}}</span>
 							</div><!-- End .price-box -->
 
 							<div class="product-desc">
 								<p>
-									{$produto.desresume}
+									{{produto.bv_desc}}
 								
 								</p>
 							</div><!-- End .product-desc -->
@@ -85,10 +71,11 @@
 
 							<div class="product-action">
 								<div class="product-single-qty">
-									<input class="horizontal-quantity form-control"  disabled>
+									<input class="horizontal-quantity form-control"  > VERIFICAR QUANDO METODO POST FOR ATIVADO E FAZER O VALOR MUDAR CONFORME QUANTIDADE
 								</div><!-- End .product-single-qty -->
 
-								<a href='/adicionar-carrinho/{function="setHash($produto.idproduct)"}'class="btn btn-dark add-cart icon-shopping-cart" title="Add to Cart">ADICIONAR AO CARRINHO</a>
+								<a href='{% url "addCarrinho" produto.id %}' 
+								class="btn btn-dark add-cart icon-shopping-cart" title="Add to Cart">ADICIONAR AO CARRINHO</a>
 							</div><!-- End .product-action -->
 
 							<hr class="divider mb-1">
@@ -110,13 +97,13 @@
 							<a class="nav-link" id="product-tab-tags" data-toggle="tab" href="#product-tags-content" role="tab" aria-controls="product-tags-content" aria-selected="false">TAGS</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" id="product-tab-reviews" data-toggle="tab" href="#product-reviews-content" role="tab" aria-controls="product-reviews-content" aria-selected="false">AVALIAÇÕES (3)</a>
+							<a class="nav-link" id="product-tab-reviews" data-toggle="tab" href="#product-reviews-content" role="tab" aria-controls="product-reviews-content" aria-selected="false">AVALIAÇÕES ({{comentarios.count}})</a>
 						</li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade show active" id="product-desc-content" role="tabpanel" aria-labelledby="product-tab-desc">
 							<div class="product-desc-content">
-								<p>{$produto.desdescription}</p>
+								<p>{{produto.descricao}}</p>
 								
 								
 							</div><!-- End .product-desc-content -->
@@ -124,13 +111,13 @@
 
 						<div class="tab-pane fade fade" id="product-more-info-content" role="tabpanel" aria-labelledby="product-tab-more-info">
 							<div class="product-desc-content">
-								<p>{$produto.desreason}</p>
+								<p>Publicado por {{produto.usuario.username}}</p>
 							</div><!-- End .product-desc-content -->
 						</div><!-- End .tab-pane -->
 
 						<div class="tab-pane fade" id="product-tags-content" role="tabpanel" aria-labelledby="product-tab-tags">
 							<div class="product-desc-content">
-								<p>{$produto.destags}</p>
+								<p>{{produto.tags}}</p>
 							</div><!-- End .product-desc-content -->
 						</div><!-- End .tab-pane -->
 
@@ -138,74 +125,36 @@
 							<div class="product-reviews-content">
 								<div class="row">
 									<div class="col-xl-7">
-										<h2 class="reviews-title">3 reviews for Product Long Name</h2>
+										<h2 class="reviews-title">Comentarios </h2>
 
 										<ol class="comment-list">
-											<li class="comment-container">
-												<div class="comment-avatar">
-													<img src="/res/UserDashboard/assets/images/avatar/avatar1.jpg" width="65" height="65" alt="avatar"/>
-												</div><!-- End .comment-avatar-->
-
-												<div class="comment-box">
-													<div class="ratings-container">
-														<div class="product-ratings">
-															<span class="ratings" style="width:80%"></span><!-- End .ratings -->
-														</div><!-- End .product-ratings -->
-													</div><!-- End .ratings-container -->
-
-													<div class="comment-info mb-1">
-														<h4 class="avatar-name">Pedro Henrique</h4> - <span class="comment-date">9 de Abril de 2021</span>
-													</div><!-- End .comment-info -->
-
-													<div class="comment-text">
-														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
-													</div><!-- End .comment-text -->
-												</div><!-- End .comment-box -->
-											</li><!-- comment-container -->
+											{% for c in comentarios  %}
 
 											<li class="comment-container">
-												<div class="comment-avatar">
-													<img src="/res/UserDashboard/assets/images/avatar/avatar2.jpg" width="65" height="65" alt="avatar"/>
-												</div><!-- End .comment-avatar-->
-
-												<div class="comment-box">
-													<div class="ratings-container">
-														<div class="product-ratings">
-															<span class="ratings" style="width:80%"></span><!-- End .ratings -->
-														</div><!-- End .product-ratings -->
-													</div><!-- End .ratings-container -->
-
-													<div class="comment-info mb-1">
-														<h4 class="avatar-name">Pedro Henrique</h4> - <span class="comment-date">9 de Abril de 2021</span>
-													</div><!-- End .comment-info -->
-
-													<div class="comment-text">
-														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
-													</div><!-- End .comment-text -->
-												</div><!-- End .comment-box -->
-											</li><!-- comment-container -->
 												
-											<li class="comment-container">
 												<div class="comment-avatar">
-													<img src="/res/UserDashboard/assets/images/avatar/avatar3.jpg" width="65" height="65" alt="avatar"/>
+													<img src="{{ c.customUser.imagem.url }}" width="65" height="65" alt="avatar"/>
 												</div><!-- End .comment-avatar-->
 
 												<div class="comment-box">
 													<div class="ratings-container">
 														<div class="product-ratings">
-															<span class="ratings" style="width:80%"></span><!-- End .ratings -->
+															<span class="ratings" style="width:80%">FAZER </span><!-- End .ratings -->
 														</div><!-- End .product-ratings -->
 													</div><!-- End .ratings-container -->
 
 													<div class="comment-info mb-1">
-														<h4 class="avatar-name">Pedro Henrique</h4> - <span class="comment-date">9 de Abril de 2021</span>
+														<h4 class="avatar-name">{{c.user.name}}</h4> - <span class="comment-date">{{c.data_create}}</span>
 													</div><!-- End .comment-info -->
 
 													<div class="comment-text">
-														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+														<p>{{c.comentario}}</p>
 													</div><!-- End .comment-text -->
 												</div><!-- End .comment-box -->
 											</li><!-- comment-container -->
+											{% endfor %}
+
+										
 										</ol><!-- End .comment-list -->
 									</div>
 
@@ -214,52 +163,60 @@
 											<form action="#" class="comment-form m-0">
 												<h3 class="review-title">ADICIONE UMA AVALIAÇÃO</h3>
 
+
+												{% if request.user.is_authenticated %}
+												<form method="POST" action='{%url "addComentario" produto.id%}' 
+												
 												<div class="rating-form">
 													<label for="rating">QUANTAS ESTRELAS?</label>
-													<span class="rating-stars">
+													<div class="rating-stars">
 														<a class="star-1" href="#">1</a>
 														<a class="star-2" href="#">2</a>
 														<a class="star-3" href="#">3</a>
 														<a class="star-4" href="#">4</a>
 														<a class="star-5" href="#">5</a>
-													</span>
-
-													<select name="rating" id="rating" required="" style="display: none;">
-														<option value="">Avalie</option>
-														<option value="5">PERFEITO</option>
-														<option value="4">ÓTIMO</option>
-														<option value="3">MEDIANO</option>
-														<option value="2">NÃO FOI TÃO RUIM</option>
-														<option value="1">PÉSSIMO SERVIÇO</option>
-													</select>
-
-
+													</div>
+													<p>Rating: <span id="rating-value">0</span>/5</p>
+													<input type="text" id='inputStar' value=0 style="display:none"/>
+												
 												</div>
 
 												<div class="form-group">
 													<label>Como foi o serviço?</label>
-													<textarea cols="5" rows="6" class="form-control form-control-sm"></textarea>
+													<textarea id="comentario" cols="5" rows="6" class="form-control form-control-sm" required > </textarea>
 												</div><!-- End .form-group -->
 
 
 												<div class="row">
 													<div class="col-md-6 col-xl-12">
 														<div class="form-group">
-															<label>Seu nome</label>
-															<input type="text" class="form-control form-control-sm" required>
-														</div><!-- End .form-group -->
-													</div>
-
-													<div class="col-md-6 col-xl-12">
-														<div class="form-group">
-															<label>Seu email</label>
-															<input type="text" class="form-control form-control-sm" required>
+															<input type="text" value="{{produto.nome}}" class="form-control form-control-sm" style="display: none" >
 														</div><!-- End .form-group -->
 													</div>
 												</div>
 
+												
+													<div class="row">
+														<div class="col-md-6 col-xl-12">
+															<div class="form-group">
+																<input type="text" value="{{produto.usuario}}" class="form-control form-control-sm" style="display: none" >
+															</div><!-- End .form-group -->
+														</div>
+	
+
 												<input type="submit" class="btn btn-dark ls-n-15" value="Enviar">
-											</form>
+
+													</form>
+												{% else %}
+													<div class="col-md-6 col-xl-12">
+														<div class="form-group">
+															<label>Faça login para avaliar</label>
+														</div><!-- End .form-group -->
+													</div>
+													<a href="{%url 'login'%}" class="btn btn-primary ls-n-15" > Entrar </a>
+												</div>
+													
+												{% endif %}
 										</div><!-- End .add-product-review -->
 									</div>
 								</div>
@@ -269,50 +226,32 @@
 				</div><!-- End .product-single-tabs -->
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				<div class="products-section pt-0">
 					<h2 class="section-title">Produtos Relacionados</h2>
 					<div class="products-slider owl-carousel owl-theme dots-top">
 					
-					
-					
-					
-					
-						{loop="$relacionados"}
+						{% for p in produtosRelacionados  %}
 						<div class="product-default inner-quickview inner-icon">
 							<figure>
-								<a href='/servico/visualizar/{function="setHash($value.idproduct)"}'>
-									<img src='/{function="getArrayFromProducts($value.desimages)"}' class="img-product-related"   alt="product">
+								<a href='{% url "produto" p.id %}'>
+									<img src='{{p.imagem.url}}' class="img-product-related "  style="width:30vw"  alt="product">
 								</a>
 							
 								<div class="btn-icon-group">
 									<button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i class="icon-shopping-cart"></i></button>
 								</div>
-								<a href='/modal-produtos/{function="setHash($value.idproduct)"}' class="btn-quickview" title="Quick View">VISUALIZAR</a> 
+								<a href='{% url "produto" p.id %}' class="btn-quickview" title="Quick View">VISUALIZAR</a> 
 							</figure>
 							<div class="product-details">
 								<div class="category-wrap">
 									<div class="category-list">
-										<a href="/lista-produtos" class="product-category">
-											{function="getCategoryByID($value.incategory,'descat')"}
+										<a href="{% url "lista_categorias" p.categoria %}" class="product-category">
+											{{p.categoria}}
 										  </a>
 									</div>
 								</div>
 								<h3 class="product-title">
-									<a href='/servico/visualizar/{function="setHash($value.idproduct)"}'>{$value.desproduct}</a>
+									<a href='{% url "produto" p.id %}}'>{{p.valor}}</a>
 								</h3>
 								<div class="ratings-container">
 									<div class="product-ratings">
@@ -322,11 +261,11 @@
 								</div><!-- End .ratings-container -->
 								<div class="price-box">
 								
-									<span class="product-price"><b>R${function="ConvertVirgulaToPonto($value.vlprice)"}</b></span>
+									<span class="product-price"><b>R$ {{p.valor}}</b></span>
 								</div><!-- End .price-box -->
 							</div><!-- End .product-details -->
 						</div>
-						{/loop}
+						{% endfor %}
 
 
 
@@ -347,4 +286,33 @@
 			</div><!-- End .container -->
 		</main><!-- End .main -->
 
-		
+		<script>
+
+const stars = document.querySelectorAll('.rating-stars a');
+const ratingValue = document.getElementById('rating-value');
+const inputValue = document.getElementById('inputStar');
+
+stars.forEach((star, index) => {
+    star.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        // Remove active class from all stars
+        stars.forEach(s => s.classList.remove('active'));
+
+        // Add active class to the clicked star and all previous stars
+        for (let i = 0; i <= index; i++) {
+            stars[i].classList.add('active');
+        }
+
+        // Update the rating value
+        ratingValue.textContent = index + 1;
+		inputStar.value = index + 1; 
+    });
+});
+
+
+</script>
+{% include "index/footer.html" %}
+		{% endblock  %}
+
+	

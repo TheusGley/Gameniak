@@ -109,7 +109,7 @@
 							<div class="col-6 col-sm-4">
 								<div class="product-default inner-quickview inner-icon">
 									<figure>
-										<a href='/servico/visualizar/{function="setHash($value.idproduct)"}' >
+										<a href='{% url "produto" p.id %}' >
 											<img src='{{p.imagem.url}}' class="img-product-alta" alt="{{p.nome}}">
 										</a>
 									
@@ -117,18 +117,18 @@
 											
 											<button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal{{p.id}}"><i class="icon-shopping-cart"></i></button>
 										</div>
-										<a href='/modal-produtos/{function="setHash($value.idproduct)"}' class="btn-quickview" title="Quick View">VISUALIZAR</a> 
+										<a href='{% url "produto" p.id %}' class="btn-quickview" title="Quick View">VISUALIZAR</a> 
 									</figure>
 									<div class="product-details">
 										<div class="category-wrap">
 											<div class="category-list">
-												<a href="/produtos?procurar=&categoria={$value.incategory}" class="product-category"> 
-													{function="getCategoryByID($value.incategory,'descat')"}</a>
+												<a href='{% url "categoria" p.categoria %}' class="product-category"> 
+													{{p.categoria}}</a>
 											</div>
 											<a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
 										</div>
 										<h2 class="product-title">
-											<a href='/servico/visualizar/{function="setHash($value.idproduct)"}'>{{p.nome}}</a>
+											<a href='{% url "produto" p.id %}"}'>{{p.nome}}</a>
 										</h2>
 										<div class="ratings-container">
 											<div class="product-ratings">
@@ -218,7 +218,7 @@
 									<div class="widget-body">
 										<ul class="cat-list">
 											{% for c in categorias  %}
-										    <li><a href="/produtos?procurar=&categoria={$value.idcat}">{{c.nome}}</a></li>																				
+										    <li><a href="{% url "categoria" c.nome %}">{{c.nome}}</a></li>																				
 											{% endfor %}				
 										</ul>
 									</div><!-- End .widget-body -->
@@ -244,13 +244,13 @@
 											{% for p in produtos %}
 											<div class="product-default left-details product-widget">
 												<figure>
-													<a href='/servico/visualizar/{function="setHash($value.idproduct)"}' >
+													<a href='{% url "produto" p.id %}' >
 														<img src='{{p.imagem.url}}' alt="product">
 													</a>											
 												</figure>
 												<div class="product-details">
 													<h2 class="product-title">
-														<a href='/servico/visualizar/{function="setHash($value.idproduct)"}'>{{p.nome}}</a>
+														<a href='{% url "produto" p.id %}'>{{p.nome}}</a>
 													</h2>
 													<div class="ratings-container">
 														<div class="product-ratings">

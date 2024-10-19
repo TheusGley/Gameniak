@@ -7,12 +7,17 @@ from django.shortcuts import render,get_object_or_404, redirect
 from decimal import Decimal
 from django.contrib.auth.models import  Group
 
-
+# Login Cadastro
 def loginView (request):
     
     if request.user.is_authenticated:
         
-        return redirect('dashboard')                     
+        if request.user.groups.filter(name='Cliente').exists():
+        
+            return redirect('home')          
+        elif request.user.groups.filter(name='Colaborador').exists():
+            
+            return redirect('dashboard')           
             
 
     if request.method == 'POST':
@@ -22,7 +27,12 @@ def loginView (request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                     login(request,user)
-                    return redirect('dashboard')
+                    if request.user.groups.filter(name='Cliente').exists():
+        
+                            return redirect('home')          
+                    elif request.user.groups.filter(name='Colaborador').exists():
+                            
+                        return redirect('dashboard')           
             else :
                     error_messagem = "Email ou Senha não conferem" 
                     return render (request, 'index/login.html', {'error_messagem':error_messagem})
@@ -38,17 +48,24 @@ def cadastroView (request):
     email = request.POST.get('email') 
     username = request.POST.get('username')
     senha = request.POST.get('senha')
+    dataNasc = request.POST.get('dataNasc')
+    dataFormat = datetime.datetime.strptime(dataNasc, "%Y-%m-%d")
+
 
     if request.method == 'POST':
         user  = User.objects.all()
         customuser = Customuser.objects.all()
+        creditos = Creditos.objects.all()
+        
         try:
             user.create(email=email, password=senha, first_name=nome, username=username)
             user_request = User.objects.get(username=username)
-            customuser.create(sobre="", telefone="", creditos=0, data_nas = datetime.datetime.now() , user=user_request)
+            creditos.create(user= user_request)
+            creditos_user = Creditos.objects.get(user=user_request)
+            
+            customuser.create(sobre="", telefone="", creditos=creditos_user, data_nas = dataFormat , user=user_request)
             login(request, user_request)
             
-        
             return redirect('tipo')
             
         except IntegrityError as e :
@@ -60,47 +77,70 @@ def cadastroView (request):
 
 
 
-# Index 
+# Index
 
-def homeSiteView (request):
-    
+def homeSiteView(request):
     carro_id = request.session.get("carro_id", None)
-            
+    
+    # Gerenciamento do carrinho de compras
     if carro_id:
-        carro_id = Carrinho.objects.get(id=carro_id)
+        try: 
+            carrinho = Carrinho.objects.get(id=carro_id)
+        except Carrinho.DoesNotExist:  # Se o carrinho não for encontrado, cria um novo
+            carrinho = Carrinho.objects.create()
+            request.session['carro_id'] = carrinho.id  # Atualiza o carro_id na sessão
     else:
-        carro_id = None
-        
-    produto_destaque = Produto.objects.filter(visualizacao = 10) 
-    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
-    produto_carrinho = Produto_Carrinho.objects.filter(carrinho = carro_id)
+        # Se não houver carrinho na sessão, cria um novo
+        carrinho = Carrinho.objects.create()
+        request.session['carro_id'] = carrinho.id
+    
+    # Contagem de produtos no carrinho
+    contagem = Produto_Carrinho.objects.filter(carrinho=carrinho).count()
+    produto_carrinho = Produto_Carrinho.objects.filter(carrinho=carrinho)
+    
+    total_valor = produto_carrinho.aggregate(total=models.Sum('produto__valor'))['total'] 
+     
+    # Data atual para filtrar produtos e serviços
     today = datetime.datetime.today().month
+    
+    # Banner e verificações de grupo de usuários
     imagens_banner = Banner.objects.all()
     
-    # Colocar os produtos mais Vendidos, 
+    if request.user.groups.filter(name='Colaborador').exists():
+        group = "colaborador"
+    elif request.user.groups.filter(name='Cliente').exists():
+        group = "clientes"
+    else:
+        group = 'None'
+    
+    # Produtos e serviços recentes
     produtos = Produto.objects.all()
     produto_recentes = Produto.objects.filter(data_adicionada__month=today)
     servicos_recentes = Servico.objects.filter(data_adicionada__month=today)
     
+    # Produtos mais visualizados (destaques)
+    produto_destaque = Produto.objects.filter(visualizacao__gte=100)
     
     context = {
+        'group': group,
         'produto_carrinho': produto_carrinho,
         'imagens_banner': imagens_banner,
-        'produto_destaque':produto_destaque,
-        'Produtos':produtos,
-        'produto_recentes':  produto_recentes,
-        'contagem':contagem,
-        'servicos_recentes':servicos_recentes,
-        
+        'produto_destaque': produto_destaque,
+        'Produtos': produtos,
+        'produto_recentes': produto_recentes,
+        'contagem': contagem,
+        'servicos_recentes': servicos_recentes,
+        'carro_id': carro_id,
+        'total_valor':  total_valor, 
     }
     
-    
-    return render(request, 'index/index.html',context )
+    return render(request, 'index/index.html', context)
 
 
 def carrinho_add (request, id):    
     produto = get_object_or_404(Produto, id=id)
     carro_id = request.session.get("carro_id", None)
+ 
     
     if carro_id :
         carro_obj = Carrinho.objects.get(id=carro_id)
@@ -127,16 +167,79 @@ def carrinho_add (request, id):
         carro_obj.total += produto.valor
         carro_obj.save()
         
-    active  = "disabled"
-       
-    context ={ 'active' : active, 
-              }
-    
-    return redirect('home' )
+   
+    return redirect('produto',id)
 
 
 def carrinho (request): 
+    carro_id = request.session.get('carro_id',None)
+
+    # Gerenciamento do carrinho de compras
+    if carro_id:
+        try: 
+            carrinho = Carrinho.objects.get(id=carro_id)
+        except Carrinho.DoesNotExist:  # Se o carrinho não for encontrado, cria um novo
+            carrinho = Carrinho.objects.create()
+            request.session['carro_id'] = carrinho.id  # Atualiza o carro_id na sessão
+    else:
+        # Se não houver carrinho na sessão, cria um novo
+        carrinho = Carrinho.objects.create()
+        request.session['carro_id'] = carrinho.id
+
+        
+    produtos = Produto_Carrinho.objects.filter(carrinho=carro_id)
+    valorTotal = produtos.aggregate(total=models.Sum('produto__valor'))['total'] 
+   
+           
+    context = { 
+        'carro':carro_id,
+        'produtos': produtos, 
+        'valorTotal': valorTotal, 
+        
+    }
+       
+    return render (request, 'index/carrinho.html', context)   
+
+def limparCarrinhoView (request,):
+
+    carro_id = request.session.get("carro_id", None)
+            
+    if carro_id:
+        carro_id = Carrinho.objects.get(id=carro_id)
+    else:
+        carro_id = None
     
+    carro_id.delete()
+    return redirect('carrinho')
+
+
+        
+def deleteView (request,idObj):
+
+    carro_id = request.session.get("carro_id", None)
+            
+    if carro_id:
+        carrinho = Produto_Carrinho.objects.get(carrinho= carro_id, id = idObj)
+        carrinho.delete()
+    else:
+        carro_id = None
+    
+
+    
+    return redirect('carrinho')
+
+
+def listaProdutosView (request):
+    if request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+    else: 
+        group = 'None'
+    
+     
     carro_id = request.session.get("carro_id", None)
             
     if carro_id:
@@ -144,47 +247,256 @@ def carrinho (request):
     else:
         carro_id = None
         
-   
-           
-    context = { 
-        'carro':carro_id,
-    }
-       
-    return render (request, 'index/carrinho.html', context)   
-
-
-
-def listaProdutosView (request):
-    
+    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
     produtos = Produto.objects.all()
     categorias = Categoria.objects.all()
     # produtosD = Produto.objects.filter()
     context = { 
             'categorias':categorias,
             'produtos' :produtos,
+            'group' :group,
+            'contagem':contagem
             }
     
     return render(request, 'index/lista-produtos.html', context)
 
 
-def servicosView (request):
+
+def produtoView(request, id):
     
+    produto = Produto.objects.get(id=id)
+    produto.visualizacao += 1 
+    produto.save()
+    comentarios = Comentario.objects.filter(produto=produto) # adicionar imagem do usuario no comentraio 
+      
+    carro_id = request.session.get("carro_id", None)
+            
+    if carro_id:
+        carro_id = Carrinho.objects.get(id=carro_id)
+    else:
+        carro_id = None
+        
+    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
+     
+    produtosRelacionados = Produto.objects.filter(categoria = produto.categoria)
+    
+   
+    
+    context = {
+        'produto': produto,
+        'comentarios': comentarios,
+        'produtosRelacionados': produtosRelacionados,
+        'contagem':contagem,
+        }
+    return render(request, 'index/produto.html', context)
+
+
+
+def listaCategoriaView (request, categoria):
+    produtos = Produto.objects.filter(categoria=categoria)
+  
+    carro_id = request.session.get("carro_id", None)
+            
+    if carro_id:
+        carro_id = Carrinho.objects.get(id=carro_id)
+    else:
+        carro_id = None
+        
+    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
+
+    context = {
+        'produtos': produtos,
+        'contagem':contagem,
+    }
+
+    return render(request, 'index/lista_produtos.html', context)
+
+def servicosView (request,id):
+     
+    produto = Servico.objects.get(id=id)
+    produto.visualizacao += 1 
+    produto.save()
+    comentarios = Comentario.objects.filter(servico=produto) # adicionar imagem do usuario no comentraio 
+      
+    carro_id = request.session.get("carro_id", None)
+            
+    if carro_id:
+        carro_id = Carrinho.objects.get(id=carro_id)
+    else:
+        carro_id = None
+        
+    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
+     
+    produtosRelacionados = Produto.objects.filter(categoria = produto.categoria)
+   
+   
+    if request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+    else: 
+        group = 'None'
+        
+    carro_id = request.session.get('carro_id', None)
+    
+    if carro_id:
+        carro_id = Carrinho.objects.get(id=carro_id)
+    else:
+        carro_id = None
+        
+    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
+    categorias = Categoria.objects.all()
+    # produtosD = Produto.objects.filter()
+    context = { 
+            'categorias':categorias,
+            'produto' :produto,
+            'group' :group,
+            'comentarios': comentarios,
+            'produtosRelacionados': produtosRelacionados,
+            'contagem':contagem,
+            
+            }
+    
+    return render(request, 'index/produto.html', context)
+
+
+
+def listaServicosView (request):
+    
+    if request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+    else: 
+        group = 'None'
+     
+    carro_id = request.session.get("carro_id", None)
+            
+    if carro_id:
+        carro_id = Carrinho.objects.get(id=carro_id)
+    else:
+        carro_id = None
+        
+    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
     servicos = Servico.objects.all()
     categorias = Categoria.objects.all()
     # produtosD = Produto.objects.filter()
     context = { 
             'categorias':categorias,
             'servicos' :servicos,
+            'group' :group,
+            'contagem':contagem
             }
     
     return render(request, 'index/lista-servicos.html', context)
 
 
 
+def categoriaView (request, cat):
+    
+    if request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+    else: 
+        group = 'None'
+     
+    carro_id = request.session.get("carro_id", None)
+            
+    if carro_id:
+        carro_id = Carrinho.objects.get(id=carro_id)
+    else:
+        carro_id = None
+        
+    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
+    servicos = Servico.objects.filter(categoria__nome= cat)
+    produtos = Produto.objects.filter(categoria__nome= cat)
+    categorias = Categoria.objects.all()
+    # produtosD = Produto.objects.filter()
+    context = { 
+            'categorias':categorias,
+            'servicos' :servicos,
+            'produtos' :produtos,
+            'group' :group,
+            'contagem':contagem
+            }
+    
+    return render(request, 'index/categorias.html', context)
 
+def comentarioView(request, id_obj):
+    
+    if request.method == 'POST':
+        user = request.user
+        comentario = request.POST.get('comentario')
+        objeto = request.POST.get('objeto')
+        usuario = request.POST.get('usuario')
+        avaliacao = request.POST.get('inputStar')
+        customuser = Customuser.objects.get(user=user)
+        
+        coments = Comentario.objects.all()
+        
+        if  Produto.objects.get(usuario=usuario.username, nome= objeto):
+            
+            try:
+            
+                coments = Comentario.objects.create(
+                    user = user,
+                    comentario = comentario,
+                    produto = objeto,
+                    avaliacao = avaliacao,
+                    customuser = customuser
+                )
+                
+                coments.save()
+                print("produto")
+                return redirect('produto', id_obj)
+            except IntegrityError as e:
+                print(str(e))
+                
+                return redirect('home')
+        
+        elif Servico.objects.get(usuario=usuario.username, nome = objeto):
+            try:
+            
+                coments = Comentario.objects.create(
+                user = user,
+                comentario = comentario,
+                servico = objeto,
+                avaliacao = avaliacao,
+                customuser = customuser
+            )
+                
+                coments.save() 
+                print("servico")
+                
+                return redirect('servicos', id_obj)
+            
+            except IntegrityError as e:
+                print(str(e))
+                return redirect('home')
+        print("algo")
+    return redirect('lista-servicos')
+
+    
 def homeView (request):
     
-    return render(request, 'dashboard/index.html')
+    if  request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+    else: 
+        group = 'None'
+    context = {'group':group}
+    
+    return render(request, 'dashboard/index.html',context)
 
 def tipoView (request):
     
@@ -211,15 +523,29 @@ def groupsColaborador (request):
 
 def meuPerfilView(request):
     
-    return render(request, 'dashboard/meu-servico.html')
+    if  request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+    else: 
+        group = 'None'
+    context = {'group':group}
+    
+    return render(request, 'dashboard/meu-servico.html', context)
 
 
 
 def dashboardView (request):
     
     now=  datetime.datetime.now()
-    print(request.user)
-    user = Customuser.objects.get(user=request.user)     
+
+    try:
+        user = Customuser.objects.get(user=request.user)    
+        
+    except :
+        return redirect('mudarInfo') 
     creditos = user.creditos
     transacoes = Transaction.objects.filter(seller=request.user.id)
     produtos_vendidos = Transaction.objects.filter(seller=request.user.id).count()
@@ -230,12 +556,23 @@ def dashboardView (request):
 
     valorTotal = Transaction.objects.filter(seller=request.user.id)
     ultimas_vendas = Transaction.objects.filter(seller=request.user.id, date__month=now.month)
+    
     if valorTotal:
         
         for i in valorTotal:
             total =+ i.valor
     total = 0
             
+    if  request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+    else: 
+        group = 'None'
+    
+    
                 
     context = {
         'transacoes': transacoes,
@@ -244,7 +581,9 @@ def dashboardView (request):
         'creditos' : creditos, 
         'produtos_vendidos':produtos_vendidos,
         'produtos_servicos':produtos_servicos,
-    }
+        'customuser': user,
+        'group':group,
+    }    
     return render(request, 'dashboard/index.html',context)
 
 
@@ -252,7 +591,17 @@ def dashboardView (request):
 def minhaContaView(request):
     user = User.objects.get(id=request.user.id)
     userInfo = Customuser.objects.get(user=user)
+    creditos = Creditos.objects.get(user=user)
     error_messages = " "
+    if  request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+    else: 
+        group = 'None'
+    
     
     
     if request.method == 'POST':
@@ -268,6 +617,9 @@ def minhaContaView(request):
             context = {
             'userInfo':userInfo,
             'error_message': error_messages,
+            'group':group,
+            'creditos':creditos,
+            
             }
     
             return render(request, 'dashboard/minha-conta.html',context)
@@ -283,7 +635,9 @@ def minhaContaView(request):
                 
                 context = {
                     'userInfo':userInfo,
+                    'creditos':creditos,
                     'error_message': error_messages,
+                    'group':group
                     
                     }
             
@@ -294,6 +648,8 @@ def minhaContaView(request):
                 context = {
                     'userInfo':userInfo,
                     'error_message': e,
+                    'group':group,
+                    'creditos':creditos,
                     
                     }
                 return render(request, 'dashboard/minha-conta.html',context)
@@ -303,7 +659,9 @@ def minhaContaView(request):
     context = {
         'userInfo':userInfo,
         'error_message': error_messages,
-        
+        'group':group,
+        'creditos':creditos,
+         
         }
     
     return render(request, 'dashboard/minha-conta.html',context)
@@ -316,6 +674,12 @@ def mensagensView(request):
     mensagens_envi = Mensagen.objects.filter(user_env=user)
     mensagens_rec = Mensagem_Manager.objects.filter(user_rec=user, status= "Confirmada")
     error_message = " "
+    if  request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
     
     if request.method == 'POST':
         user_rec = request.POST.get('user_rec')
@@ -350,6 +714,7 @@ def mensagensView(request):
                 'mensagens_envi': mensagens_envi,
                 'mensagens_rec':mensagens_rec,
                 'error_message': error_message,
+                'group':group
             }
             return render(request, 'dashboard/mensagens.html', context)
             
@@ -365,6 +730,8 @@ def mensagensView(request):
         'mensagens_envi': mensagens_envi,
         'mensagens_rec':mensagens_rec,
         'error_message': error_message,
+        'group':group
+        
         
     }
     return render(request, 'dashboard/mensagens.html', context)
@@ -374,10 +741,18 @@ def mensagensView(request):
 def mudarInfoView(request):
     user = request.user.id
     userInfo = Customuser.objects.get(user=user)
+    if  request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+
     
     
     context = {
         'userInfo':userInfo,
+        'group':group,
         }
     
     return render(request, 'dashboard/mudar-informacao.html',context)
@@ -387,6 +762,14 @@ def pubAnuncioView(request):
     
     
     categorias = Categoria.objects.all()
+    if  request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+
+    
     
     if request.method == 'POST':
         tipo_servico = request.POST.get('tipo')
@@ -474,8 +857,18 @@ def gerAnuncioView(request):
 
     produtos_servicos = list(produtos) + list(servicos)
     
+    if  request.user.groups.filter(name='Colaborador').exists():
+        
+        group = "colaborador"
+        
+    elif request.user.groups.filter(name='Cliente').exists():
+        group= 'clientes'
+
+    
+    
     
     context = {
+        'group':group,
         'produtos_servicos' : produtos_servicos,
     }
     return render(request, 'dashboard/gerenciar-anuncios.html', context)

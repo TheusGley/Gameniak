@@ -6,24 +6,30 @@
 
   <div class="row">
     <!-- Coluna da esquerda -->
-    <div class="col-lg-9 col-xl-3 mb-4">
+    <div class="col-lg-9 col-xl-3 mb-2">
       <div class="card card-modern">
         <div class="card-body p-0">
           <div class="widget-user-info">
             <div class="widget-user-info-header bg-primary text-center">
               <h2 class="font-weight-bold text-white">Olá, {{request.user.username}}</h2>
-              <p class="mb-0 text-white">Usuário do Gameniak Marketplace</p>
+              <p class="pb-4 text-white">Usuário do Gameniak Marketplace</p>
               <div class="widget-user-acrostic bg-primary">
-                <span class="font-weight-bold">MG</span>
+                {% if not customuser.imagem  %}
+                <span> sem foto </span>
+                {% else %}
+                <img src={{customuser.imagem}}/>
+                {% endif %}
               </div>
             </div>
             <div class="widget-user-info-body">
               <div class="row text-center">
                 <div class="col-6">
-                  <strong class="text-color-dark text-5">R$ {{creditos}}</strong>
+                  <strong class="text-color-dark text-5">R$ {{creditos.quantia}}</strong>
                   <h3 class="text-4-1">Saldo Atual</h3>
+                  <a href="{% url 'mudarInfo' %}" class="btn btn-success font-weight-semibold rounded " style="width:6vw; height:6vh; font-size:13px; padding:6px; margin-top:2vh">Adicionar Credito</a>
+
                 </div>
-                <div class="col-6">
+                <div class="col-6 mt-2 pt-5">
                   <strong class="text-color-dark text-5">{{produtos_servicos}}</strong>
                   <h3 class="text-4-1">Anuncios Publicados</h3>
                 </div>
@@ -46,7 +52,7 @@
         <div class="card-body py-4">
           <div class="row align-items-center text-center">
             <div class="col-6">
-              <h3 class="text-4-1 my-0">Total Produtos/Serviços Vendidos</h3>
+              <h3 class="text-4-1 my-0">Serviços Vendidos</h3>
               <strong class="text-6 text-color-dark">{{produtos_vendidos}}</strong>
             </div>
             <div class="col-6 border-left">

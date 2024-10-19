@@ -97,6 +97,11 @@
 
 			<section class="featured-products-section">
 				<div class="container">
+
+					{% if not produto_destaque %}
+					
+					{% else %}
+
 					<h2 class="section-title heading-border ls-20 border-0" id='mail-camp'>PRODUTOS EM ALTA</h2>
 
 					<div class="products-slider custom-products owl-carousel owl-theme nav-outer show-nav-hover nav-image-center" data-owl-options="{
@@ -149,6 +154,9 @@
 				</div>
 			</section>
 
+					{% endif %}
+					
+
 
 
 			{% for i in Produtos %}
@@ -197,7 +205,8 @@
 						<div class="product-default">
 							
 							<figure>
-								<a href="/">
+								<a href="{% url "produto" p.id %}" >
+
 									<img src='{{p.imagem.url}}' class="img-product-novidade"  alt="{{.nome}}">
 
 								</a>
@@ -241,8 +250,8 @@
 					<div class="product-default">
 							
 						<figure>
-							<a href="/">
-								<img src='{{p.imagens_produto.url}}' class="img-product-novidade"  alt="{{.nome}}">
+							<a href="{% url "servico" p.id %}" >
+								<img src='{{p.imagem.url}}' class="img-product-novidade"  alt="{{.nome}}">
 
 							</a>
 							<div class="label-group">
