@@ -240,7 +240,7 @@
 
 												<figure class="product-image-container">
 													<a href='{% url "produto" i.id %}' class="product-image">
-														<img src='{{i.image.url}}'  class="img-product-cart" >
+														<img src='{{i.produto.imagem.url}}'  class="img-product-cart " style="width:10vw; object-fit: cover;" >
 													</a>
 													<a href='{%url "delete"  i.id %}' class="btn-remove icon-cancel" title="Remover Produto"></a>
 												</figure>
@@ -255,9 +255,9 @@
 
 										<div class="dropdown-cart-total">
 											{% if not total_valor  %}
-											
 												Nenhum produto Selecionado
-												{%else%}
+
+											{%else%}
 												<span>Total</span>
 													<span class="cart-total-price float-right">R$
 														{{total_valor}}
@@ -313,6 +313,9 @@
 							<li><a href="/">TERMOS DE USO</a></li> 
 						    -->
 				
+						</ul>
+						<ul>
+							<label> Creditos {{creditos.quantia}} </label>
 						</ul>
 					</nav>
 				</div><!-- End .container -->

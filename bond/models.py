@@ -20,44 +20,31 @@ class Creditos(models.Model):
         return self.user.username    
     
     
-class Produto(models.Model):
-    usuario = models.ForeignKey(User,on_delete=models.CASCADE)
-    nome = models.CharField(max_length=40)
-    bv_desc = models.CharField(max_length=60)
-    descricao = models.CharField(max_length=300)
-    funcao = models.CharField(max_length=60)
-    tags = models.CharField(max_length=40)
-    imagem = models.ImageField( upload_to='imagens_produtos', height_field=None, width_field=None, max_length=None, blank=True, null=True)
-    data_adicionada = models.DateField(auto_now=True)
-    categoria = models.ForeignKey(Categoria,on_delete=models.CASCADE, related_name= 'categoria_produto')
-    valor = models.DecimalField(max_digits=5,decimal_places=2)
-    visualizacao = models.PositiveIntegerField(default=0) 
-    avaliacao = models.PositiveIntegerField(default=0)
     
-    
-    
-    def __str__(self):
-        return self.nome
-    
-    
-    
-class Servico(models.Model):
-    usuario = models.OneToOneField(User,on_delete=models.CASCADE)
-    nome = models.CharField(max_length=40)
-    bv_desc = models.CharField(max_length=60)
-    descricao = models.CharField(max_length=300)
-    funcao = models.CharField(max_length=60)
-    tags = models.CharField(max_length=40)  
-    imagem = models.ImageField( upload_to='imagens_produtos', height_field=None, width_field=None, max_length=None, blank=True, null=True)
-    data_adicionada = models.DateField(auto_now=True)
-    categoria = models.ForeignKey(Categoria,on_delete=models.CASCADE, related_name= 'categoria_servico')
-    valor = models.DecimalField(max_digits=5,decimal_places=2)
-    visualizacao = models.PositiveIntegerField(default=0) 
-    
-    
-    
-    def __str__(self):
-        return self.nome
+class Anuncio(models.Model):
+        Tipos = {
+          (  'produto','Produtp'),
+          (  'servico','Servico'),  
+        }
+      
+        usuario = models.ForeignKey(User,on_delete=models.CASCADE)
+        nome = models.CharField(max_length=40)
+        bv_desc = models.CharField(max_length=60)
+        descricao = models.CharField(max_length=300)
+        funcao = models.CharField(max_length=60)
+        tags = models.CharField(max_length=40)
+        imagem = models.ImageField( upload_to='imagens_produtos', height_field=None, width_field=None, max_length=None, blank=True, null=True)
+        data_adicionada = models.DateField(auto_now=True)
+        categoria = models.ForeignKey(Categoria,on_delete=models.CASCADE, related_name= 'categoria_produto')
+        valor = models.DecimalField(max_digits=5,decimal_places=2)
+        visualizacao = models.PositiveIntegerField(default=0) 
+        avaliacao = models.PositiveIntegerField(default=0)
+        tipo =  models.CharField(max_length=10, choices=Tipos)
+        
+        
+        def __str__(self):
+            return self.nome
+        
     
 
 
@@ -115,7 +102,7 @@ class Carrinho (models.Model):
 
 class Produto_Carrinho (models.Model):
     carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE)
-    produto = models.ForeignKey(Produto, on_delete=models.SET_NULL, null=True)
+    produto = models.ForeignKey(Anuncio, on_delete=models.SET_NULL, null=True)
     avaliacao =  models.PositiveIntegerField()
     quantidade = models.PositiveIntegerField()
     subtotal = models.PositiveIntegerField()
@@ -128,7 +115,7 @@ class Produto_Carrinho (models.Model):
 class Transaction(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='purchases')
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sales')
-    product = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    product = models.ForeignKey(Anuncio, on_delete=models.CASCADE)
     credits_exchanged = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
 
@@ -137,7 +124,7 @@ class Transaction(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Produto)
+    products = models.ManyToManyField(Anuncio)
     total_credits = models.DecimalField(max_digits=10, decimal_places=2)  # Total em créditos
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=[('Pendente', 'Pendente'), ('Pago', 'Pago')], default='Pendente')
@@ -159,8 +146,7 @@ class Comentario (models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comentario = models.CharField(max_length=100, blank=True, null=True)
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, blank=True, null=True)
-    servico = models.ForeignKey(Servico, on_delete=models.CASCADE, blank=True, null=True)
+    produto = models.ForeignKey(Anuncio, on_delete=models.CASCADE, blank=True, null=True)
     avaliacao = models.IntegerField(null=False, blank=False, default=0)
     data_create = models.DateField(auto_now_add=True, null=True, blank=False)
     customUser =  models.ForeignKey(Customuser,on_delete=models.CASCADE)

@@ -79,6 +79,7 @@ def cadastroView (request):
 
 # Index
 
+
 def homeSiteView(request):
     carro_id = request.session.get("carro_id", None)
     
@@ -99,7 +100,6 @@ def homeSiteView(request):
     produto_carrinho = Produto_Carrinho.objects.filter(carrinho=carrinho)
     
     total_valor = produto_carrinho.aggregate(total=models.Sum('produto__valor'))['total'] 
-     
     # Data atual para filtrar produtos e serviços
     today = datetime.datetime.today().month
     
@@ -114,12 +114,12 @@ def homeSiteView(request):
         group = 'None'
     
     # Produtos e serviços recentes
-    produtos = Produto.objects.all()
-    produto_recentes = Produto.objects.filter(data_adicionada__month=today)
-    servicos_recentes = Servico.objects.filter(data_adicionada__month=today)
-    
+    produtos = Anuncio.objects.all()
+    produto_recentes = Anuncio.objects.filter(data_adicionada__month=today, tipo="Produto")
+    servicos_recentes = Anuncio.objects.filter(data_adicionada__month=today,tipo="Servico")
+    creditos = Creditos.objects.get(user=request.user)
     # Produtos mais visualizados (destaques)
-    produto_destaque = Produto.objects.filter(visualizacao__gte=100)
+    produto_destaque = Anuncio.objects.filter(visualizacao__gte=100)
     
     context = {
         'group': group,
@@ -131,6 +131,7 @@ def homeSiteView(request):
         'contagem': contagem,
         'servicos_recentes': servicos_recentes,
         'carro_id': carro_id,
+        'creditos':creditos,
         'total_valor':  total_valor, 
     }
     
@@ -138,7 +139,7 @@ def homeSiteView(request):
 
 
 def carrinho_add (request, id):    
-    produto = get_object_or_404(Produto, id=id)
+    produto = get_object_or_404(Anuncio, id=id)
     carro_id = request.session.get("carro_id", None)
  
     
@@ -189,12 +190,14 @@ def carrinho (request):
         
     produtos = Produto_Carrinho.objects.filter(carrinho=carro_id)
     valorTotal = produtos.aggregate(total=models.Sum('produto__valor'))['total'] 
+    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
    
            
     context = { 
         'carro':carro_id,
         'produtos': produtos, 
         'valorTotal': valorTotal, 
+        'contagem': contagem
         
     }
        
@@ -213,6 +216,26 @@ def limparCarrinhoView (request,):
     return redirect('carrinho')
 
 
+def quantidadeView (request,idObj, desc):
+    
+    carro_id = request.session.get("carro_id", None)
+    produto =  Produto_Carrinho.objects.get(carrinho= carro_id, id=idObj)
+    
+    if desc == "inc" : #increment
+        produto.quantidade += 1
+        produto.save()
+        return redirect ("carrinho")
+    elif desc == "dec" : # decrement
+        produto.quantidade -=1
+        if produto.quantidade < 1:
+            print("entrou")
+            produto.delete()
+            return redirect('carrinho')
+        produto.save()
+        return redirect('carrinho') 
+    
+    return redirect('carrinho')
+    
         
 def deleteView (request,idObj):
 
@@ -248,14 +271,20 @@ def listaProdutosView (request):
         carro_id = None
         
     contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
-    produtos = Produto.objects.all()
+    produtos = Anuncio.objects.all()
     categorias = Categoria.objects.all()
-    # produtosD = Produto.objects.filter()
+    # produtosD = Anuncio.objects.filter()
+    produto_carrinho = Produto_Carrinho.objects.filter(carrinho=carro_id)
+    total_valor = produto_carrinho.aggregate(total=models.Sum('produto__valor'))['total'] 
+    
+    
     context = { 
             'categorias':categorias,
             'produtos' :produtos,
             'group' :group,
-            'contagem':contagem
+            'contagem':contagem,
+            'produto_carrinho':produto_carrinho,
+            'total_valor' : total_valor,
             }
     
     return render(request, 'index/lista-produtos.html', context)
@@ -264,7 +293,7 @@ def listaProdutosView (request):
 
 def produtoView(request, id):
     
-    produto = Produto.objects.get(id=id)
+    produto = Anuncio.objects.get(id=id)
     produto.visualizacao += 1 
     produto.save()
     comentarios = Comentario.objects.filter(produto=produto) # adicionar imagem do usuario no comentraio 
@@ -278,22 +307,40 @@ def produtoView(request, id):
         
     contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
      
-    produtosRelacionados = Produto.objects.filter(categoria = produto.categoria)
-    
+    produtosRelacionados = Anuncio.objects.filter(categoria = produto.categoria)
+    produto_carrinho = Produto_Carrinho.objects.filter(carrinho=carro_id)
+    total_valor = produto_carrinho.aggregate(total=models.Sum('produto__valor'))['total'] 
+    try:
+        credito = Creditos.objects.filter(user=request.user)
+        
    
-    
-    context = {
+        context = {
         'produto': produto,
         'comentarios': comentarios,
         'produtosRelacionados': produtosRelacionados,
         'contagem':contagem,
+        'produto_carrinho':produto_carrinho,
+        'total_valor':total_valor,
+        'creditos':credito,
+        
         }
-    return render(request, 'index/produto.html', context)
+        return render(request, 'index/produto.html', context)
+    except :
+        context = {
+            'produto': produto,
+            'comentarios': comentarios,
+            'produtosRelacionados': produtosRelacionados,
+            'contagem':contagem,
+            'produto_carrinho':produto_carrinho,
+            'total_valor':total_valor,
+            
+            }
+        return render(request, 'index/produto.html', context)
 
 
 
 def listaCategoriaView (request, categoria):
-    produtos = Produto.objects.filter(categoria=categoria)
+    produtos = Anuncio.objects.filter(categoria=categoria)
   
     carro_id = request.session.get("carro_id", None)
             
@@ -313,7 +360,7 @@ def listaCategoriaView (request, categoria):
 
 def servicosView (request,id):
      
-    produto = Servico.objects.get(id=id)
+    produto = Anuncio.objects.get(id=id)
     produto.visualizacao += 1 
     produto.save()
     comentarios = Comentario.objects.filter(servico=produto) # adicionar imagem do usuario no comentraio 
@@ -327,7 +374,7 @@ def servicosView (request,id):
         
     contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
      
-    produtosRelacionados = Produto.objects.filter(categoria = produto.categoria)
+    produtosRelacionados = Anuncio.objects.filter(categoria = produto.categoria)
    
    
     if request.user.groups.filter(name='Colaborador').exists():
@@ -348,19 +395,36 @@ def servicosView (request,id):
         
     contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
     categorias = Categoria.objects.all()
-    # produtosD = Produto.objects.filter()
-    context = { 
-            'categorias':categorias,
-            'produto' :produto,
-            'group' :group,
-            'comentarios': comentarios,
-            'produtosRelacionados': produtosRelacionados,
-            'contagem':contagem,
-            
-            }
+    # produtosD = Anuncio.objects.filter()
     
-    return render(request, 'index/produto.html', context)
-
+    try:
+        
+        credito = Creditos.objects.filter(user=request.user)
+        context = { 
+                'categorias':categorias,
+                'produto' :produto,
+                'group' :group,
+                'comentarios': comentarios,
+                'produtosRelacionados': produtosRelacionados,
+                'contagem':contagem,
+                'credito':credito,
+                
+                }
+        
+        return render(request, 'index/produto.html', context)
+    except:
+        context = { 
+                'categorias':categorias,
+                'produto' :produto,
+                'group' :group,
+                'comentarios': comentarios,
+                'produtosRelacionados': produtosRelacionados,
+                'contagem':contagem,
+                
+                }
+        
+        return render(request, 'index/produto.html', context)
+    
 
 
 def listaServicosView (request):
@@ -382,9 +446,9 @@ def listaServicosView (request):
         carro_id = None
         
     contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
-    servicos = Servico.objects.all()
+    servicos = Anuncio.objects.filter(tipo='servico')
     categorias = Categoria.objects.all()
-    # produtosD = Produto.objects.filter()
+    # produtosD = Anuncio.objects.filter()
     context = { 
             'categorias':categorias,
             'servicos' :servicos,
@@ -415,10 +479,10 @@ def categoriaView (request, cat):
         carro_id = None
         
     contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
-    servicos = Servico.objects.filter(categoria__nome= cat)
-    produtos = Produto.objects.filter(categoria__nome= cat)
+    servicos = Anuncio.objects.filter(categoria__nome= cat, tipo="Servico")
+    produtos = Anuncio.objects.filter(categoria__nome= cat)
     categorias = Categoria.objects.all()
-    # produtosD = Produto.objects.filter()
+    # produtosD = Anuncio.objects.filter()
     context = { 
             'categorias':categorias,
             'servicos' :servicos,
@@ -429,7 +493,7 @@ def categoriaView (request, cat):
     
     return render(request, 'index/categorias.html', context)
 
-def comentarioView(request, id_obj):
+def comentarioView(request, tipo):
     
     if request.method == 'POST':
         user = request.user
@@ -441,7 +505,7 @@ def comentarioView(request, id_obj):
         
         coments = Comentario.objects.all()
         
-        if  Produto.objects.get(usuario=usuario.username, nome= objeto):
+        if  Anuncio.objects.get(usuario=usuario.username, tipo= tipo):
             
             try:
             
@@ -461,7 +525,7 @@ def comentarioView(request, id_obj):
                 
                 return redirect('home')
         
-        elif Servico.objects.get(usuario=usuario.username, nome = objeto):
+        elif Anuncio.objects.get(usuario=usuario.username, tipo= tipo):
             try:
             
                 coments = Comentario.objects.create(
@@ -549,10 +613,9 @@ def dashboardView (request):
     creditos = user.creditos
     transacoes = Transaction.objects.filter(seller=request.user.id)
     produtos_vendidos = Transaction.objects.filter(seller=request.user.id).count()
-    produtos = Produto.objects.filter(usuario=request.user).count()
-    servicos = Servico.objects.filter(usuario=request.user).count()
+    produtos = Anuncio.objects.filter(usuario=request.user).count()
 
-    produtos_servicos = produtos + servicos
+    produtos_servicos = produtos 
 
     valorTotal = Transaction.objects.filter(seller=request.user.id)
     ultimas_vendas = Transaction.objects.filter(seller=request.user.id, date__month=now.month)
@@ -758,6 +821,51 @@ def mudarInfoView(request):
     return render(request, 'dashboard/mudar-informacao.html',context)
 
 
+def editAnuncioView (request,idObj):
+    user = request.user
+    if request.method == "POST":
+       
+        tipo_servico = request.POST.get('tipo')
+        nome_servico = request.POST.get('nome_servico')
+        resume_servico = request.POST.get('resume_servico')
+        descricao = request.POST.get('descricao_servico')
+        funcao = request.POST.get('funcao_servico')
+        categoria =  request.POST.get('categoria_servico')
+        tags_servico = request.POST.get('tags_servico')
+        imagem_servico = request.FILES.get('fileInput')
+        valor_servico = request.POST.get('valorServico')
+        valor_decimal = float(valor_servico.replace(',', '.'))
+        valor_comissao =  valor_decimal * 0.10
+        valor_final = valor_decimal + valor_comissao
+        categoria_servico = Categoria.objects.get(nome=categoria)
+        
+        anuncio = Anuncio.objects.get(id=idObj)
+        anuncio.nome = nome_servico
+        anuncio.bv_desc = resume_servico
+        anuncio.descricao = descricao
+        anuncio.funcao = funcao
+        anuncio.tags = tags_servico
+        anuncio.imagem = imagem_servico
+        anuncio.categoria  = categoria_servico
+        anuncio.valor = valor_final
+        anuncio.tipo = tipo_servico
+        anuncio.save
+        
+        return redirect ('gerAnuncio')
+    try:
+        produto = Anuncio.objects.get(id=idObj)
+        categorias = Categoria.objects.all()
+        context = {
+            'produto':produto,
+            'categorias':categorias,
+            
+        }
+        return render(request,"dashboard/editar-anuncio.html", context)
+    except IntegrityError as e:
+        print(str(e))
+        return redirect('gerAnuncio')
+        
+
 def pubAnuncioView(request):
     
     
@@ -782,12 +890,15 @@ def pubAnuncioView(request):
         imagem_servico = request.FILES.get('fileInput')
         valor_servico = request.POST.get('valorServico')
         valor_decimal = float(valor_servico.replace(',', '.'))
+        valor_comissao =  valor_decimal * 0.10
+        valor_final = valor_decimal + valor_comissao
+        print (valor_final)
         
         categoria_servico = Categoria.objects.get(nome=categoria)
         if tipo_servico == "servico":
             
             try:
-                servicos =  Servico.objects.all()
+                servicos =  Anuncio.objects.all()
                 servicos.create(
                     usuario = request.user,
                     nome = nome_servico,
@@ -795,9 +906,10 @@ def pubAnuncioView(request):
                     descricao = descricao,
                     tags = tags_servico,
                     funcao = funcao,
-                    imagens_produto = imagem_servico,
+                    imagem = imagem_servico,
                     categoria = categoria_servico,
-                    valor = valor_decimal
+                    valor = valor_final,
+                    tipo = "Servico"
                 )
                                 
                 return redirect('gerAnuncio')
@@ -815,7 +927,7 @@ def pubAnuncioView(request):
             
              
             try:
-                produto =  Produto.objects.all()
+                produto =  Anuncio.objects.all()
                 produto.create(
                     usuario = request.user,
                    nome = nome_servico,
@@ -825,7 +937,8 @@ def pubAnuncioView(request):
                     funcao = funcao,
                     imagem = imagem_servico,
                     categoria = categoria_servico,
-                    valor = valor_decimal   
+                    valor = valor_final,
+                    tipo = "Produto"
                 )
                 
                 return redirect('gerAnuncio')
@@ -852,8 +965,8 @@ def pubAnuncioView(request):
 
 def gerAnuncioView(request):
     
-    produtos = Produto.objects.filter(usuario=request.user)
-    servicos = Servico.objects.filter(usuario=request.user)
+    produtos = Anuncio.objects.filter(usuario=request.user, tipo="Produto")
+    servicos = Anuncio.objects.filter(usuario=request.user, tipo="Servico")
 
     produtos_servicos = list(produtos) + list(servicos)
     

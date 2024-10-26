@@ -10,6 +10,7 @@ urlpatterns = [
     path('cliente', groupsCliente, name='cliente'),
     path('cadastro', cadastroView, name='cadastro'),
     path('login', loginView, name='login'),
+    
     #home
   
     path('lista_produtos', listaProdutosView, name='lista_produtos'),
@@ -19,7 +20,7 @@ urlpatterns = [
     
     path('produto/<id>', produtoView, name='produto'),
     path('servico/<id>', servicosView, name='servico'),
-    path('servicos/<search>', listaProdutosView, name='lista_produtos'),
+    # path('servicos/<search>', listaProdutosView, name='lista_produtos'),
     path('lista_produtos/<search>', listaProdutosView, name='lista_produtos'),
     path('categoria/<cat>', categoriaView, name='categoria'),
     
@@ -32,18 +33,21 @@ urlpatterns = [
     path('meuPerfil', meuPerfilView, name='meuPerfil'),
     path('mensagens', mensagensView, name='mensagens'),
     path('pubAnuncio', pubAnuncioView, name='pubAnuncio'),
+    path('editarAnuncio/<idObj>/', editAnuncioView, name='editAnuncio'),
     path('gerAnuncio', gerAnuncioView, name='gerAnuncio'),
     path('logout', logoutView, name='logout'),
     path('tipo', tipoView, name='tipo'),
     
     #carrinho 
-    path('addCarrinho/<id>/url', carrinho_add,  name='addCarrinho'),
+    path('addCarrinho/<id>/', carrinho_add,  name='addCarrinho'),
     path('carrinho/', carrinho,  name='carrinho'),
     path('limpar_carrinho/', limparCarrinhoView,  name='limparCarrinho'),
     path('delete/<idObj>', deleteView,  name='delete'),
+    path('quantidade/<idObj>/<desc>', quantidadeView,  name='quantidade'),
+    
     
     #comentarios
-    path('comentario/<id_obj>/', comentarioView,  name='addComentario'),
+    path('comentario/<tipo>/', comentarioView,  name='addComentario'),
     
     
     

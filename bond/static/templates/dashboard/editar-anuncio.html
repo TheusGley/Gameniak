@@ -1,0 +1,390 @@
+{% extends "dashboard/header.html" %}
+
+{% load static %}
+
+
+{% block content %}
+ 
+
+<div class="container">
+
+                    <form class="action-buttons-fixed ecommerce-form" action"{% url 'editAnuncio' produto.id %}" method="post" enctype="multipart/form-data">
+                        {{error_message}}
+                      {% csrf_token %}
+                        <div class="row">
+                            <div class="col">
+                                <section class="card card-modern card-big-info">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-2-5 col-xl-1-5">
+                                                <i class="card-big-info-icon  bx bxs-book-add  text-primary"></i>
+                                                <h2 class="card-big-info-title">Informação Geral</h2>
+                                                <p class="card-big-info-desc">Adicione aqui as informações básicas do seu produto.</p>
+                                            </div>
+
+
+                                            <div class="col-lg-3-5 col-xl-4-5">
+                                            
+                                            
+                                            
+                                                <div class="form-group row align-items-center">
+                                                    <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-bold text-4">Qual o tipo de anuncio ?</label>
+                                                    <div class="col-lg-7 col-xl-6">
+                                                        <select class="form-control  text-4 p-3" name="tipo" id="tipo" required />
+                                                            <option value="{{produto.tipo}}">{{produto.tipo}}</option>
+                                                            <option value="servico">Serviço</option>
+                                                            <option value="produto">Produto</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row align-items-center">
+                                                    <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-bold text-4">Nome do Serviço</label>
+                                                    <div class="col-lg-7 col-xl-6">
+                                                        <input type="text" class="form-control form-control-modern Form-Color text-5" name="nome_servico" id="nome_servico" placeholder="{{produto.nome}}"  data-plugin-maxlength maxlength="25" value="{{produto.nome}}" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-lg-5 col-xl-3 control-label text-lg-right pt-2 mt-1 mb-0 font-weight-bold text-4">Resumo do serviço </label>
+                                                    <div class="col-lg-7 col-xl-6">
+                                                        <textarea class="form-control form-control-modern Form-Color text-5" name="resume_servico" placeholder="{{produto.bv_desc}}" data-plugin-maxlength maxlength="165" rows="2" cols="33" value="{{produto.bv_desc}}"  required style=" resize: none;"></textarea>
+                                                    </div>
+                                                </div>
+
+            
+                                                <div class="form-group row">
+                                                    <label class="col-lg-5 col-xl-3 control-label text-lg-right pt-2 mt-1 mb-0 font-weight-bold text-4">Descrição do serviço </label>
+                                                    <div class="col-lg-7 col-xl-6">
+                                                        <textarea class="form-control form-control-modern Form-Color text-5" name="descricao_servico" placeholder="{{produto.descricao}}" data-plugin-maxlength maxlength="256" rows="5" cols="33" value="{{produto.descricao}}" required style=" resize: none;"></textarea>
+                                                    </div>
+                                                </div>
+
+            
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                        <div class="row">
+                            <div class="col">
+                                <section class="card card-modern card-big-info">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-2-5 col-xl-1-5">
+                                                <i class="card-big-info-icon bx bx-box text-primary"></i>
+                                                <h2 class="card-big-info-title">Categoria / Tags</h2>
+                                                <p class="card-big-info-desc">Informe aqui informações que as pessoas irão utilizar para encontrar o seu serviço.</p>
+                                            </div>
+
+
+                                            <div class="col-lg-3-5 col-xl-4-5">   
+                                         
+                                                <div class="tab-pane fade show " id="avanced" role="tabpanel" aria-labelledby="avanced-tab">
+                                                     
+                                                    
+                                                    <div class="form-group row align-items-center text-4">
+                                                        <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-bold">Para o que serve esse serviço?</label>
+                                                        <div class="col-lg-7 col-xl-6">
+                                                            <input type="text" class="form-control form-control-modern Form-Color text-5 " name="funcao_servico" placeholder="{{produto.funcao}}"  data-plugin-maxlength  maxlength="35" value="{{produto.funcao}}" required />
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group row align-items-center">
+                                                        <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-bold text-4">Categoria do produto</label>
+                                                        <div class="col-lg-7 col-xl-6">
+
+                                                         
+                                                        <select class="form-control form-control-modern p-3 text-4" name="categoria_servico" id="categoria_servico" placeholder="Selecione a categoria " data-plugin-maxlength maxlength="25" value="" required />
+                                                            {% for c in categorias  %}
+                                                            <option value="{{c.nome}}">{{c.nome}}</option>
+                                                            {% endfor %}    
+                                                        </select>
+                                                            
+                                                        </div>
+                                                    </div>
+
+
+                                                   <div class="form-group row align-items-center">
+                                                      <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-bold text-4">Tags do produto</label>
+                                                      <div class="col-lg-7 col-xl-6 ">
+                                                         
+                                                        <input class="form-control form-control-modern Form-Color text-5" id="tags_servico" placeholder="{{produto.tags}}" value="{{produto.tags}}" name="tags_servico"  data-role="tagsinput" data-tag-class="badge badge-primary " required  />
+                                                              
+                                                
+                                               
+                                                      </div>
+                                                      
+                                                  </div>
+                                                  
+                                              
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                      
+
+
+                  
+
+
+
+            
+
+
+
+
+                 
+                        <div class="row">
+                            <div class="col">
+                                <section class="card card-modern card-big-info">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-2-5 col-xl-1-5">
+                                                <i class="card-big-info-icon bx bx-camera text-primary"></i>
+                                                <h2 class="card-big-info-title">Imagem do Serviço</h2>
+                                                <p class="card-big-info-desc">Envie algumas imagens do seu serviço, use as melhores que tiver!</p>
+                                            </div>
+
+
+                                            <div class="col-lg-3-5 col-xl-4-5">
+                                                <div class="form-group row align-items-center">
+                                                    <div class="col">
+                                                        <div id="dropzone-form-image"  >
+                                                            <span class="dropzone-upload-message text-center ">
+                                                                <div class="dropzone" id="dropzone">
+                                                                    <span class="dropzone-upload-message">
+                                                                        <i class="bx bxs-cloud-upload"></i>
+                                                                        <p>Arraste/Envie <span style="color: rgb(47, 182, 58);">imagens aqui</span> (Recomendado: <span style="color: red;">600 x 600</span>).</p>
+                                                                    </span>
+                                                                    <input type="file" id="fileInput" name="fileInput"value="produto.imagem" multiple style="display: none;">
+                                                                </div>
+                                                            
+                                                                <div id="preview"></div>
+                                                    </div>
+                                                </div>
+
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+
+                        <style>
+                            .dropzone {
+                                border: 2px dashed #4CAF50;
+                                border-radius: 10px;
+                                padding: 20px;
+                                text-align: center;
+                                cursor: pointer;
+                                margin-bottom: 20px;
+                            }
+                    
+                            .dropzone i {
+                                font-size: 50px; /* Aumenta o tamanho do ícone */
+                                color: #4CAF50;  /* Cor do ícone */
+                            }
+                    
+                            #preview img {
+                                max-width: 100px;
+                                margin: 10px;
+                                display: inline-block;
+                                border: 1px solid #ccc;
+                                padding: 5px;
+                                border-radius: 5px;
+                            }
+                        </style>
+
+                        <script>
+                            // Seleciona os elementos
+                            const dropzone = document.getElementById('dropzone');
+                            const fileInput = document.getElementById('fileInput');
+                            const preview = document.getElementById('preview');
+                    
+                            // Evento para abrir o seletor de arquivos ao clicar na dropzone
+                            dropzone.addEventListener('click', () => {
+                                fileInput.click();
+                            });
+                    
+                            // Evento para detectar o drop de arquivos na dropzone
+                            dropzone.addEventListener('dragover', (event) => {
+                                event.preventDefault();
+                                dropzone.classList.add('hover');
+                            });
+                    
+                            dropzone.addEventListener('dragleave', () => {
+                                dropzone.classList.remove('hover');
+                            });
+                    
+                            dropzone.addEventListener('drop', (event) => {
+                                event.preventDefault();
+                                dropzone.classList.remove('hover');
+                    
+                                const files = event.dataTransfer.files;
+                                handleFiles(files);
+                            });
+                    
+                            
+                            fileInput.addEventListener('change', (event) => {
+                                const files = event.target.files;
+                                handleFiles(files);
+                            });
+                    
+                            
+                            function handleFiles(files) {
+                                preview.innerHTML = '';
+                                for (const file of files) {
+                                    const reader = new FileReader();
+                                    reader.readAsDataURL(file);
+                                    reader.onload = (e) => {
+                                        const img = document.createElement('img');
+                                        img.src = e.target.result;
+                                        preview.appendChild(img);
+                                    };
+                                }
+                            }
+                                function calcularTaxa() {
+                                    const valorServico = document.getElementById('valorServico').value;
+                                    const taxaServico = document.getElementById('TaxaServico');
+                                    const finalValue = document.getElementById('FinalValue');
+                            
+                                    // Verifica se o valor do serviço é um número válido
+                                    const valor = parseFloat(valorServico);
+                                    if (!isNaN(valor)) {
+                                        const taxa = valor * 0.10; // Calcula 10% do valor
+                                        const valorTotal = valor + taxa; // Calcula o valor total
+                            
+                                        // Atualiza os campos
+                                        taxaServico.value = taxa.toFixed(2); // Taxa de serviço
+                                        finalValue.textContent = `R$ ${valorTotal.toFixed(2)}`; // Valor total com 2 casas decimais
+                                    } else {
+                                        // Limpa os campos se o valor não for válido
+                                        taxaServico.value = ''; 
+                                        finalValue.textContent = 'R$ 00,00'; 
+                                    }
+                                }
+                            </script>
+
+
+
+
+
+
+
+
+
+
+                   
+                        <div class="row">
+                            <div class="col">
+                                <section class="card card-modern card-big-info">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <section class="card card-modern card-big-info">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-2-5 col-xl-1-5">
+                                                                <i class="card-big-info-icon bx bxs-wallet text-primary"></i>
+                                                                <h2 class="card-big-info-title">Preço do Serviço</h2>
+                                                                <p class="card-big-info-desc">Informe aqui o valor do seu serviço, este valor será a quantia que as pessoas irão pagar por ele.</p>
+                                                            </div>
+                                        
+                                                            <div class="col-lg-3-5 col-xl-4-5">
+                                                                <!-- Primeiro Input: Valor do Serviço -->
+                                                                <div class="form-group row align-items-center">
+                                                                    <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-bold">Valor do serviço</label>
+                                                                    <div class="col-lg-7 col-xl-6">
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-prepend">
+                                                                                <span class="input-group-text">
+                                                                                    <i class="fas fa-money-bill"></i>
+                                                                                </span>
+                                                                            </span>
+                                                                            <input type="number" id="valorServico" placeholder="{{produto.valor}}" name="valorServico" required class="form-control form-control-modern Form-Color font-weight-bold text-left" oninput="calcularTaxa()">                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                        
+                                                                <!-- Segundo Input: Nossa Taxa -->
+                                                                <div class="form-group row align-items-center">
+                                                                    <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0 font-weight-bold">Nossa Taxa <strong style="color: red;">(10%)</strong></label>
+                                                                    <div class="col-lg-7 col-xl-6">
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-prepend">
+                                                                                <span class="input-group-text">
+                                                                                    <i class="fas fa-money-check-alt"></i>
+                                                                                </span>
+                                                                            </span>
+                                                                            <input type="number" id="TaxaServico" class="form-control form-control-modern Form-Color font-weight-bold" placeholder="00.00" disabled/>                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                        
+                                                                <!-- Terceiro Campo: Valor Total -->
+                                                                <div class="form-group row align-items-center">
+                                                                    <label class="col-lg-5 col-xl-3 control-label text-lg-right mb-0"></label>
+                                                                    <div class="col-lg-7 col-xl-6">
+                                                                        <h2 class="text-center text-white font-weight-bold" id="FinalValue" style="background-color: rgb(122, 122, 122);">R$ 00,00</h2>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                                <div class="row action-buttons" style="z-index: 999;">
+                                                                    <div class="col-12 col-md-auto">
+                                                                        <button type="submit" class="submit-button btn btn-success btn-px-4 py-3 d-flex align-items-center font-weight-semibold line-height-1" id="submit-all" data-loading-text="Loading...">
+                                                                            <i class="bx bx-save text-4 mr-2"></i> Atualizar Anuncio
+                                                                        </button>
+                                                                    </div>
+                                                                    <!-- <div class="col-12 col-md-auto px-md-0 mt-3 mt-md-0">
+                                                                        <a href="ecommerce-products-list.html" class="cancel-button btn btn-light btn-px-4 py-3 border font-weight-semibold text-color-dark text-3">Cancel</a>
+                                                                    </div> -->
+                                                                    <div class="col-12 col-md-auto ml-md-auto mt-3 mt-md-0">
+                                                                        <a href="{% url 'dashboard' %}" class="delete-button btn btn-info btn-px-4 py-3 d-flex align-items-center font-weight-semibold line-height-1">
+                                                                            <i class="bx bx-trash text-4 mr-2"></i> Voltar 
+                                                                        </a>
+                                                                    </div>
+                                                            </div>
+
+                                                            
+                                    
+                                                        </div>
+                                                       
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        </div>
+                                        
+                                   
+
+                        <hr>
+
+                        
+
+
+
+                    </form>
+                <!-- end: page -->
+            </div>
+
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+{% endblock %}

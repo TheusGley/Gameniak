@@ -69,16 +69,22 @@
 
 							<hr class="divider">
 
-							<div class="product-action">
-								<div class="product-single-qty">
-									<input class="horizontal-quantity form-control"  > VERIFICAR QUANDO METODO POST FOR ATIVADO E FAZER O VALOR MUDAR CONFORME QUANTIDADE
-								</div><!-- End .product-single-qty -->
-
+							
 								<a href='{% url "addCarrinho" produto.id %}' 
 								class="btn btn-dark add-cart icon-shopping-cart" title="Add to Cart">ADICIONAR AO CARRINHO</a>
+
+								{% if contagem >= 1 %}
+								<hr class="divider mb-1">
+
+
+								<a href='{% url "carrinho" %}' 
+								class="btn btn-primary add-cart " title="Add to Cart">IR PARA O CARRINHO</a>
+
+							{%else %}
+
+								{% endif %}
 							</div><!-- End .product-action -->
 
-							<hr class="divider mb-1">
 
 						
 						</div><!-- End .product-single-details -->

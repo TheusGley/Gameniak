@@ -23,6 +23,8 @@
 									<tr>
 										<th class="product-col">Produto</th>
 										<th>Valor Únitário</th>
+										<th>Quantidade</th>
+
 									</tr>
 								</thead>
 								<tbody>
@@ -43,6 +45,14 @@
 									
 								
 										<td>R${{i.produto.valor}}</td>
+										<td colspan="4">
+												<a href ="{% url "quantidade" i.id 'inc' %}" class="btn form-control  rounded " style="width: 3vw; height: 7vh; font-size: 30px; padding: 0px;">+</a>
+												<label class="text-center "  style="width:4vw; padding-left:0px;" >{{i.quantidade}} </label>
+												<a href ="{% url "quantidade" i.id 'dec' %}" class="btn form-control  rounded " style="width: 3vw; height: 7vh; font-size: 30px; padding: 0px;">-</a>
+
+
+										</td>
+
 									
 										<td colspan="4" class="clearfix">
 											<div class="float-left">

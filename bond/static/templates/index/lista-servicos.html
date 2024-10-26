@@ -240,15 +240,15 @@
 												</figure>
 												<div class="product-details">
 													<h2 class="product-title">
-														<a href='/servico/visualizar/{function="setHash($value.idproduct)"}'>{{p.nome}}</a>
+														<a href='{% url "produto" p.id %}'>{{p.nome}}</a>
 													</h2>
 													<div class="ratings-container">
 														<div class="product-ratings">
-															<span class="ratings" style="width:100%"></span><!-- End .ratings -->
+															<span class="ratings" style="width:100%">{{p.avaliacao}}</span><!-- End .ratings -->
 															<span class="tooltiptext tooltip-top"></span>
 														</div><!-- End .product-ratings -->
 													</div><!-- End .product-container -->
-													<div class="price-box  ">aaaaaaaaaaaaaaaaaa
+													<div class="price-box  ">
 														<span class="product-price">R${{p.valor}}</span>
 													</div><!-- End .price-box -->
 												</div><!-- End .product-details -->
