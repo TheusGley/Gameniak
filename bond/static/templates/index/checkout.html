@@ -1,4 +1,10 @@
-	<main class="main">
+{% extends "index/header.html" %}
+
+{% block content %}
+
+
+
+<main class="main">
 			<nav aria-label="breadcrumb" class="breadcrumb-nav">
 				<div class="container">
 					<ol class="breadcrumb">
@@ -28,12 +34,12 @@
 								<form action="/carrinho-comprar" method="POST">
 									<div class="form-group required-field">
 										<label>Primeiro Nome</label>
-										<input type="text" name="desfirstname" maxlength="10" placeholder="ex: André" value="{$register_values.desfirstname}" class="form-control" required>
+										<input type="text" name="desfirstname" maxlength="10" placeholder="{{user.first_name}}" value="{{user.first_name}}" class="form-control" required>
 									</div><!-- End .form-group -->
 
 									<div class="form-group required-field">
 										<label>Último Nome</label>
-										<input type="text" name="dessecoundname" maxlength="10" placeholder="ex: Silva" value="{$register_values.dessecoundname}" class="form-control" required>
+										<input type="text" name="dessecoundname" maxlength="10" placeholder="{{user.last_name}}" value="{{user.last_name}}" class="form-control" required>
 									</div><!-- End .form-group -->
 
 								
@@ -41,13 +47,13 @@
 						
 									<div class="form-group required-field">
 										<label>Seu telefone</label>
-										<input type="text" name="desphonenumber" minlength="11" onkeypress="return onlyNumberKey(event)" value="{$register_values.desphonenumber}" class="form-control" placeholder="ex: 00 000000000" required>
+										<input type="text" name="desphonenumber" minlength="11" onkeypress="return onlyNumberKey(event)" value="{{customUser.telefone}}" class="form-control" placeholder="{{customUser.telefone}}" required>
 									</div><!-- End .form-group -->
 
 
 									<div class="form-group required-field">
 										<label>Email para contato</label>
-										<input type="email" name="desemail" placeholder="ex: nome@nome.com" class="form-control" value="{$register_values.desemail}" required>
+										<input type="email" name="desemail" placeholder="{{user.email}}" class="form-control" value="{{user.email}}" required>
 									</div><!-- End .form-group -->
 
 
@@ -86,32 +92,32 @@
 											<h3>Resumo da compra</h3>
 
 											<h4>
-												<a data-toggle="collapse" href="#order-cart-section" class="collapsed" role="button" aria-expanded="false" aria-controls="order-cart-section">{$CartCount} produtos no carrinho</a>
+												<a data-toggle="collapse" href="#order-cart-section" class="collapsed" role="button" aria-expanded="false" aria-controls="order-cart-section">{{contagem}} produtos no carrinho</a>
 											</h4>
 
 											<div class="collapse" id="order-cart-section">
 												<table class="table table-mini-cart">
 													<tbody>
 											
-														{loop="$Item"}
+														{% for c in carrinho  %}
 														<tr>
 															<td class="product-col">
 																<figure class="product-image-container">
-																	<a href="/produto" class="product-image">
-																		<img src='/{function="getArrayFromProducts($value[0].desimages)"}' alt="product">
+																	<a href="{% url 'produto' c.id %}" class="product-image">
+																		<img src='{{c.produto.imagem.url}}' alt="product">
 																	</a>
 																</figure>
 																<div>
 																	<h2 class="product-title">
-																		<a href="/produto">{$value[0].desproduct}</a>
+																		<a href="{% url 'produto' c.id %}">{{c.produto.nome}}</a>
 																	</h2>
 
-																	<span class="product-qty">Qtd: 1</span>
+																	<span class="product-qty">{{c.produto.quantidade}}</span>
 																</div>
 															</td>
-															<td class="price-col">R${function="ConvertVirgulaToPonto($value[0].vlprice)"}</td>
+															<td class="price-col">R${{c.produto.valor}}</td>
 														</tr>
-														{/loop}
+														{% endfor %}
 														
 													</tbody>	
 												</table>
@@ -125,7 +131,7 @@
 				<div class="row">
 					<div class="col-lg-8">
 						<div class="checkout-steps-action">
-							<button type="submit" class="btn btn-primary float-left">AVANÇAR</a>
+							<a href="{% url 'pagamento' %}" class="btn btn-primary float-left">AVANÇAR</a>
 						</div><!-- End .checkout-steps-action -->
 					</div><!-- End .col-lg-8 -->
 				</div><!-- End .row -->
@@ -136,3 +142,7 @@
 
 			<div class="mb-6"></div><!-- margin -->
 		</main><!-- End .main -->
+
+{% endblock %}
+
+		{% include "index/footer.html" %}

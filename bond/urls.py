@@ -44,6 +44,10 @@ urlpatterns = [
     path('limpar_carrinho/', limparCarrinhoView,  name='limparCarrinho'),
     path('delete/<idObj>', deleteView,  name='delete'),
     path('quantidade/<idObj>/<desc>', quantidadeView,  name='quantidade'),
+    path('checkout', checkoutView,  name='checkout'),
+    path('pagamento', pagamentoView,  name='pagamento'),
+    
+    
     
     
     #comentarios

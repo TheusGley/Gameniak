@@ -992,3 +992,42 @@ def logoutView (request):
     
     
     return redirect('home')
+
+def checkoutView (request):
+    
+    user = request.user
+    user_custom = Customuser.objects.get(user=user.id)
+    carro_id = request.session.get("carro_id", None)
+    carrinho =  Produto_Carrinho.objects.filter(carrinho=carro_id)
+    contagem = Produto_Carrinho.objects.filter(carrinho=carro_id).count()
+    print(user.username)
+    
+    context = {
+        'user' :user,
+        'customUser':user_custom,
+        'carrinho': carrinho,   
+        'contagem' : contagem,
+        
+    }
+    
+    return render(request, 'index/checkout.html', context)
+
+def pagamentoView (request):
+    
+    user = request.user
+    user_custom = Customuser.objects.get(user=user.id)
+    carro_id = request.session.get("carro_id", None)
+    carrinho =  Produto_Carrinho.objects.filter(carrinho=carro_id)
+    contagem = Produto_Carrinho.objects.filter(carrinho=carro_id).count()
+    carrinho_total = Carrinho.objects.get(id=carro_id)
+    
+    context = {
+        'user' :user,
+        'customUser':user_custom,
+        'carrinho': carrinho,   
+        'contagem' : contagem,
+        'carrinho_total':carrinho_total,
+        
+    }
+    
+    return render(request, 'index/pagamento.html', context)

@@ -1,0 +1,207 @@
+{% extends "index/header.html" %}	
+	{% block content %}
+	
+	<main class="main">
+			<nav aria-label="breadcrumb" class="breadcrumb-nav">
+				<div class="container">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
+						<li class="breadcrumb-item active" aria-current="page">Checkout</li>
+					</ol>
+				</div><!-- End .container -->
+			</nav>
+
+			<div class="container">
+				<ul class="checkout-progress-bar">
+				
+					<a href="/carrinho-comprar">
+					<li>				
+						<span>Suas Informações</span>
+					</li></a>
+
+
+					<li class="active">
+						<span>Pagamento</span>
+					</li>
+				</ul>
+				<div class="row">
+					<div class="col-lg-8">
+						<ul class="checkout-steps">
+							<li>
+						
+							
+
+								<form action="/carrinho-comprar-2" method="POST">
+							
+							<li>
+								<div class="checkout-step-shipping">
+									<h2 class="step-title">Método de pagamento</h2>
+
+									<table class="table table-step-shipping">
+										<tbody>
+											
+
+											<tr style="background-color: rgb(214, 214, 214);">
+
+													<td >
+														<input type="radio" class="form-check-input" name="modalOption" id="radioModal1" value="modal1">
+														<label class="form-check-label" for="radioModal1">Pagamento com Creditos</label>
+														<p> {{carrinho_total.total}} Creditos</p>
+													</td>
+													
+
+											</tr>
+
+											<tr>
+												<td>
+														<input type="radio" class="form-check-input" name="modalOption" id="radioModal2" value="modal2">
+														<label class="form-check-label" for="radioModal2">Pagamento via Pix</label>
+														<p> {{carrinho_total.total}} Reais </p>
+												</td>
+											</tr>
+											
+										</tbody>
+									</table>
+								</div><!-- End .checkout-step-shipping -->
+							</li>
+						</ul>
+					</div><!-- End .col-lg-8 -->
+					
+
+					<div class="col-lg-4">
+						<div class="order-summary">
+							<h3>Resumo da compra</h3>
+
+							<h4>
+								<a data-toggle="collapse" href="#order-cart-section" class="collapsed" role="button" aria-expanded="false" aria-controls="order-cart-section">{{contagem}} produtos no carrinho</a>
+							</h4>
+
+							<div class="collapse" id="order-cart-section">
+								<table class="table table-mini-cart">
+									<tbody>
+							
+										{% for c in carrinho  %}
+										
+										
+										<tr>
+											<td class="product-col">
+												<figure class="product-image-container">
+													<a href="{% url 'produto' c.produto.id %}" class="product-image">
+														<img src='{{c.produto.imagem.url}}' alt="product">
+													</a>
+												</figure>
+												<div>
+													<h2 class="product-title">
+														<a href="{% url 'produto' c.produto.id %}">{{c.produto.nome}}</a>
+													</h2>
+
+													<span class="product-qty">{{c.produto.quantidade}}</span>
+												</div>
+											</td>
+											<td class="price-col">R${{c.produto.valor}}</td>
+										</tr>
+										{% endfor %}
+										
+										
+									</tbody>	
+								</table>
+							</div><!-- End #order-cart-section -->
+						</div><!-- End .order-summary -->
+					</div><!-- End .col-lg-4 -->
+			
+
+
+
+				</div><!-- End .row -->
+
+
+				<div class="row">
+
+
+					
+						<div class="checkout-steps-action">
+							<button type="button" class="btn btn-primary mt-3" id="openModalButton" data-toggle="modal" data-target="#modalDefault" class="btn btn-primary float-left">SEGUIR PARA PAGAMENTO</button>
+						</div><!-- End .checkout-steps-action -->
+				
+
+					
+
+
+				</div><!-- End .row -->
+
+				
+
+			</form>
+
+           
+			</div><!-- End .container -->
+
+
+
+
+			<div class="mb-6"></div><!-- margin -->
+		</main><!-- End .main -->
+
+    <!-- Modal 1 -->
+    <div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="modal1Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal1Label">Quer confirmar o pagamento?</h5>
+                </div>
+                <div class="modal-body">
+                    Você tem certeza que quer usar seus Creditos para realizar esta compra?
+                </div>
+				<div class="col p-5">
+						<a href="#" class="btn btn-success" style="width: 14vw;" > Confirmar </a> 
+						<a href="#" class="btn btn-danger" style="width: 14vw;"> Cancelar </a>
+				</div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2 -->
+    <div class="modal fade" id="modal2" tabindex="-1" aria-labelledby="modal2Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal2Label">Voce quer confirmar o pagamento?</h5>
+                </div>
+                <div class="modal-body">
+                    Voce tem certeza que voce quer realizar o pagamento via PIX ??
+                </div>
+				<div class="col p-5">
+					<a href="#" class="btn btn-success" style="width: 14vw;" > Confirmar </a> 
+					<a href="#" class="btn btn-danger" style="width: 14vw;"> Cancelar </a>
+			</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+		<script>
+			document.getElementById("openModalButton").addEventListener("click", function() {
+				const radioModal1 = document.getElementById("radioModal1");
+				const radioModal2 = document.getElementById("radioModal2");
+			
+				// Remove o evento de foco do modal ao abrir, para evitar loops
+				$('.modal').off('focus');
+			
+				// Verifica qual botão de rádio está selecionado e abre o modal correspondente
+				if (radioModal1.checked) {
+					$('#modal1').modal('show');
+				} else if (radioModal2.checked) {
+					$('#modal2').modal('show');
+				} else {
+					alert("Por favor, selecione um modal.");
+				}
+			});
+			</script>
+
+	
+		{% endblock content %}
+
+		{% include "index/footer.html" %}
