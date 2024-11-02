@@ -1,0 +1,87 @@
+{% extends "index/header.html" %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-8">
+			<div class="cart-table-container">
+				<table class="table table-cart">
+					<thead>
+						<tr>
+							<th class="product-col">Compras</th>
+							<th>Valor Únitário</th>
+							<th>Status</th>
+
+						</tr>
+					</thead>
+					<tbody>
+
+						<h1> {{error}} </h1>
+
+						{% for i in produtos   %}
+						
+						<tr class="product-row">
+							<td class="product-col">
+								<figure class="product-image-container">
+									<a href='{% url "produto" i.id %}' class="product-image">
+										<img src='{{i.produto.imagem.url}}' class="img-product-novidade" alt="product">
+									</a>
+								</figure>
+								<h2 class="product-title">
+									<a href='{% url "produto" i.id %}'>{{i.produto.nome}}</a>
+								</h2>
+							</td>
+						
+					
+							<td>R${{i.produto.valor}}</td>
+							<td colspan="4">
+									<a href ="{% url "quantidade" i.id 'inc' %}" class="btn form-control  rounded " style="width: 3vw; height: 7vh; font-size: 30px; padding: 0px;">+</a>
+									<label class="text-center "  style="width:4vw; padding-left:0px;" >{{i.quantidade}} </label>
+									<a href ="{% url "quantidade" i.id 'dec' %}" class="btn form-control  rounded " style="width: 3vw; height: 7vh; font-size: 30px; padding: 0px;">-</a>
+
+
+							</td>
+
+						
+							<td colspan="4" class="clearfix">
+								<div class="float-left">
+									<a href='{% url "delete" i.id %}' class="btn-move">Clique para remover do carrinho</a>
+								</div>
+								
+								<div class="float-right">
+									<a href='{% url "limparCarrinho"%}}' title="Remover Produto" class="btn-edit"><span class="sr-only">Editar</span><i class="icon-cancel"></i></a>
+								</div>
+							</td>
+
+						</tr> 
+						{% endfor %}
+
+
+					</tbody>
+
+					<tfoot>
+						<tr>
+							<td colspan="4" class="clearfix">
+								<div class="float-left">
+									<a href="{% url "home" %}" class="btn btn-outline-secondary">Continuar comprando</a>
+								</div><!-- End .float-left -->
+
+								<div class="float-right">
+									<a href='{% url "limparCarrinho" %}' class="btn btn-outline-secondary btn-clear-cart">Limpar carrinho de compras</a>
+							
+								</div><!-- End .float-right -->
+							</td>
+						</tr>
+					</tfoot>
+
+				</table>
+			</div><!-- End .cart-table-container -->
+		</div>
+	</div>
+</div>
+{% include "index/footer.html" %}
+
+
+{% endblock  %}
+

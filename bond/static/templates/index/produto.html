@@ -253,7 +253,7 @@
 									<div class="category-list">
 										<a href="{% url "lista_categorias" p.categoria %}" class="product-category">
 											{{p.categoria}}
-										  </a>
+										</a>
 									</div>
 								</div>
 								<h3 class="product-title">
@@ -292,29 +292,29 @@
 			</div><!-- End .container -->
 		</main><!-- End .main -->
 
-		<script>
+<script>
 
-const stars = document.querySelectorAll('.rating-stars a');
-const ratingValue = document.getElementById('rating-value');
-const inputValue = document.getElementById('inputStar');
+	const stars = document.querySelectorAll('.rating-stars a');
+	const ratingValue = document.getElementById('rating-value');
+	const inputValue = document.getElementById('inputStar');
 
-stars.forEach((star, index) => {
-    star.addEventListener('click', function(event) {
-        event.preventDefault();
+	stars.forEach((star, index) => {
+		star.addEventListener('click', function(event) {
+			event.preventDefault();
 
-        // Remove active class from all stars
-        stars.forEach(s => s.classList.remove('active'));
+			// Remove active class from all stars
+			stars.forEach(s => s.classList.remove('active'));
 
-        // Add active class to the clicked star and all previous stars
-        for (let i = 0; i <= index; i++) {
-            stars[i].classList.add('active');
-        }
+			// Add active class to the clicked star and all previous stars
+			for (let i = 0; i <= index; i++) {
+				stars[i].classList.add('active');
+			}
 
-        // Update the rating value
-        ratingValue.textContent = index + 1;
-		inputStar.value = index + 1; 
-    });
-});
+			// Update the rating value
+			ratingValue.textContent = index + 1;
+			inputStar.value = index + 1; 
+		});
+	});
 
 
 </script>

@@ -112,23 +112,23 @@ class Produto_Carrinho (models.Model):
         return "Carrinho: " + str(self.carrinho.id) + "   Produto: "+ str(self.id)
     
         
-class Transaction(models.Model):
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='purchases')
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sales')
-    product = models.ForeignKey(Anuncio, on_delete=models.CASCADE)
-    credits_exchanged = models.DecimalField(max_digits=10, decimal_places=2)
+class Transacao(models.Model):
+    user_remetente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rementente')
+    user_destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_destino')
+    quantidade = models.DecimalField(max_digits=5,decimal_places=2)
+    tipo_transacao = models.CharField(max_length=20, choices=[('UserforUser', 'UserforUser'), ('acr_Credito', 'acr_Credito')])
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Transação de {self.buyer.user.username} para {self.seller.user.username}'
+        return f'Transação de {self.user_remetente.username} para {self.user_destino.username}'
 
-class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Anuncio)
-    total_credits = models.DecimalField(max_digits=10, decimal_places=2)  # Total em créditos
-    created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=[('Pendente', 'Pendente'), ('Pago', 'Pago')], default='Pendente')
-
+class Extrato(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_extrato')
+    date = models.DateTimeField(auto_now_add=True)
+    tipo_transacao = models.CharField(max_length=20, choices=[('UserforUser', 'UserforUser'), ('acr_Credito', 'acr_Credito')]),
+    quantidade = models.DecimalField(max_digits=5,decimal_places=2)
+    user_destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userDestino', blank=True)
+    
     def __str__(self):
         return f"Pedido {self.id} de {self.user.user.username}"
     

@@ -46,6 +46,8 @@ urlpatterns = [
     path('quantidade/<idObj>/<desc>', quantidadeView,  name='quantidade'),
     path('checkout', checkoutView,  name='checkout'),
     path('pagamento', pagamentoView,  name='pagamento'),
+    path('creditos', creditoView,  name='creditos'),
+    
     
     
     

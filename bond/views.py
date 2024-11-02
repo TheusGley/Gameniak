@@ -118,6 +118,7 @@ def homeSiteView(request):
     produto_recentes = Anuncio.objects.filter(data_adicionada__month=today, tipo="Produto")
     servicos_recentes = Anuncio.objects.filter(data_adicionada__month=today,tipo="Servico")
     creditos = Creditos.objects.get(user=request.user)
+    
     # Produtos mais visualizados (destaques)
     produto_destaque = Anuncio.objects.filter(visualizacao__gte=100)
     
@@ -519,7 +520,7 @@ def comentarioView(request, tipo):
                 
                 coments.save()
                 print("produto")
-                return redirect('produto', id_obj)
+                return redirect('produto',)
             except IntegrityError as e:
                 print(str(e))
                 
@@ -611,14 +612,14 @@ def dashboardView (request):
     except :
         return redirect('mudarInfo') 
     creditos = user.creditos
-    transacoes = Transaction.objects.filter(seller=request.user.id)
-    produtos_vendidos = Transaction.objects.filter(seller=request.user.id).count()
+    transacoes = Transacao.objects.filter(user_remetente=request.user.id)
+    produtos_vendidos = Transacao.objects.filter(user_remetente=request.user.id).count()
     produtos = Anuncio.objects.filter(usuario=request.user).count()
 
     produtos_servicos = produtos 
 
-    valorTotal = Transaction.objects.filter(seller=request.user.id)
-    ultimas_vendas = Transaction.objects.filter(seller=request.user.id, date__month=now.month)
+    valorTotal = Transacao.objects.filter(user_remetente=request.user.id)
+    ultimas_vendas = Transacao.objects.filter(user_remetente=request.user.id, date__month=now.month)
     
     if valorTotal:
         
@@ -1031,3 +1032,59 @@ def pagamentoView (request):
     }
     
     return render(request, 'index/pagamento.html', context)
+
+
+def creditoView (request):
+    
+    user = request.user
+    transacao = Transacao.objects.all()
+    carro_id = request.session.get("carro_id", None)
+    carrinho =  Produto_Carrinho.objects.filter(carrinho=carro_id)
+    creditos_usuario = Creditos.objects.get(user=user)
+    carrinho_total = Carrinho.objects.get(id=carro_id)
+    
+   
+    
+    if  creditos_usuario.quantia < carrinho_total.total:
+        
+        
+        error = "Creditos Insuficientes"
+        context = {
+            'error' : error,
+        }
+        return render(request, 'index/pagamento2.html', context )
+        
+    
+    try :
+        for i in carrinho :
+
+            transacao.create(
+                user_remetente = user,
+                user_destino = i.produto.usuario,
+                quantidade = i.produto.valor,
+                tipo_transacao = 'UserforUser'
+            )    
+    except IntegrityError as e:
+        print(str(e))
+        error = str(e)
+        context = {
+            'error' : error,
+        }
+        return render(request, 'index/pagamento2.html', context )
+        
+    creditos_usuario.quantia - carrinho_total.total 
+    creditos_usuario.save()
+    
+    contagem = Produto_Carrinho.objects.filter(carrinho=carro_id).count()
+    carrinho_total = Carrinho.objects.get(id=carro_id)
+    
+    context = {
+        # 'user' :user,
+        # 'customUser':user_custom,
+        'carrinho': carrinho,   
+        'contagem' : contagem,
+        'carrinho_total':carrinho_total,
+        
+    }
+    
+    return render(request, 'index/pagamento2.html', context )
