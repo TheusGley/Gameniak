@@ -47,7 +47,8 @@
 	<script src="{% static '/res/UserDashboard/assets/js2/jquery.min.js' %}"></script>
 	<script src="{% static '/res/UserDashboard/assets/js2/bootstrap.bundle.min.js' %}"></script>
 	<script src="{% static '/res/UserDashboard/assets/js2/plugins.min.js' %}"></script>
-
+	{% comment %} icons {% endcomment %}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 
 	<!-- Main JS File -->
@@ -165,13 +166,18 @@
 
 			
 						</div>
-						{% if group == "clientes" %}
+						{% if group == "cliente" %}
 					
 						<!-- ÍCONE DOS FAVORITOS -->
 						<a href="/ativar-modo-escuro" title="Ativar modo escuro" class="header-icon"><i class="far fa-lightbulb"></i></a>
 						<a href="{% url "minhaConta" %}" class="header-icon ">
 							<i class="icon-user-2"></i>
 						</a>
+						<!-- ÍCONE DOS PEDIDOS-->
+						<a href="{% url "pedidos" %}" class="header-icon ">
+							<i class="bi bi-box-seam-fill"></i>
+						</a>
+
 						{% elif  group == "colaborador"  %}
 
 						<!-- ÍCONE DO LOGIN -->
@@ -182,8 +188,10 @@
 						</a>
 						<!-- ÍCONE DOS FAVORITOS -->
 						<a href="/ativar-modo-escuro" title="Ativar modo escuro" class="header-icon"><i class="far fa-lightbulb"></i></a>
-						<!-- ÍCONE DOS FAVORITOS -->
-
+						<!-- ÍCONE DOS Pedidos -->
+						<a href="{% url "pedidos" %}" title="ir para a pedidos" class="header-icon ">
+							<i class="bi bi-box-seam-fill"></i>
+						</a>
 						{% else %}
 
 							<!-- ÍCONE DO LOGIN -->
@@ -304,6 +312,14 @@
 						
 							<li><a href="{% url 'lista_produtos' %} ">PRODUTOS</a></li>
 							<li><a href="{% url "lista_servicos" %}">SERVIÇOS</a></li>
+							
+							{% if  creditos.valor == None %}
+							<li> <i class="bi bi-coin  mt-2 text-success display-3"> 0 </i> 
+								{% else %}
+							<li> <i class="bi bi-coin  mt-2 text-success display-3">{{creditos.valor}}</i> 
+
+							
+							{% endif %}
 							{% comment %} <li><a href="/logout">Desconectar-se</a></li> {% endcomment %}
 							{% comment %} <li><a href="/logar">CONECTAR-SE</a></li> {% endcomment %}
 							<!-- 
@@ -313,9 +329,6 @@
 							<li><a href="/">TERMOS DE USO</a></li> 
 						    -->
 				
-						</ul>
-						<ul>
-							<label> Creditos {{creditos.quantia}} </label>
 						</ul>
 					</nav>
 				</div><!-- End .container -->

@@ -11,9 +11,10 @@ class Categoria(models.Model):
     
     
     
-class Creditos(models.Model):
+class Credito(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='creditos_usuario')
-    quantia = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False, default=0)
+    valor = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False, default=0)
+    valor_antigo = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False, default=0)
     
     
     def __str__(self):
@@ -38,6 +39,7 @@ class Anuncio(models.Model):
         categoria = models.ForeignKey(Categoria,on_delete=models.CASCADE, related_name= 'categoria_produto')
         valor = models.DecimalField(max_digits=5,decimal_places=2)
         visualizacao = models.PositiveIntegerField(default=0) 
+        vendas = models.PositiveIntegerField(default=0) 
         avaliacao = models.PositiveIntegerField(default=0)
         tipo =  models.CharField(max_length=10, choices=Tipos)
         
@@ -53,7 +55,7 @@ class Customuser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     sobre = models.CharField(max_length=200)
     telefone = models.CharField(max_length=15, blank=True, null=True)
-    creditos = models.ForeignKey(Creditos,on_delete=models.CASCADE,related_name='creditosCustom')
+    creditos = models.ForeignKey(Credito,on_delete=models.CASCADE,related_name='creditosCustom')
     # creditos= models.DecimalField(max_digits=10, decimal_places=3)
     data_nas = models.DateTimeField(auto_now_add=False,)
     imagem = models.ImageField( upload_to='users', height_field=None, width_field=None, max_length=None, blank=True, null=True)
@@ -112,22 +114,22 @@ class Produto_Carrinho (models.Model):
         return "Carrinho: " + str(self.carrinho.id) + "   Produto: "+ str(self.id)
     
         
-class Transacao(models.Model):
+class Pedido(models.Model):
     user_remetente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rementente')
-    user_destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_destino')
-    quantidade = models.DecimalField(max_digits=5,decimal_places=2)
-    tipo_transacao = models.CharField(max_length=20, choices=[('UserforUser', 'UserforUser'), ('acr_Credito', 'acr_Credito')])
+    valor_carrinho = models.DecimalField(max_digits=5,decimal_places=2)
+    carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE, related_name="Carrinho_pedido")
+    status = models.CharField(max_length=20, choices=[('Pendente', 'Pendente'), ('Concluida', 'Concluida'), ('Recusada', 'Recusada')])
     date = models.DateTimeField(auto_now_add=True)
+    comprovante = models.ImageField( upload_to='comprovantes', height_field=None, width_field=None, max_length=None, blank=True, null=True)
 
     def __str__(self):
-        return f'Transação de {self.user_remetente.username} para {self.user_destino.username}'
+        return f'Pedidos de {self.user_remetente.username} '
 
 class Extrato(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_extrato')
     date = models.DateTimeField(auto_now_add=True)
-    tipo_transacao = models.CharField(max_length=20, choices=[('UserforUser', 'UserforUser'), ('acr_Credito', 'acr_Credito')]),
-    quantidade = models.DecimalField(max_digits=5,decimal_places=2)
-    user_destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userDestino', blank=True)
+    valor_carrinho = models.DecimalField(max_digits=5,decimal_places=2)
+    carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE, blank=True, related_name='carrinho_extrato')    
     
     def __str__(self):
         return f"Pedido {self.id} de {self.user.user.username}"

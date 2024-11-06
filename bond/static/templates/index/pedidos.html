@@ -1,0 +1,85 @@
+{% extends "index/header.html" %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-8">
+			<div class="cart-table-container">
+				<table class="table table-cart">
+					<h4> Pedidos <h4>
+					<thead>
+						<tr>
+							<th class="product-col">Pedido</th>
+							<th>Data</th>
+							<th>Valor do pedidos</th>
+							<th>Status</th>
+
+						</tr>
+					</thead>
+					<tbody>
+
+						<h1> {{error}} </h1>
+
+						{% if not pedidos %}
+						<tr class="product-row">
+							<td> Nenhum</td>
+							<td> Pedido</td>
+							<td> Encontrado </td>
+
+						</tr>
+						
+						{% else %}
+						{% for i in pedidos   %}
+						
+						<tr class="product-row">
+							<td >
+															
+									<a href='{% url "produto" i.id %}'>Order n°
+										{{i.id}}	</a>
+							</td>
+							<td>{{i.date}}</td>
+						
+					
+							<td>R${{i.carrinho.total}}</td>
+							<td colspan="4">
+								{{i.status}}
+							</td>
+
+						
+							<td colspan="4" class="clearfix">
+								<div class="float-left">
+									<a href='{% url "delete" i.id %}' class="btn-move">Clique para Cancelar o pedido</a>
+								</div>
+								
+								
+							</td>
+
+						</tr> 
+						{% endfor %}
+						{% endif %}
+
+
+					</tbody>
+
+					<tfoot>
+						<tr>
+							<td colspan="4" class="clearfix">
+								<div class="float-left">
+									<a href="{% url "home" %}" class="btn btn-outline-secondary">Continuar comprando</a>
+								</div><!-- End .float-left -->
+
+							</td>
+						</tr>
+					</tfoot>
+
+				</table>
+			</div><!-- End .cart-table-container -->
+		</div>
+	</div>
+</div>
+{% include "index/footer.html" %}
+
+
+{% endblock  %}
+

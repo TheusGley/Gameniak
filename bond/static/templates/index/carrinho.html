@@ -78,7 +78,12 @@
 											</div><!-- End .float-left -->
 
 											<div class="float-right">
-												<a href='{% url "limparCarrinho" %}' class="btn btn-outline-secondary btn-clear-cart">Limpar carrinho de compras</a>
+										{% if valorTotal == 0 or valorTotal == none%}
+
+										{% else %}
+											<a href='{% url "limparCarrinho" %}' class="btn btn-outline-secondary btn-clear-cart">Limpar carrinho de compras</a>
+
+										{% endif %}
 										
 											</div><!-- End .float-right -->
 										</td>
@@ -197,14 +202,24 @@
 								<tfoot>
 									<tr>
 										<td>Valor Final</td>
+								{% if valorTotal == 0 or valorTotal == none%}
+
+										<td>R$ 0</td>
+								{% else %}
 										<td>R$ {{valorTotal}}</td>
+								{% endif %}
 									</tr>
 								</tfoot>
 							</table>
 
 
 							<div class="checkout-methods">
-								<a href="{% url 'checkout' %}" class="btn btn-block btn-sm btn-primary">Ir para o checkout</a>
+								{% if valorTotal == 0 or valorTotal == none%}
+
+								{% else %}
+								<a href="{% url 'checkout' %}"  class="btn btn-block btn-sm btn-primary">Ir para o checkout</a>
+
+								{% endif %}
 					
 							</div><!-- End .checkout-methods -->
 						</div><!-- End .cart-summary -->

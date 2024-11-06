@@ -4,7 +4,7 @@ from django.db.utils import IntegrityError
 from django.contrib.auth import authenticate, login ,  logout
 import datetime
 from django.shortcuts import render,get_object_or_404, redirect
-from decimal import Decimal
+from .defs import validador_pedido
 from django.contrib.auth.models import  Group
 
 # Login Cadastro
@@ -55,13 +55,13 @@ def cadastroView (request):
     if request.method == 'POST':
         user  = User.objects.all()
         customuser = Customuser.objects.all()
-        creditos = Creditos.objects.all()
+        creditos = Credito.objects.all()
         
         try:
             user.create(email=email, password=senha, first_name=nome, username=username)
             user_request = User.objects.get(username=username)
             creditos.create(user= user_request)
-            creditos_user = Creditos.objects.get(user=user_request)
+            creditos_user = Credito.objects.get(user=user_request)
             
             customuser.create(sobre="", telefone="", creditos=creditos_user, data_nas = dataFormat , user=user_request)
             login(request, user_request)
@@ -117,8 +117,8 @@ def homeSiteView(request):
     produtos = Anuncio.objects.all()
     produto_recentes = Anuncio.objects.filter(data_adicionada__month=today, tipo="Produto")
     servicos_recentes = Anuncio.objects.filter(data_adicionada__month=today,tipo="Servico")
-    creditos = Creditos.objects.get(user=request.user)
-    
+    creditos = Credito.objects.get(user=request.user)
+ 
     # Produtos mais visualizados (destaques)
     produto_destaque = Anuncio.objects.filter(visualizacao__gte=100)
     
@@ -138,119 +138,6 @@ def homeSiteView(request):
     
     return render(request, 'index/index.html', context)
 
-
-def carrinho_add (request, id):    
-    produto = get_object_or_404(Anuncio, id=id)
-    carro_id = request.session.get("carro_id", None)
- 
-    
-    if carro_id :
-        carro_obj = Carrinho.objects.get(id=carro_id)
-        # carroProduto = Produto_Carrinho.objects.get(produto=produto)
-        produto_no_carrinho = carro_obj.produto_carrinho_set.filter(produto=produto)        
-        if produto_no_carrinho.exists():    
-            carroProduto= produto_no_carrinho.last()
-            carroProduto.quantidade += 1
-            carroProduto.subtotal = produto.valor
-            carroProduto.save()
-            carro_obj.total += produto.valor
-            carro_obj.save()
-            
-        else:
-            carroProduto = Produto_Carrinho.objects.create(carrinho = carro_obj,produto = produto, avaliacao   = produto.valor,  quantidade  = 1, subtotal=produto.valor)
-            carro_obj.total += produto.valor
-            carro_obj.save()
-        
-            
-    else:
-        carro_obj = Carrinho.objects.create(total= 0)
-        request.session["carro_id"]=carro_obj.id
-        carroProduto = Produto_Carrinho.objects.create(carrinho    = carro_obj,produto     = produto, avaliacao   = produto.valor,  quantidade  = 1,           subtotal=produto.valor)
-        carro_obj.total += produto.valor
-        carro_obj.save()
-        
-   
-    return redirect('produto',id)
-
-
-def carrinho (request): 
-    carro_id = request.session.get('carro_id',None)
-
-    # Gerenciamento do carrinho de compras
-    if carro_id:
-        try: 
-            carrinho = Carrinho.objects.get(id=carro_id)
-        except Carrinho.DoesNotExist:  # Se o carrinho não for encontrado, cria um novo
-            carrinho = Carrinho.objects.create()
-            request.session['carro_id'] = carrinho.id  # Atualiza o carro_id na sessão
-    else:
-        # Se não houver carrinho na sessão, cria um novo
-        carrinho = Carrinho.objects.create()
-        request.session['carro_id'] = carrinho.id
-
-        
-    produtos = Produto_Carrinho.objects.filter(carrinho=carro_id)
-    valorTotal = produtos.aggregate(total=models.Sum('produto__valor'))['total'] 
-    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
-   
-           
-    context = { 
-        'carro':carro_id,
-        'produtos': produtos, 
-        'valorTotal': valorTotal, 
-        'contagem': contagem
-        
-    }
-       
-    return render (request, 'index/carrinho.html', context)   
-
-def limparCarrinhoView (request,):
-
-    carro_id = request.session.get("carro_id", None)
-            
-    if carro_id:
-        carro_id = Carrinho.objects.get(id=carro_id)
-    else:
-        carro_id = None
-    
-    carro_id.delete()
-    return redirect('carrinho')
-
-
-def quantidadeView (request,idObj, desc):
-    
-    carro_id = request.session.get("carro_id", None)
-    produto =  Produto_Carrinho.objects.get(carrinho= carro_id, id=idObj)
-    
-    if desc == "inc" : #increment
-        produto.quantidade += 1
-        produto.save()
-        return redirect ("carrinho")
-    elif desc == "dec" : # decrement
-        produto.quantidade -=1
-        if produto.quantidade < 1:
-            print("entrou")
-            produto.delete()
-            return redirect('carrinho')
-        produto.save()
-        return redirect('carrinho') 
-    
-    return redirect('carrinho')
-    
-        
-def deleteView (request,idObj):
-
-    carro_id = request.session.get("carro_id", None)
-            
-    if carro_id:
-        carrinho = Produto_Carrinho.objects.get(carrinho= carro_id, id = idObj)
-        carrinho.delete()
-    else:
-        carro_id = None
-    
-
-    
-    return redirect('carrinho')
 
 
 def listaProdutosView (request):
@@ -312,7 +199,7 @@ def produtoView(request, id):
     produto_carrinho = Produto_Carrinho.objects.filter(carrinho=carro_id)
     total_valor = produto_carrinho.aggregate(total=models.Sum('produto__valor'))['total'] 
     try:
-        credito = Creditos.objects.filter(user=request.user)
+        credito = Credito.objects.filter(user=request.user)
         
    
         context = {
@@ -400,7 +287,7 @@ def servicosView (request,id):
     
     try:
         
-        credito = Creditos.objects.filter(user=request.user)
+        credito = Credito.objects.filter(user=request.user)
         context = { 
                 'categorias':categorias,
                 'produto' :produto,
@@ -612,14 +499,13 @@ def dashboardView (request):
     except :
         return redirect('mudarInfo') 
     creditos = user.creditos
-    transacoes = Transacao.objects.filter(user_remetente=request.user.id)
-    produtos_vendidos = Transacao.objects.filter(user_remetente=request.user.id).count()
+    produtos_vendidos = Anuncio.objects.filter(usuario=request.user.id, vendas=1).count()
     produtos = Anuncio.objects.filter(usuario=request.user).count()
 
     produtos_servicos = produtos 
 
-    valorTotal = Transacao.objects.filter(user_remetente=request.user.id)
-    ultimas_vendas = Transacao.objects.filter(user_remetente=request.user.id, date__month=now.month)
+    valorTotal = Anuncio.objects.filter(usuario=request.user.id)
+    # ultimas_vendas = Anuncio.objects.filter(usuario=request.user.id, date__month=now.month)
     
     if valorTotal:
         
@@ -639,8 +525,7 @@ def dashboardView (request):
     
                 
     context = {
-        'transacoes': transacoes,
-        'ultimas_vendas':ultimas_vendas,
+        # 'ultimas_vendas':ultimas_vendas,
         'valorTotal': total,
         'creditos' : creditos, 
         'produtos_vendidos':produtos_vendidos,
@@ -655,7 +540,7 @@ def dashboardView (request):
 def minhaContaView(request):
     user = User.objects.get(id=request.user.id)
     userInfo = Customuser.objects.get(user=user)
-    creditos = Creditos.objects.get(user=user)
+    creditos = Credito.objects.get(user=user)
     error_messages = " "
     if  request.user.groups.filter(name='Colaborador').exists():
         
@@ -994,6 +879,126 @@ def logoutView (request):
     
     return redirect('home')
 
+
+#################### FINALIZAÇÃO DE COMPRA ###########################
+
+
+def carrinho_add (request, id):    
+    produto = get_object_or_404(Anuncio, id=id)
+    carro_id = request.session.get("carro_id", None)
+ 
+    
+    if carro_id :
+        carro_obj = Carrinho.objects.get(id=carro_id)
+        produto_no_carrinho = carro_obj.produto_carrinho_set.filter(produto=produto)        
+        if produto_no_carrinho.exists():    
+            carroProduto= produto_no_carrinho.last()
+            carroProduto.quantidade += 1
+            carroProduto.subtotal = produto.valor
+            carroProduto.save()
+            carro_obj.total += produto.valor
+            carro_obj.save()
+            
+        else:
+            carroProduto = Produto_Carrinho.objects.create(carrinho = carro_obj,produto = produto, avaliacao   = produto.avaliacao,  quantidade  = 1, subtotal=produto.valor)
+            carro_obj.total += produto.valor
+            carro_obj.save()
+        
+            
+    else:
+        carro_obj = Carrinho.objects.create(total= 0)
+        request.session["carro_id"]=carro_obj.id
+        carroProduto = Produto_Carrinho.objects.create(carrinho    = carro_obj,produto     = produto, avaliacao   = produto.valor,  quantidade  = 1,           subtotal=produto.valor)
+        carro_obj.total += produto.valor
+        carro_obj.save()
+        
+   
+    return redirect('produto',id)
+
+
+def carrinho (request): 
+    carro_id = request.session.get('carro_id',None)
+
+    # Gerenciamento do carrinho de compras
+    if carro_id:
+        try: 
+            carrinho = Carrinho.objects.get(id=carro_id)
+        except Carrinho.DoesNotExist:  # Se o carrinho não for encontrado, cria um novo
+            carrinho = Carrinho.objects.create()
+            request.session['carro_id'] = carrinho.id  # Atualiza o carro_id na sessão
+    else:
+        # Se não houver carrinho na sessão, cria um novo
+        carrinho = Carrinho.objects.create()
+        request.session['carro_id'] = carrinho.id
+
+        
+    produtos = Produto_Carrinho.objects.filter(carrinho=carro_id)
+    valorTotal = produtos.aggregate(total=models.Sum('produto__valor'))['total'] 
+    contagem = Produto_Carrinho.objects.filter(carrinho= carro_id).count()
+    creditos = Credito.objects.get(user=request.user)
+   
+           
+    context = { 
+        'carro':carro_id,
+        'produtos': produtos, 
+        'valorTotal': valorTotal, 
+        'contagem': contagem,
+        'creditos' :creditos,
+    }
+       
+    return render (request, 'index/carrinho.html', context)   
+
+def limparCarrinhoView (request,):
+
+    carro_id = request.session.get("carro_id", None)
+            
+    if carro_id:
+        carro_id = Carrinho.objects.get(id=carro_id)
+    else:
+        carro_id = None
+    
+    carro_id.delete()
+    return redirect('carrinho')
+
+
+def quantidadeView (request,idObj, desc):
+    
+    carro_id = request.session.get("carro_id", None)
+    produto =  Produto_Carrinho.objects.get(carrinho= carro_id, id=idObj)
+    
+    if desc == "inc" : #increment
+        produto.quantidade += 1
+        produto.save()
+        return redirect ("carrinho")
+    elif desc == "dec" : # decrement
+        produto.quantidade -=1
+        produto.save()
+        
+        if produto.quantidade < 1:
+            print("entrou")
+            produto.delete()
+            return redirect('carrinho')
+        produto.save()
+        return redirect('carrinho') 
+    
+    return redirect('carrinho')
+    
+        
+def deleteView (request,idObj):
+
+    carro_id = request.session.get("carro_id", None)
+            
+    if carro_id:
+        carrinho = Produto_Carrinho.objects.get(carrinho= carro_id, id = idObj)
+        carrinho.delete()
+    else:
+        carro_id = None
+    
+
+    
+    return redirect('carrinho')
+
+
 def checkoutView (request):
     
     user = request.user
@@ -1001,7 +1006,6 @@ def checkoutView (request):
     carro_id = request.session.get("carro_id", None)
     carrinho =  Produto_Carrinho.objects.filter(carrinho=carro_id)
     contagem = Produto_Carrinho.objects.filter(carrinho=carro_id).count()
-    print(user.username)
     
     context = {
         'user' :user,
@@ -1021,6 +1025,7 @@ def pagamentoView (request):
     carrinho =  Produto_Carrinho.objects.filter(carrinho=carro_id)
     contagem = Produto_Carrinho.objects.filter(carrinho=carro_id).count()
     carrinho_total = Carrinho.objects.get(id=carro_id)
+    creditos = Credito.objects.get(user=user)
     
     context = {
         'user' :user,
@@ -1028,63 +1033,77 @@ def pagamentoView (request):
         'carrinho': carrinho,   
         'contagem' : contagem,
         'carrinho_total':carrinho_total,
+        'creditos':creditos
         
     }
     
     return render(request, 'index/pagamento.html', context)
 
 
-def creditoView (request):
+def pedidosView (request):
     
     user = request.user
-    transacao = Transacao.objects.all()
+    pedido = Pedido.objects.all()
     carro_id = request.session.get("carro_id", None)
-    carrinho =  Produto_Carrinho.objects.filter(carrinho=carro_id)
-    creditos_usuario = Creditos.objects.get(user=user)
+    creditos_usuario = Credito.objects.get(user=user)
     carrinho_total = Carrinho.objects.get(id=carro_id)
+    produtos_carrinho = Produto_Carrinho.objects.filter(carrinho=carro_id)
     
-   
-    
-    if  creditos_usuario.quantia < carrinho_total.total:
+    if request.method =="POST":
         
+        if  creditos_usuario.valor < carrinho_total.total:
+            
+            
+            error = "Creditos Insuficientes"
+            
+            context = {
+                'error' : error,
+            }
+            return render(request, 'index/pagamento2.html', context )
+            
         
-        error = "Creditos Insuficientes"
-        context = {
-            'error' : error,
-        }
-        return render(request, 'index/pagamento2.html', context )
-        
-    
-    try :
-        for i in carrinho :
+        try :
+            
+            creditos_usuario.valor_antigo = creditos_usuario.valor
+            creditos_usuario.valor = creditos_usuario.valor - carrinho_total.total
+            creditos_usuario.save()
 
-            transacao.create(
+            pedido.create(
                 user_remetente = user,
-                user_destino = i.produto.usuario,
-                quantidade = i.produto.valor,
-                tipo_transacao = 'UserforUser'
-            )    
-    except IntegrityError as e:
-        print(str(e))
-        error = str(e)
+                valor_carrinho = carrinho_total.total,
+                carrinho = carrinho_total,
+                status = "Pendente"
+            
+            ) 
+            ultimo_pedido = Pedido.objects.get(user_remetente =user, carrinho__id=carrinho_total.id)   
+            validador_pedido(ultimo_pedido.id)
+                
+            
+            produtos_carrinho.delete()
+            carrinho_total.delete()
+            
+        except IntegrityError as e:
+            print(str(e))
+            error = str(e)
+            context = {
+                'error' : error,
+            }
+            return render(request, 'index/pedidos.html', context )
+            
+        pedidos = Pedido.objects.filter(user_remetente= user)
         context = {
-            'error' : error,
+            'carrinho_total':carrinho_total,
+            'pedidos' : pedidos,
+            'creditos': creditos_usuario,
         }
-        return render(request, 'index/pagamento2.html', context )
         
-    creditos_usuario.quantia - carrinho_total.total 
-    creditos_usuario.save()
-    
-    contagem = Produto_Carrinho.objects.filter(carrinho=carro_id).count()
-    carrinho_total = Carrinho.objects.get(id=carro_id)
-    
-    context = {
-        # 'user' :user,
-        # 'customUser':user_custom,
-        'carrinho': carrinho,   
-        'contagem' : contagem,
-        'carrinho_total':carrinho_total,
+        return render(request, 'index/pedidos.html', context )
+    else :
+        pedidos = Pedido.objects.filter(user_remetente= user)
+        context = {
+            'carrinho_total':carrinho_total,
+            'pedidos' : pedidos,
+            
+        }
         
-    }
-    
-    return render(request, 'index/pagamento2.html', context )
+        return render(request, 'index/pedidos.html', context )
