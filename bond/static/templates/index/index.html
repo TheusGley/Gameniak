@@ -113,7 +113,7 @@
 								
 						<div class="product-default">
 							<figure >
-								{% comment %} <a href="{% url "lista_produtos" p.id %}" > {% endcomment %}
+								<a href="{% url "produto" p.id %}" >
 									<img src="{{p.imagem.url}}" class="img-product-alta" alt="product">
 								</a>
 								<div class="label-group">
@@ -207,7 +207,7 @@
 							<figure>
 								<a href="{% url "produto" p.id %}" >
 
-									<img src='{{p.imagem.url}}' class="img-product-novidade"  alt="{{.nome}}">
+									<img src='{{p.imagem.url}}' class="img-product-novidade"  alt="{{p.nome}}">
 
 								</a>
 								<div class="label-group">

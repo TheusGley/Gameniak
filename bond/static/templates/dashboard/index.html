@@ -5,80 +5,7 @@
 <div class="container mt-5 pt-4">
 
   <div class="row">
-    <!-- Coluna da esquerda -->
-    <div class="col-lg-9 col-xl-3 mb-2">
-      <div class="card card-modern">
-        <div class="card-body p-0">
-          <div class="widget-user-info">
-            <div class="widget-user-info-header bg-primary text-center">
-              <h2 class="font-weight-bold text-white">Olá, {{request.user.username}}</h2>
-              <p class="pb-4 text-white">Usuário do Gameniak Marketplace</p>
-              <div class="widget-user-acrostic bg-primary">
-                {% if not customuser.imagem  %}
-                <span> sem foto </span>
-                {% else %}
-                <img src={{customuser.imagem}}/>
-                {% endif %}
-              </div>
-            </div>
-            <div class="widget-user-info-body">
-              <div class="row text-center">
-                <div class="col-6">
-                  <strong class="text-color-dark text-5">R$ {{creditos.valor}}</strong>
-                  <h3 class="text-4-1">Saldo Atual</h3>
-                  <a href="{% url 'mudarInfo' %}" class="btn btn-success font-weight-semibold rounded " style="width:6vw; height:6vh; font-size:13px; padding:6px; margin-top:2vh">Adicionar Credito</a>
-
-                </div>
-                <div class="col-6 mt-2 pt-5">
-                  <strong class="text-color-dark text-5">{{produtos_servicos}}</strong>
-                  <h3 class="text-4-1">Anuncios Publicados</h3>
-                </div>
-              </div>
-              <div class="row mt-3 text-center">
-                <div class="col">
-                  <a href="{% url 'mudarInfo' %}" class="btn btn-warning shadow-none font-weight-semibold rounded">Configurações</a>
-                </div>
-                <div class="col">
-                  <a href="{% url 'home' %}" class="btn btn-primary shadow-none font-weight-semibold rounded">Gameniak</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Estatísticas de Vendas -->
-      <div class="card card-modern mt-4">
-        <div class="card-body py-4">
-          <div class="row align-items-center text-center">
-            <div class="col-6">
-              <h3 class="text-4-1 my-0">Serviços Vendidos</h3>
-              <strong class="text-6 text-color-dark">{{produtos_vendidos}}</strong>
-            </div>
-            <div class="col-6 border-left">
-              <h3 class="text-4-1 text-color-success line-height-2 my-0">Último Mês</h3>
-              <span>Produtos Vendidos &uarr;</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card card-modern mt-4">
-        <div class="card-body py-4">
-          <div class="row align-items-center text-center">
-            <div class="col-6">
-              <h3 class="text-4-1 my-0">Valor Vendas Totais</h3>
-              <strong class="text-6 text-color-dark">{{valorTotal}}</strong>
-            </div>
-            <div class="col-6 border-left">
-              <h3 class="text-4-1 text-color-success line-height-2 my-0">Todos os Dias</h3>
-              <span>Vendas Concluídas &uarr;</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+   {% include "dashboard/sidebar.html" %}
     <!-- Coluna da direita -->
     <div class="col-lg-12 col-xl-8">
       <section class="card card-modern">
@@ -90,33 +17,86 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Produto</th>
-                <th>Data do pagamento</th>
-                <th>Valor Pago</th>
-                <th>Status</th>
-                <th>Ação</th>
+                <th>Usuario</th>
+                <th>Data </th>
+                <th>Valor </th>
+                <th>Tipo da Transação</th>
               </tr>
             </thead>
             <tbody>
-              {% if not transacoes %}
+              {% if  extrato == None %}
                 <tr>
                   <td colspan="6" class="text-center">Nenhuma transação feita</td>
                 </tr>
               {% else %}
-                {% for t in transacoes %}
+                {% for t in extrato %}
                   <tr>
                     <td><a href='/admin-secret/visualizar-compra/{{ t.id }}' class="text-primary"><strong>{{ t.id }}</strong></a></td>
-                    <td><a href='/admin-secret/visualizar-compra/{{ t.id }}' class="text-primary"><strong>{{ t.produto.nome }}</strong></a></td>
+                    <td><a href='/admin-secret/visualizar-compra/{{ t.id }}' class="text-primary"><strong>{{ t.user.username }}</strong></a></td>
                     <td>{{ t.date }}</td>
-                    <td>{{ t.credits_exchanged }}</td>
-                    <td><span class="ecommerce-status completed">Concluído</span></td>
-                    <td><a href="#" class="btn btn-sm btn-primary">Detalhes</a></td>
+                    <td>{{ t.valor }}</td>
+                    <td>{{t.tipo_transacao}}<td>
                   </tr>
                 {% endfor %}
               {% endif %}
             </tbody>
           </table>
+        </section>
 
+          <section class="card card-modern">
+            <header class="card-header">
+              <h2 class="text-6">Tabela de Pedidos</h2>
+            </header>
+            <div class="card-body">
+              <table class="table table-bordered table-striped mb-0 text-center" id="datatable-default">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Valor</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if not pedidos %}
+                    <tr>
+                      <td colspan="6" class="text-center">Nenhum Pedido feito</td>
+                    </tr>
+                  {% else %}
+                    {% for p in pedidos %}
+                      <tr>
+                        <td><a href="{% url 'pedidos' p.id %}" class="text-primary"><strong>Order n° {{ p.id }}</strong></a></td>
+                        {% comment %} <td><a href='/admin-secret/visualizar-compra/{{ t.id }}' class="text-primary"><strong{{p.status}}></strong></a></td> {% endcomment %}
+                        {% comment %} <td>{{ t.date }}</td> {% endcomment %}
+                        {% comment %} <td>{{ t.credits_exchanged }}</td> {% endcomment %}
+
+                        {% if p.status_pedido == "Pendente" %}
+                        <td><span class="ecommerce-status pending ">{{p.status_pedido}}</span></td>
+                        <td><span class="text-dark"> {{p.carrinho.total}} </span></td>
+                        <td><a href={%url 'confirmarEntrega' p.id%} class="btn btn-success btn-sm " > Confirmar Entrega </a></td>
+                        <td><a href="#" class="btn  btn-sm btn-danger">Cancelar</a></td>
+
+                        {%elif p.status_pedidos == "Recusada"%}
+                        <td><span class="btn-danger">{{p.status_pedido}}</span></td>
+                        <td><span class="text-dark"> {{p.carrinho.total}} </span></td>
+
+                        {%elif p.status_pedido == "Concluida"%}
+                          <td><span class="ecommerce-status completed">{{p.status_pedido}}</span></td>
+                          <td><span class="text-dark"> {{p.carrinho.total}} </span></td>
+
+
+                        {%else %}
+                        <td><span class="ecommerce-status "> ----- </span></td>
+                        <td><span class="text-white"> ----- </span></td>
+
+
+                        {% endif %}
+
+                      </tr>
+                    {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
           <!-- Paginação e informações -->
           <hr class="solid mt-5 opacity-4">
           <div class="row align-items-center justify-content-between">

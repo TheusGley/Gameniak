@@ -1,4 +1,10 @@
-<main class="main">
+{% extends "dashboard/header.html" %}
+
+{% block content  %}
+
+<hr class="opacity-4">
+
+<main class="main mt-5">
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
@@ -13,35 +19,17 @@
     <div class="container pb-5">
         <div class="heading mb-4">
         
-            {if="$sucess"}
-
-            <div class="alert alert-success  mb-1 mt-1 text-center"  >
-            
-            <strong class="text-dark">{$sucess}</strong>
-            </div>
-            
-            {/if}
-            
-            
-            
-            
-            {if="$error"}
-            
-            <div class="alert alert-danger  mb-1 mt-1 text-center" >
-            
-            <strong class="text-dark">Ocorreu um erro inesperado! </strong> <strong>{$error}</strong>
-            </div>
-            
-            {/if}
 
             <h2 class="title">Recuperação de senha</h2>
             <p>Por favor, nos informe o seu e-mail e enviaremos um link para a recuperação da senha.</p>
         </div><!-- End .heading -->
+              <h3 class="text-3 text-danger"  > {{error_message}} </h3>
+        <form action="{%url 'rec_senha' %}" method="POST">
 
-        <form action="/recuperar-senha" method="POST">
+            {% csrf_token %}
             <div class="form-group required-field">
                 <label for="reset-email">E-mail da conta</label>
-                <input type="email" class="form-control" id="deslogin" name="deslogin" required>
+                <input type="email"  class="form-control text-3" id="email" name="email" required>
             </div><!-- End .form-group -->
 
             <div class="form-footer">
@@ -50,3 +38,5 @@
         </form>
     </div><!-- End .container -->
 </main><!-- End .main -->
+
+{% endblock %}

@@ -147,8 +147,10 @@
 							<a href="#" class="search-toggle" role="button"><i class="icon-search-3"></i></a>
 						
 
-							<form action="/produtos" method="get" novalidate>
+							<form action="{% url "pesquisa" %}" method="Post" novalidate>
 								<div class="header-search-wrapper">
+
+									{% csrf_token %}
 									
 									<input type="search" class="form-control" name="procurar" placeholder="Pesquisar serviço..." required>
 									
@@ -166,19 +168,8 @@
 
 			
 						</div>
-						{% if group == "cliente" %}
 					
-						<!-- ÍCONE DOS FAVORITOS -->
-						<a href="/ativar-modo-escuro" title="Ativar modo escuro" class="header-icon"><i class="far fa-lightbulb"></i></a>
-						<a href="{% url "minhaConta" %}" class="header-icon ">
-							<i class="icon-user-2"></i>
-						</a>
-						<!-- ÍCONE DOS PEDIDOS-->
-						<a href="{% url "pedidos" %}" class="header-icon ">
-							<i class="bi bi-box-seam-fill"></i>
-						</a>
-
-						{% elif  group == "colaborador"  %}
+					
 
 						<!-- ÍCONE DO LOGIN -->
 						<a href="{% url "dashboard" %}" title="ir para a dashboard" class="header-icon "><i class="fas fa-tools"></i></a>
@@ -187,23 +178,15 @@
 							<i class="icon-user-2"></i>
 						</a>
 						<!-- ÍCONE DOS FAVORITOS -->
-						<a href="/ativar-modo-escuro" title="Ativar modo escuro" class="header-icon"><i class="far fa-lightbulb"></i></a>
+						 {% if not request.user.is_authenticated %}
+						 {% else %}
+							<a href="{% url "logout" %}" title="Logout" class="header-icon"><i class="bi bi-box-arrow-left"></i></a>
+
+						 {% endif %}
 						<!-- ÍCONE DOS Pedidos -->
 						<a href="{% url "pedidos" %}" title="ir para a pedidos" class="header-icon ">
 							<i class="bi bi-box-seam-fill"></i>
-						</a>
-						{% else %}
-
-							<!-- ÍCONE DO LOGIN -->
-							<a href="{% url "login" %}" class="header-icon ">
-								<i class="icon-user-2"></i>
-							</a>
-							<!-- ÍCONE DOS FAVORITOS -->
-							<a href="/ativar-modo-escuro" title="Ativar modo escuro" class="header-icon"><i class="far fa-lightbulb"></i></a>
-							<!-- ÍCONE DOS FAVORITOS -->
-	
-						{% endif %}
-			
+						
 						
 						<!-- ======================== -->
 							   <!-- CARRINHO -->
@@ -311,11 +294,11 @@
 							</li>
 						
 							<li><a href="{% url 'lista_produtos' %} ">PRODUTOS</a></li>
-							<li><a href="{% url "lista_servicos" %}">SERVIÇOS</a></li>
+							{% comment %} <li><a href="{% url "lista_servicos" %}">SERVIÇOS</a></li> {% endcomment %}
 							
-							{% if  creditos.valor == None %}
-							<li> <i class="bi bi-coin  mt-2 text-success display-3"> 0 </i> 
-								{% else %}
+							{% if  not request.user.is_authenticated %}
+
+							{% else %}
 							<li> <i class="bi bi-coin  mt-2 text-success display-3">{{creditos.valor}}</i> 
 
 							
@@ -379,14 +362,14 @@
 		
 						<form action="/cadastrar" method="post" novalidate>
 		
-							<label for="register-email">Insira o seu nome completo <span class="required">*</span></label>
+							{% comment %} <label for="register-email">Insira o seu nome completo <span class="required">*</span></label>
 							<input type="email" class="form-input form-wide mb-2" id="register-email" required>
 		
 							<label for="register-email">Insira seu Email <span class="required">*</span></label>
 							<input type="email" class="form-input form-wide mb-2" id="register-email" required>
 		
 							<label for="register-email">Confirme o seu Email<span class="required">*</span></label>
-							<input type="email" class="form-input form-wide mb-2" id="register-email" required>
+							<input type="email" class="form-input form-wide mb-2" id="register-email" required> {% endcomment %}
 		
 							<label for="register-password">Insira sua senha<span class="required">*</span></label>
 							<input type="password" class="form-input form-wide mb-2" id="register-password" required>

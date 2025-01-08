@@ -1,0 +1,200 @@
+{% extends "dashboard/header.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-5 pt-4">
+
+  <div class="row">
+   {% include "dashboard/sidebar.html" %}
+   <div class="col-lg-12 col-xl-8">
+    <section class="card card-modern mt-3">
+                  <header class="card-header">
+             
+            
+                    <h1 class="card-title text-4">Tabela de Compras</h2>
+                  </header>
+                  <div class="card-body">
+                    <table class="table table-bordered table-striped mb-0" id="datatable-default">
+                
+                
+                      <thead>
+                    <tr>
+                  
+                      <th >ID </th>             
+                      <th >Resumo do Pedido</th>
+                      <th >Status do pagamento </th>
+                      <th >Método de pagamento</th>
+                      <th >Valor Pago</th>             
+                      <th >Data do pedido </th>      
+                      <th >Status do Pedido</th>        
+                      {% if pedidos.status_pedido == "Concluida" %}
+                      <th >Status do Pedido</th>               
+                      
+                      {% endif %}       
+                      
+                    </tr>
+                  </thead>
+    
+                  <tbody>
+               
+    
+    
+                    <tr > 
+                   
+                      <td class="text-primary font-weight-semibold"> <strong>{{pedidos.id}}</strong></a></td>
+                      <td class="text-primary font-weight-semibold">{{texto_limpo}}</td>
+                      <td class="text-primary font-weight-semibold">{{pedidos.status_pagamento}}</td>
+                      <td class="text-primary font-weight-semibold">{{pedidos.metodo_pagamento}}</td>
+                      <td class="text-success font-weight-semibold">R$ {{pedidos.valor_carrinho}}</td>
+                      <td class="text-primary font-weight-semibold">{{pedidos.date}}</td>
+                      <td class="text-primary font-weight-semibold">{{pedidos.status_pedido}}</td>
+
+                      {% if pedidos.status_pedido == "Concluida" %}
+                      {% comment %} <td class="text-primary font-weight-semibold"><a href="{% url ""  %}"  class= "btn btn-sm btn-warning">Avaliar</button></td> {% endcomment %}
+                      
+                      {% endif %}       
+
+                    </tr> 
+                    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
+    
+    
+    
+    
+    
+    
+                        <!-- Modal Animation -->
+      <div id="modal{$counter}" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+        <section class="card">
+          <header class="card-header">
+       
+          </header>
+          <div class="card-body">
+            <div class="modal-wrapper">
+              
+              <div class="text-center">
+                 <p class="mb-2"><strong class="text-8 font-weight-bold text-decoration-none text-primary ">RECIBO DA COMPRA</strong></p> 
+
+                  <P class="text-8 font-weight-bold text-decoration-none text-primary" >{$value.desproduct} -  <b class="text-success">[ R$ {function="ConvertVirgulaToPonto($value.vlprice)"} ]</b>   </p>
+              </div>
+    
+              <div class="text-center col-md-12" >
+    
+        
+                          <hr>
+                    
+                          <h5 class="text-5"><strong>Status da compra :</strong> <span class="lighter-1 ">{$value.desstatus}</span> </h5>   
+                          <h5 class="text-5"><strong>Método de pagamento :</strong> <span class="lighter-1">{$value.despayamentmethod}</span> </h5>                                                                                 
+                          <h5 class="text-5"><strong>Data da compra:</strong> <span class="lighter-1">{$value.dtbuy}</span> </h5>
+                          <h5 class="text-5"><strong>ID da compra :</strong> <span class="lighter-1">{$value.dessellername}</span> </h5>
+                          <h5 class="text-5"><strong>IP do comprador :</strong> <span class="lighter-1">{$value.desbuyerip}</span> </h5> 
+
+                          <hr>
+              
+                          <h5 class="text-5"><strong>Resumo do produto :</strong> <span class="lighter-1">{$value.desresume}</span> </h5>      
+                          <h5 class="text-5"><strong>Nome do produto :</strong> <span class="lighter-1">{$value.desproduct}</span> </h5>                                                                         
+                          <h5 class="text-5"><strong>Valor do produto :</strong> <span class="lighter-1">R${function="ConvertVirgulaToPonto($value.vlprice)"}</span> </h5>                              
+                        
+                        
+                      
+                          
+                         <hr>                   
+                          <h5 class="text-5"><strong>Nome do vendedor :</strong> <span class="lighter-1">{function="GetUserByID($value.idseller,'desperson')"}</span> </h5>
+                          <h5 class="text-5"><strong>E-mail do vendedor :</strong> <span class="lighter-1">{function="GetUserByID($value.idseller,'desemail')"}</span> </h5>          
+                          <h5 class="text-5"><strong>Apelido do vendedor :</strong> <span class="lighter-1">{function="GetUserByID($value.idseller,'desnick')"}</span> </h5>                                                         
+                          <h5 class="text-5"><strong>Data de registro:</strong> <span class="lighter-1">{function="FormatDate(GetUserByID($value.idseller,'dtregister'))"}</span> </h5>
+          
+
+                      
+    
+
+    
+           
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <div class="row">
+            <div class="col-md-12 text-center">
+            
+              <a href='{function="getPurchaseInfoAndReturnHashOnURL($value.idcompra)"}'  class="btn btn-danger text-7 " style="text-decoration: none;" >
+               Deletar </a>
+              <button class="btn btn-danger text-7 modal-dismiss">Fechar</button>
+            </div>
+          </div>
+        </footer>
+      </section>
+    </div>
+    
+          
+            
+            
+          
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+                  </tbody>
+    
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+
+
+        <hr class="solid mt-5 opacity-4">
+    
+    
+        <div class="datatable-footer">
+          <div class="row align-items-center justify-content-between mt-3">
+                    
+                  <div class="col-lg-auto text-center order-3 order-lg-2">
+                    <div class="results-info-wrapper"></div>
+                  </div>
+                    <div class="col-lg-auto order-2 order-lg-3 mb-3 mb-lg-0">
+                      <div class="pagination-wrapper"></div>
+                    </div>
+          </div>
+        </div>
+
+
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- end: page -->
+</section>
+
+
+
+
+{% endblock  %}
+{% include "dashboard/footer.html" %}

@@ -1,0 +1,43 @@
+{% extends 'dashboard/header.html' %}
+{% load static %}
+{% block content %}
+
+<body>
+
+    <hr class="opacity-4">
+
+    <main class="main mt-5">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
+                    <li class="breadcrumb-item active" aria-current="page">recuperar-senha</li>
+                </ol>
+            </div>
+        </nav>
+    
+      
+    
+        <div class="container pb-5">
+            <div class="heading mb-4">
+            
+    
+                <h2 class="title">Recuperação de senha</h2>
+                <p>Foi enviado um link de recuperação de senha para o seu email</p>
+                <p>Se não estiver na caixa de Entrada </p>
+                <p>Verifique sua Caixa de Spam ou lixeira  </p>
+            </div>            
+                <a href="{%url 'login' %}" class="btn btn-outline-dark mt-3">Fazer Login</a>
+
+   
+
+       
+               
+        </div>
+    
+    </div>
+</body>
+
+
+{%endblock%} 
+

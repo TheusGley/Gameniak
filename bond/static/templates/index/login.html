@@ -50,12 +50,12 @@
 						<form action="{% url "login" %}" method="post" novalidate>
 						{% csrf_token %}
 						
-							<input id="email" name="email" type="email" name="deslogin" class="form-control" placeholder="Seu Email" required>
+							<input id="email" name="email" type="email"  class="form-control" placeholder="Seu Email" required>
 							<input id="password" name="password" type="password" name="despassword" class="form-control" placeholder="Sua Senha" required>
 							 <p class="text-danger"> {{error_messagem}} </p>
 							<div class="form-footer">
 								<button type="submit" class="btn btn-primary">Conectar-se</button>
-								<a href="/recuperar-senha" class="forget-pass">Esqueceu a senha?</a>
+								<a href="{%url 'rec_senha'%}" class="forget-pass">Esqueceu a senha?</a>
 							</div><!-- End .form-footer -->
 
 

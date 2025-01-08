@@ -35,11 +35,64 @@
 							<h1 class="product-title">{{produto.nome}}</h1>
 
 							<div class="ratings-container">
-								<div class="product-ratings">
-									<span class="ratings" style="width:100%"></span><!-- End .ratings --> 
-								</div><!-- End .product-ratings -->
+									{{produto.avaliacao_anuncio}}
+								{% if produto.avaliacao_anuncio == '1' %}
+								<div class="rating-stars">
+									<a class="star-1 active" href="#">1</a>
+									<a class="star-2" href="#">2</a>
+									<a class="star-3" href="#">3</a>
+									<a class="star-4" href="#">4</a>
+									<a class="star-5" href="#">5</a>
+								</div>
+								{% elif produto.avaliacao_anuncio == '2' %}
+									<div class="rating-stars">
+										<a class="star-1" href="#">1</a>
+										<a class="star-2 active" href="#">2</a>
+										<a class="star-3" href="#">3</a>
+										<a class="star-4" href="#">4</a>
+										<a class="star-5" href="#">5</a>
+									</div>
+								{% elif produto.avaliacao_anuncio == '3' %}
+									<div class="rating-stars">
+										<a class="star-1" href="#">1</a>
+										<a class="star-2" href="#">2</a>
+										<a class="star-3 active" href="#">3</a>
+										<a class="star-4" href="#">4</a>
+										<a class="star-5" href="#">5</a>
+									</div>
+									{% elif produto.avaliacao_anuncio == '4' %}
+									<div class="rating-stars">
+										<a class="star-1" href="#">1</a>
+										<a class="star-2" href="#">2</a>
+										<a class="star-3 active" href="#">3</a>
+										<a class="star-4 active" href="#">4</a>
+										<a class="star-5" href="#">5</a>
+									</div>
+									{% elif produto.avaliacao_anuncio == '5' %}
+									<div class="rating-stars">
+										<a class="star-1" href="#">1</a>
+										<a class="star-2" href="#">2</a>
+										<a class="star-3 active" href="#">3</a>
+										<a class="star-4" href="#">4</a>
+										<a class="star-5 active" href="#">5</a>
+									</div>
+									{% else %}
+									<div class="rating-stars">
+										<a class="star-1" href="#">1</a>
+										<a class="star-2" href="#">2</a>
+										<a class="star-3" href="#">3</a>
+										<a class="star-4" href="#">4</a>
+										<a class="star-5" href="#">5</a>
 
-								<a href="#" class="rating-link">( {{produto.visualizacao}} )</a>
+									</div>
+									{% endif %}
+
+								<a href="#" class="rating-link">( {{produto.avaliacao}} )</a>
+								<br>
+								<br>
+
+								<a href="#" class="">Visualizações:  {{produto.visualizacao}} </a>
+
 							</div><!-- End .ratings-container -->
 
 							<hr class="short-divider">
@@ -48,8 +101,13 @@
 								<span class="product-price">R$ {{produto.valor}}</span>
 							</div><!-- End .price-box -->
 
+							<div class="">
+								<span class="product-price">Prazo para entrega: {{produto.data_prazo}} </span>
+							</div><!-- End .price-box -->
+
 							<div class="product-desc">
 								<p>
+									Descrição:
 									{{produto.bv_desc}}
 								
 								</p>
@@ -102,9 +160,13 @@
 						<li class="nav-item">
 							<a class="nav-link" id="product-tab-tags" data-toggle="tab" href="#product-tags-content" role="tab" aria-controls="product-tags-content" aria-selected="false">TAGS</a>
 						</li>
-						<li class="nav-item">
+						{% if avaliacao == "habilitado" %}
+						 <li class="nav-item">
 							<a class="nav-link" id="product-tab-reviews" data-toggle="tab" href="#product-reviews-content" role="tab" aria-controls="product-reviews-content" aria-selected="false">AVALIAÇÕES ({{comentarios.count}})</a>
-						</li>
+						</li> 
+						{% else %}
+					
+						{% endif %}
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade show active" id="product-desc-content" role="tabpanel" aria-labelledby="product-tab-desc">
@@ -117,7 +179,17 @@
 
 						<div class="tab-pane fade fade" id="product-more-info-content" role="tabpanel" aria-labelledby="product-tab-more-info">
 							<div class="product-desc-content">
-								<p>Publicado por {{produto.usuario.username}}</p>
+								{% if not user_produto.imagem %}
+								<p> SEM IMAGEM <P>
+								{% else %}
+								<img src='{{user_produto.imagem}}'>
+
+								{% endif %}
+								<p><strong> Publicado por </strong> {{user_produto.user.username}}</p>
+								<p><strong> Membro desde  </strong> {{user_produto.confiabilidade.data_membro}}</p>
+								<p><strong> Ultimo Acesso  </strong>{{user_produto.confiabilidade.ultimo_acesso}}</p>
+								<p><strong> Nivel de Confiabilidade </strong> {{user_produto.confiabilidade.nivel_confiavel}}</p>
+
 							</div><!-- End .product-desc-content -->
 						</div><!-- End .tab-pane -->
 
@@ -134,19 +206,79 @@
 										<h2 class="reviews-title">Comentarios </h2>
 
 										<ol class="comment-list">
+
+											{% if comentarios  %}
 											{% for c in comentarios  %}
 
 											<li class="comment-container">
 												
 												<div class="comment-avatar">
+													{% if c.customUser.imagem  %}
 													<img src="{{ c.customUser.imagem.url }}" width="65" height="65" alt="avatar"/>
+													{% else %}
+														<img src="" width="65" height="65" alt="avatar"/>
+													{% endif %}
 												</div><!-- End .comment-avatar-->
 
 												<div class="comment-box">
 													<div class="ratings-container">
-														<div class="product-ratings">
-															<span class="ratings" style="width:80%">FAZER </span><!-- End .ratings -->
-														</div><!-- End .product-ratings -->
+														
+															{{c.avaliacao}}
+															{% if c.avaliacao == 1 %}
+														<div class="rating-stars">
+															<a class="star-1 active" href="#">1</a>
+															<a class="star-2" href="#">2</a>
+															<a class="star-3" href="#">3</a>
+															<a class="star-4" href="#">4</a>
+															<a class="star-5" href="#">5</a>
+														</div>
+
+															{% elif c.avaliacao == 2 %} 
+														<div class="rating-stars">
+															<a class="star-1 " href="#">1</a>
+															<a class="star-2 active" href="#">2</a>
+															<a class="star-3" href="#">3</a>
+															<a class="star-4" href="#">4</a>
+															<a class="star-5" href="#">5</a>
+														</div>
+
+															{% elif c.avaliacao == 3%} 
+														<div class="rating-stars">
+															<a class="star-1 " href="#">1</a>
+															<a class="star-2" href="#">2</a>
+															<a class="star-3 active" href="#">3</a>
+															<a class="star-4" href="#">4</a>
+															<a class="star-5" href="#">5</a>
+														</div>
+
+															{% elif c.avaliacao == 4 %} 
+														<div class="rating-stars">
+															<a class="star-1 " href="#">1</a>
+															<a class="star-2" href="#">2</a>
+															<a class="star-3" href="#">3</a>
+															<a class="star-4 active" href="#">4</a>
+															<a class="star-5" href="#">5</a>
+														</div>
+
+															{% elif c.avaliacao == 5 %} 
+														<div class="rating-stars">
+															<a class="star-1 " href="#">1</a>
+															<a class="star-2" href="#">2</a>
+															<a class="star-3" href="#">3</a>
+															<a class="star-4" href="#">4</a>
+															<a class="star-5 active" href="#">5</a>
+														</div>
+
+															{% else %}
+															<div class="rating-stars">
+																<a class="star-1 " href="#">1</a>
+																<a class="star-2" href="#">2</a>
+																<a class="star-3" href="#">3</a>
+																<a class="star-4" href="#">4</a>
+																<a class="star-5 active" href="#">5</a>
+															</div>
+															
+															{% endif %}
 													</div><!-- End .ratings-container -->
 
 													<div class="comment-info mb-1">
@@ -160,36 +292,48 @@
 											</li><!-- comment-container -->
 											{% endfor %}
 
+											{% else %}
+
+											
+											<li class="comment-container">
+												
+								
+
+												<div class="comment-box">
+													
+													<div class="comment-info mb-1">
+														<h4 class="text">Nenhum comentario encontrado </h4> 
+													</div><!-- End .comment-info -->
+												</div><!-- End .comment-box -->
+											</li><!-- comment-cont
+											{% endif %}
+
 										
 										</ol><!-- End .comment-list -->
 									</div>
 
 									<div class="col-xl-5">
 										<div class="add-product-review">
-											<form action="#" class="comment-form m-0">
 												<h3 class="review-title">ADICIONE UMA AVALIAÇÃO</h3>
 
-
 												{% if request.user.is_authenticated %}
-												<form method="POST" action='{%url "addComentario" produto.id%}' 
-												
-												<div class="rating-form">
-													<label for="rating">QUANTAS ESTRELAS?</label>
+												<form method="POST" action='{%url "addComentario" produto.id%}' >
+													{% csrf_token %}
+
+												<div class="ratings-container">
+
 													<div class="rating-stars">
-														<a class="star-1" href="#">1</a>
-														<a class="star-2" href="#">2</a>
-														<a class="star-3" href="#">3</a>
-														<a class="star-4" href="#">4</a>
-														<a class="star-5" href="#">5</a>
+														<a id='star-1' class="star-1 ">1</a>
+														<a id='star-2'class="star-2 " >2</a>
+														<a id='star-3'class="star-3 " >3</a>
+														<a id='star-4'class="star-4 " >4</a>
+														<a id='star-5'class="star-5 " >5</a>
 													</div>
-													<p>Rating: <span id="rating-value">0</span>/5</p>
-													<input type="text" id='inputStar' value=0 style="display:none"/>
-												
-												</div>
+											<input type="hidden" name="inputStar" id="inputStar" value="0">
 
 												<div class="form-group">
 													<label>Como foi o serviço?</label>
-													<textarea id="comentario" cols="5" rows="6" class="form-control form-control-sm" required > </textarea>
+													<input  type="text" name="comentario"  class="form-control" size="100" required > 
 												</div><!-- End .form-group -->
 
 
@@ -210,9 +354,9 @@
 														</div>
 	
 
-												<input type="submit" class="btn btn-dark ls-n-15" value="Enviar">
+												<button type="submit" class="btn btn-dark ls-n-13"> Enviar </button>
 
-													</form>
+												</form>
 												{% else %}
 													<div class="col-md-6 col-xl-12">
 														<div class="form-group">
@@ -254,6 +398,7 @@
 										<a href="{% url "lista_categorias" p.categoria %}" class="product-category">
 											{{p.categoria}}
 										</a>
+
 									</div>
 								</div>
 								<h3 class="product-title">
@@ -293,30 +438,66 @@
 		</main><!-- End .main -->
 
 <script>
+		star_1 =	document.getElementById('star-1')
+		star_2 =	document.getElementById('star-2')
+		star_3 =	document.getElementById('star-3')
+		star_4 =	document.getElementById('star-4')
+		star_5 =	document.getElementById('star-5')
+		
+	
+		let value = 0; // Valor inicial do rating
+		const ratingValue = document.getElementById('rating-value');
+		const inputValue = document.getElementById('inputStar');
 
-	const stars = document.querySelectorAll('.rating-stars a');
-	const ratingValue = document.getElementById('rating-value');
-	const inputValue = document.getElementById('inputStar');
+		// Adiciona evento de clique para cada estrela
+		star_1.addEventListener('click', function(){
+			star_1.classList.add('active');
+			star_2.classList.remove('active');
+			star_3.classList.remove('active');
+			star_4.classList.remove('active');
+			star_5.classList.remove('active');
+			value= 1
+			inputValue.value = value;
 
-	stars.forEach((star, index) => {
-		star.addEventListener('click', function(event) {
-			event.preventDefault();
-
-			// Remove active class from all stars
-			stars.forEach(s => s.classList.remove('active'));
-
-			// Add active class to the clicked star and all previous stars
-			for (let i = 0; i <= index; i++) {
-				stars[i].classList.add('active');
-			}
-
-			// Update the rating value
-			ratingValue.textContent = index + 1;
-			inputStar.value = index + 1; 
-		});
-	});
+		})
+		star_2.addEventListener('click', function(){ 
+			star_2.classList.add('active');
+			star_3.classList.remove('active');
+			star_4.classList.remove('active');
+			star_5.classList.remove('active');
+			value = 2
+			inputValue.value = value;
 
 
+		})
+		star_3.addEventListener('click', function(){ 
+			star_3.classList.add('active');
+			star_4.classList.remove('active');
+			star_5.classList.remove('active');
+			value = 3
+			inputValue.value = value;
+
+		})
+		star_4.addEventListener('click', function(){ 
+			star_4.classList.add('active');
+			star_5.classList.remove('active');
+			value = 4
+			inputValue.value = value;
+
+		})
+		star_5.addEventListener('click', function(){
+			star_5.classList.add('active');
+			value = 5
+		inputValue.value = value;
+
+
+
+		})
+	
+	
+					// Atualiza o valor exibido e o campo oculto
+	
+	
 </script>
 {% include "index/footer.html" %}
 		{% endblock  %}

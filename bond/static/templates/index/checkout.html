@@ -29,17 +29,18 @@
 							<li>
 								<h2 class="step-title">Informações de cobrança</h2>
 
-							
+								{{error_message}}
 
-								<form action="/carrinho-comprar" method="POST">
+								<form action="{% url 'pagamento' %}" method="POST">
+									{% csrf_token %}
 									<div class="form-group required-field">
 										<label>Primeiro Nome</label>
-										<input type="text" name="desfirstname" maxlength="10" placeholder="{{user.first_name}}" value="{{user.first_name}}" class="form-control" required>
+										<input type="text" name="nome" maxlength="10" placeholder="{{user.first_name}}" value="{{user.first_name}}" class="form-control" required>
 									</div><!-- End .form-group -->
 
 									<div class="form-group required-field">
 										<label>Último Nome</label>
-										<input type="text" name="dessecoundname" maxlength="10" placeholder="{{user.last_name}}" value="{{user.last_name}}" class="form-control" required>
+										<input type="text" name="sobrenome" maxlength="10" placeholder="{{user.last_name}}" value="{{user.last_name}}" class="form-control" required>
 									</div><!-- End .form-group -->
 
 								
@@ -47,13 +48,13 @@
 						
 									<div class="form-group required-field">
 										<label>Seu telefone</label>
-										<input type="text" name="desphonenumber" minlength="11" onkeypress="return onlyNumberKey(event)" value="{{customUser.telefone}}" class="form-control" placeholder="{{customUser.telefone}}" required>
+										<input type="text" name="telefone" minlength="11" onkeypress="return onlyNumberKey(event)" value="{{customUser.telefone}}" class="form-control" placeholder="{{customUser.telefone}}" required>
 									</div><!-- End .form-group -->
 
 
 									<div class="form-group required-field">
 										<label>Email para contato</label>
-										<input type="email" name="desemail" placeholder="{{user.email}}" class="form-control" value="{{user.email}}" required>
+										<input type="email" name="email" placeholder="{{user.email}}" class="form-control" value="{{user.email}}" required>
 									</div><!-- End .form-group -->
 
 
@@ -131,7 +132,7 @@
 				<div class="row">
 					<div class="col-lg-8">
 						<div class="checkout-steps-action">
-							<a href="{% url 'pagamento' %}" class="btn btn-primary float-left">AVANÇAR</a>
+							<input type="submit"  class="btn btn-primary float-left" Value="AVANÇAR" />
 						</div><!-- End .checkout-steps-action -->
 					</div><!-- End .col-lg-8 -->
 				</div><!-- End .row -->

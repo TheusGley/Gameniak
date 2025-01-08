@@ -1,0 +1,98 @@
+{% extends "dashboard/header.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-5 pt-4">
+<div class="row">
+{% include "dashboard/sidebar.html" %}
+<div class="col-lg-12 col-xl-8">
+	<section class="card card-modern">
+	<div class="row">
+		<div class="col-lg-8 p-0">
+			<div class="cart-table-container p-0 ms-4">
+				<table class="table table-cart ms-4">
+					<h4 class="ms-4"> Pedidos <h4>
+					<thead>
+						<tr>
+							<th class="product-col">Pedido</th>
+							<th>Data</th>
+							<th>Valor do pedidos</th>
+							<th>Status</th>
+							<th></th>
+							<th></th>
+							<th></th>
+
+
+						</tr>
+					</thead>
+					<tbody>
+
+
+						{% if not pedidos %}
+						<tr class="product-row">
+							<td> Nenhum</td>
+							<td> Pedido</td>
+							<td> Encontrado </td>
+							<td> </td>
+							<td> </td>
+							<td></td>
+
+
+
+						</tr>
+						
+						{% else %}
+						{% for i in pedidos   %}
+						
+						<tr class="product-row">
+							<td >
+															
+									<a href='{% url "produto" i.id %}'>Order n°
+										{{i.id}}	</a>
+							</td>
+							<td>{{i.date}}</td>
+						
+					
+							<td>R${{i.carrinho.total}}</td>
+							<td colspan="4">
+								{{i.status}}
+							</td>
+
+						
+							<td colspan="4" class="clearfix">
+								<div class="float-left">
+									<a href='{% url "delete" i.id %}' class="btn-move">Clique para Cancelar o pedido</a>
+								</div>
+								
+								
+							</td>
+
+						</tr> 
+						{% endfor %}
+						{% endif %}
+
+
+					</tbody>
+
+					<tfoot>
+						<tr>
+							<td colspan="4" class="clearfix">
+								<div class="float-left">
+									<a href="{% url "home" %}" class="btn btn-outline-secondary">Continuar comprando</a>
+								</div><!-- End .float-left -->
+
+							</td>
+						</tr>
+					</tfoot>
+
+				</table>
+			</div><!-- End .cart-table-container -->
+		</div>
+	</div>
+</div>
+
+
+{% endblock  %}
+
+{% include "dashboard/footer.html" %}

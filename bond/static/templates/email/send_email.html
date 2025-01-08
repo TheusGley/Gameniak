@@ -1,0 +1,45 @@
+{% extends "dashboard/header.html" %}
+
+{% load static %}
+
+
+{% block content %}
+
+<body>
+    
+
+
+
+    <div class="container mt-5 pt-5">
+        <div class="row text-center">
+            <div class="col">
+                <section class="card card-modern card-big-info">
+                    <div class="card-body">
+                    <div class="title"> <h1 class="card-big-info-title">Verificação de Email</h1></div>
+                    <div class="card-big-info-desc"><span>Olá, <strong>{{user.username}}</strong> </span> </div>
+                    <div class="spacing2"></div>
+                    <div class="card-big-info-desc"><span> {{message}} </span></div>
+
+                
+
+                    <div class="email-row">
+                        <div class="email-footer"></div>
+                            <span>Precisa de ajuda? <a href="" target="_blank"><strong>Fale Conosco</strong></a></span>
+                        </div>
+                    </div>
+                                
+                                
+                   </div>
+                                
+            </section>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+</body>
+
+{% endblock %}

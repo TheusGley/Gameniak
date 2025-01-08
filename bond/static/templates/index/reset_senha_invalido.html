@@ -1,0 +1,18 @@
+{%extends 'dashboard/header.html'%}
+
+{% block content %}
+
+<main class="main">
+   <hr class="display-4">
+  
+
+    <div class="container pb-5">
+     
+
+    <h3>Link Inválido</h3>
+    <p>O link de Ativação de email é inválido ou expirou. Por favor, solicite novamente o reenvio de token.</p>
+
+
+    <a class="btn btn-primary" href="{%url 'rec_senha' %}"> Reenviar email</a>
+    </div>
+{% endblock  %}

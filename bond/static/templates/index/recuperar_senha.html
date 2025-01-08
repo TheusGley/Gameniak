@@ -1,0 +1,78 @@
+{% extends "index/header.html" %}
+
+{% block content  %}
+
+
+
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">recuperar-senha</li>
+            </ol>
+
+
+        </div>
+    </nav>
+
+  
+
+    <div class="container pb-5">
+     
+        
+                   
+        <form action="{%url 'reset_senha' uidb64 token %}" method="POST">
+        {% csrf_token %}
+        
+            <div class="form-group required-field">
+                <label for="reset-email">Insira a nova senha</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+                <input type="hidden" name="codigo" id="code" value="{$code}">
+            </div><!-- End .form-group -->
+
+
+
+            <div class="form-group required-field">
+                <label for="reset-email">Repita a nova senha</label>
+                <input type="password" class="form-control" id="senha2" name="senha2" required>
+            </div><!-- End .form-group -->
+            <div class="me-1-0 text-danger" id="mensagemErro">As senhas nao conferem</div>
+
+            <div class="form-footer">
+                <button type="submit" id="enviar" class="btn btn-primary">Confirmar</button>
+            </div><!-- End .form-footer -->
+        </form>
+    </div><!-- End .container -->
+</main><!-- End .main -->
+<script>
+
+  
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var senha = document.getElementById('senha');
+        var confirmarSenha = document.getElementById('senha2');
+        var mensagemErro = document.getElementById('mensagemErro');
+        var botaoEnviar = document.getElementById('enviar');
+
+        // Função para verificar se as senhas coincidem
+        function verificarSenhas() {
+            console.log("Verificar");
+            if (senha.value === confirmarSenha.value && senha.value !== "") {
+                mensagemErro.style.display = 'none';
+                botaoEnviar.removeAttribute('disabled');
+
+            } else {
+                mensagemErro.style.display = 'block';
+                botaoEnviar.setAttribute('disabled', 'disabled');
+
+            }
+        }
+    
+        // Verifica as senhas toda vez que o usuário digita em um dos campos
+        senha.addEventListener('input', verificarSenhas);
+        confirmarSenha.addEventListener('input', verificarSenhas);
+    });
+</script>		
+
+{% endblock   %}
